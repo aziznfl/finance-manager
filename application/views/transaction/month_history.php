@@ -54,7 +54,7 @@
 								<thead>
 									<th class="text-center">No</th>
 									<th class="text-center">Category</th>
-									<th class="text-center">Percentage</th>
+									<th class="text-center">%</th>
 								</thead>
 							</table>
 						</div>

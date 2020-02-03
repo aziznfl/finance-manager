@@ -20,36 +20,46 @@ class Transaction extends MY_Controller {
 
 		$result["add_footer"] = "
 			<script>
+				var table;
+
 				$(function() {
 					$('#date').val('".$year."-".$month."');
 					changeDate();
-
-					var table = $('#datatable-top-transaction').DataTable({
-						'ordering': false,
-						'searching': false,
-						'paging': false,
-						'ajax': '".base_url('settings/getTopTransaction/'.$year.'/'.$month)."'
-					});
-
-					table.on('order.dt search.dt', function() {
-				        table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-				            cell.innerHTML = i+1;
-				        } );
-				    }).draw();
 				});
 
 				function changeDate() {
 					$('#load_transactions_month').html('loading...');
-					$('#load_transactions_top').html('loading...');
+					// $('#load_transactions_top').html('loading...');
 
 					var date = $('#date').val().split('-');
 					var params = date[0] + '/' + date[1];
 					var site_url = '".base_url('transaction/viewGetMonthTransaction/')."' + params;
 					$('#load_transactions_month').load(site_url, function() {});
 					site_url = '".base_url('transaction/viewGetTopTransaction/')."' + params;
-					$('#load_transactions_top').load(site_url, function() {
-						window.history.pushState('object or string', 'Title', '".base_url('transaction/history/')."' + params);
+					reloadTopTransaction(date[1], date[0]);
+					window.history.pushState('object or string', 'Title', '".base_url('transaction/history/')."' + params);
+				}
+
+				function reloadTopTransaction(month, year) {
+					var link = '".base_url()."'+'settings/getTopTransaction/'+year+'/'+month;
+					table = $('#datatable-top-transaction').DataTable({
+						'searching': false,
+						'paging': false,
+						'destroy': true,
+						'ajax': link,
+						'columns': [
+							{'data': null, 'defaultContent': '', 'className': 'text-center', 'orderable': false, 'target': 0},
+							{'data': 'category_name', 'className': 'text-center'},
+							{'data': 'percentage', 'className': 'text-right'}
+						],
+						'order': [2, 'desc']
 					});
+
+					table.on('order.dt search.dt', function() {
+				        table.column(0).nodes().each( function (cell, i) {
+				            cell.innerHTML = i+1;
+				        } );
+				    }).draw();
 				}
 			</script>
 		";

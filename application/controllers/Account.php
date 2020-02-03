@@ -28,7 +28,7 @@ class Account extends MY_Controller {
 
 	function index() {
 		if ($this->session->userdata('user') != '') {
-			header("location: ".base_url('account/general'));
+			header("location: ".base_url('dashboard'));
 		}
 
 		$this->load->view('account/login');
