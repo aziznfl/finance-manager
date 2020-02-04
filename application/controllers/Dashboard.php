@@ -8,6 +8,7 @@ class Dashboard extends MY_Controller {
 
 		if ($this->session->userdata('user') == '') {
 			header("location: ".base_url('account'));
+			exit;
 		}
 
 		$this->load->model('M_Transaction');

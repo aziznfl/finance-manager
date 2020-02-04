@@ -14,17 +14,25 @@ class Transaction extends MY_Controller {
     }
 
 	function history($year = "", $month = "") {
+		print_r($result);
 		if ($year == "") $year = date('Y');
 		if ($month == "") $month = date('n');
 		$result["first_transaction"] = $this->getFirstTransaction()->result();
 
 		$result["add_footer"] = "
 			<script>
-				var table;
+				var tableMonthTrans;
+				var tableTopTrans;
 
 				$(function() {
 					$('#date').val('".$year."-".$month."');
 					changeDate();
+
+					tableMonthTrans.on('order.dt search.dt', function() {
+				        tableMonthTrans.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+				            cell.innerHTML = i+1;
+				        } );
+				    }).draw();
 				});
 
 				function changeDate() {
@@ -33,33 +41,46 @@ class Transaction extends MY_Controller {
 
 					var date = $('#date').val().split('-');
 					var params = date[0] + '/' + date[1];
-					var site_url = '".base_url('transaction/viewGetMonthTransaction/')."' + params;
-					$('#load_transactions_month').load(site_url, function() {});
-					site_url = '".base_url('transaction/viewGetTopTransaction/')."' + params;
-					reloadTopTransaction(date[1], date[0]);
+					reloadMonthTransaction(params);
+					reloadTopTransaction(params);
 					window.history.pushState('object or string', 'Title', '".base_url('transaction/history/')."' + params);
 				}
 
-				function reloadTopTransaction(month, year) {
-					var link = '".base_url()."'+'settings/getTopTransaction/'+year+'/'+month;
-					table = $('#datatable-top-transaction').DataTable({
+				function reloadMonthTransaction(params) {
+					var link = '".base_url()."'+'api/getMonthTransaction/'+params;
+					console.log(link);
+					tableMonthTrans = $('#datatable-month-transaction').DataTable({
+						'ajax': link,
+						'destroy': true,
+						'columns': [
+							{'searchable': false, 'orderable': false, 'defaultContent': '', 'className': 'text-center'},
+							{'data': 'transaction_date', 'className': 'text-center'},
+							{'data': 'amount_text', 'className': 'text-right'},
+							{'data': 'category_name', 'className': 'text-center'},
+							{'data': 'description', 'className': 'text-center'},
+							{'data': null, 'className': 'text-center', 'defaultContent': '<i class=\"fa fa-edit\"></i>'}
+						],
+						'order': [1, 'desc']
+					});
+				}
+
+				function reloadTopTransaction(params) {
+					var link = '".base_url()."'+'api/getTopTransaction/'+params;
+					tableTopTrans = $('#datatable-top-transaction').DataTable({
+						'ordering': false,
 						'searching': false,
 						'paging': false,
 						'destroy': true,
 						'ajax': link,
 						'columns': [
-							{'data': null, 'defaultContent': '', 'className': 'text-center', 'orderable': false, 'target': 0},
+							{'data': null, 'defaultContent': '', 'className': 'text-center', 'target': 0, 'render': function (data, type, row, meta) {
+			                 return meta.row + meta.settings._iDisplayStart + 1;
+			                }},
 							{'data': 'category_name', 'className': 'text-center'},
 							{'data': 'percentage', 'className': 'text-right'}
 						],
 						'order': [2, 'desc']
 					});
-
-					table.on('order.dt search.dt', function() {
-				        table.column(0).nodes().each( function (cell, i) {
-				            cell.innerHTML = i+1;
-				        } );
-				    }).draw();
 				}
 			</script>
 		";
@@ -71,7 +92,7 @@ class Transaction extends MY_Controller {
 	}
 
 	function manage() {
-		$result["categories"] = $this->getCategories();
+		$result["categories"] = $this->listCategories();
 		$result["add_footer"] = "
 			<script>
 				$(function () {

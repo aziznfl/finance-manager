@@ -46,7 +46,16 @@
 					<div class="row">
 						<div class="col-md-8">
 							<h4>List Transaction</h4>
-							<div id="load_transactions_month"></div>
+							<table id="datatable-month-transaction" class="table table-bordered table-striped table-hovered">
+								<thead>
+									<th class="text-center">No</th>
+									<th class="text-center">Date</th>
+									<th class="text-center">Rp</th>
+									<th class="text-center">Category</th>
+									<th class="text-center">Desc</th>
+									<th class="text-center"></th>
+								</thead>
+							</table>
 						</div>
 						<div class="col-md-4">
 							<h4>Top Transaction</h4>

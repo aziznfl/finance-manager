@@ -16,28 +16,35 @@ class MY_Controller extends CI_Controller {
 		$GLOBALS['menus'] = $this->CoreModel->getMenus();
 	}
 
-	function getCategories() {
-		$result = $this->M_Transaction->getCategories()->result();
+	function listCategories() {
+		$result = $this->M_Transaction->getCategories()->result_array();
 		return $result;
 	}
 
 	//-------- Transaction ---------//
 
 	function monthTransaction($month, $year) {
-		return $this->M_Transaction->getMonthTransaction($month, $year);
+		$result = $this->M_Transaction->getMonthTransaction($month, $year)->result_array();
+		$all = array();
+		foreach ($result as $transaction) {
+			$transaction["amount"] = (int)$transaction["amount"];
+			$transaction["amount_text"] = number_format($transaction["amount"]);
+			$transaction["category_name"] = ucwords($transaction["category_name"]);
+			array_push($all, $transaction);
+		}
+		return $all;
 	}
 
 	function topTransaction($month, $year) {
 		$result = $this->M_Transaction->getTopTransaction($month, $year)->result_array();
 		$all = array();
 		foreach ($result as $transaction) {
-			$arr = array();
-			$arr["category_id"] = (int)$transaction["category_id"];
-			$arr["category_name"] = $transaction["category_name"];
-			$arr["total"] = (int)$transaction["total"];
-			$arr["total_text"] = number_format($transaction["total"]);
-			$arr["percentage"] = number_format($transaction["percentage"], 2)."%";
-			array_push($all, $arr);
+			$transaction["category_id"] = (int)$transaction["category_id"];
+			$transaction["category_name"] = ucwords($transaction["category_name"]);
+			$transaction["total"] = (int)$transaction["total"];
+			$transaction["total_text"] = number_format($transaction["total"]);
+			$transaction["percentage"] = number_format($transaction["percentage"], 2)."%";
+			array_push($all, $transaction);
 		}
 		return $all;
 	}

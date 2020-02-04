@@ -9,6 +9,8 @@ class M_Transaction extends CI_Model {
 
 	function getCategories() {
 		$this->db->where("category_id != 1");
+		$this->db->order_by("parent_id", "ASC");
+		$this->db->order_by("category_name", "ASC");
 		return $this->db->get('category');
 	}
 
