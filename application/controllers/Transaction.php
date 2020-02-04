@@ -14,7 +14,6 @@ class Transaction extends MY_Controller {
     }
 
 	function history($year = "", $month = "") {
-		print_r($result);
 		if ($year == "") $year = date('Y');
 		if ($month == "") $month = date('n');
 		$result["first_transaction"] = $this->getFirstTransaction()->result();
@@ -48,7 +47,6 @@ class Transaction extends MY_Controller {
 
 				function reloadMonthTransaction(params) {
 					var link = '".base_url()."'+'api/getMonthTransaction/'+params;
-					console.log(link);
 					tableMonthTrans = $('#datatable-month-transaction').DataTable({
 						'ajax': link,
 						'destroy': true,
