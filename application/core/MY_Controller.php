@@ -23,6 +23,18 @@ class MY_Controller extends CI_Controller {
 
 	//-------- Transaction ---------//
 
+	function lastTransaction($limit) {
+		$result = $this->M_Transaction->getAllTransaction($limit)->result_array();
+		$all = array();
+		foreach ($result as $transaction) {
+			$transaction["amount"] = (int)$transaction["amount"];
+			$transaction["amount_text"] = number_format($transaction["amount"]);
+			$transaction["category_name"] = ucwords($transaction["category_name"]);
+			array_push($all, $transaction);
+		}
+		return $all;
+	}
+
 	function monthTransaction($month, $year) {
 		$result = $this->M_Transaction->getMonthTransaction($month, $year)->result_array();
 		$all = array();

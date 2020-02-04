@@ -15,9 +15,6 @@ class Dashboard extends MY_Controller {
     }
 
 	public function index() {
-		// get last transaction
-		$result["transactions"] = $this->M_Transaction->getAllTransaction(10);
-
 		// get transaction history for charts
 		$months = array();
 		$category = [];
@@ -39,6 +36,32 @@ class Dashboard extends MY_Controller {
 
 		$result["add_footer"] = "
 		<script>
+			$(function() {
+				table = $('#datatable-last-transaction').DataTable({
+					'orderable': false,
+					'searching': false,
+					'paging': false,
+					'bInfo': false,
+					'ajax': '".base_url()."'+'api/getLastTransaction',
+					'destroy': true,
+					'columns': [
+						{'searchable': false, 'orderable': false, 'defaultContent': '', 'className': 'text-center'},
+						{'data': 'transaction_date', 'className': 'text-center'},
+						{'data': 'amount_text', 'className': 'text-right'},
+						{'data': 'category_name', 'className': 'text-center'},
+						{'data': 'description', 'className': 'text-center'},
+						{'data': null, 'className': 'text-center', 'defaultContent': '<i class=\"fa fa-edit\"></i>'}
+					],
+					'order': [1, 'desc']
+				});
+
+				table.on('order.dt search.dt', function() {
+			        table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+			            cell.innerHTML = i+1;
+			        } );
+			    }).draw();
+			});
+
 			Highcharts.chart('chart-transactions', {
 			    chart: {
 			        type: 'column'

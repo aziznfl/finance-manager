@@ -20,9 +20,14 @@ class API extends MY_Controller {
 
 	//-------- Investment --------//
 
+	function getLastTransaction($limit = 10) {
+		$result = $this->lastTransaction($limit);
+		echo json_encode(array("data" => $result));
+	}
+
 	function getTotalInvestment() {
-		$investment = $this->totalInvestment();
-		echo json_encode(array("number" => $investment, "text" => number_format($investment)));
+		$result = $this->totalInvestment();
+		echo json_encode(array("number" => $result, "text" => number_format($result)));
 	}
 
 	function getListInvestment() {
