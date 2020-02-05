@@ -19,6 +19,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $config['google']['client_id']        = '693599868927-sl0s3kk1lrsvb9udromokn7p7r7firht.apps.googleusercontent.com';
 $config['google']['client_secret']    = '9aUCNUk-RWPT-CUkDu54I7y0';
 $config['google']['redirect_uri']     = 'http://fm.aziznfl.com/account/logingoogle';
-$config['google']['application_name'] = 'Login to aziznfl.com';
+$config['google']['application_name'] = 'Finance Manager';
 $config['google']['api_key']          = 'AIzaSyDzgbNeW8DbhSEm6XKpOySeyNi0nzhNwXA';
 $config['google']['scopes']           = array();

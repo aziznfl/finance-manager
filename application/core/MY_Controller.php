@@ -18,10 +18,25 @@ class MY_Controller extends CI_Controller {
 
 	function listCategories() {
 		$result = $this->M_Transaction->getCategories()->result_array();
-		return $result;
+		$all = array();
+		foreach ($result as $cat) {
+			if ($cat["parent_id"] == 1) {
+				$cat["child"] = array();
+				$all[$cat["category_id"]] = $cat;
+			} else {
+				array_push($all[$cat["parent_id"]]["child"], $cat);
+			}
+		}
+		$all = array_values($all);
+		return $all;
 	}
 
 	//-------- Transaction ---------//
+
+	function addNewTransaction($data) {
+		$result = $this->M_Transaction->addData("transaction", $data);
+		header("location:".base_url());
+	}
 
 	function lastTransaction($limit) {
 		$result = $this->M_Transaction->getAllTransaction($limit)->result_array();

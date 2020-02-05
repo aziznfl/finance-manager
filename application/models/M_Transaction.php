@@ -10,19 +10,8 @@ class M_Transaction extends CI_Model {
 	function getCategories() {
 		$this->db->where("category_id != 1");
 		$this->db->order_by("parent_id", "ASC");
-		$this->db->order_by("category_name", "ASC");
+		$this->db->order_by("position", "ASC");
 		return $this->db->get('category');
-	}
-
-	function getAllTransaction($limit, $type = "outcome") {
-		// $this->db->limit($limit);
-		$this->db->join("category", "category.category_id = transaction.category_id");
-		$this->db->order_by("type", "DESC");
-		$this->db->order_by("transaction_date", "DESC");
-		$this->db->order_by("category.category_id", "ASC");
-		$this->db->where("type", $type);
-		$this->db->limit($limit);
-		return $this->db->get('transaction');
 	}
 
 	function getDashboardTransaction($type = "outcome") {
@@ -70,7 +59,25 @@ class M_Transaction extends CI_Model {
 		return $this->db->query($query);
 	}
 
+	//-------- Global --------//
+
+	function addData($table, $data) {
+		$this->db->insert($table, $data);
+		return $this->db->affected_rows();
+	}
+
 	//-------- Transaction ---------//
+
+	function getAllTransaction($limit, $type = "outcome") {
+		// $this->db->limit($limit);
+		$this->db->join("category", "category.category_id = transaction.category_id");
+		$this->db->order_by("type", "DESC");
+		$this->db->order_by("transaction_date", "DESC");
+		$this->db->order_by("category.category_id", "ASC");
+		$this->db->where("type", $type);
+		$this->db->limit($limit);
+		return $this->db->get('transaction');
+	}
 
 	function getMonthTransaction($month, $year, $type = "outcome") {
 		$this->db->join("category", "category.category_id = transaction.category_id", "left");

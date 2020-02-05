@@ -56,7 +56,7 @@ class Transaction extends MY_Controller {
 							{'data': 'amount_text', 'className': 'text-right'},
 							{'data': 'category_name', 'className': 'text-center'},
 							{'data': 'description', 'className': 'text-center'},
-							{'data': null, 'className': 'text-center', 'defaultContent': '<i class=\"fa fa-edit\"></i>'}
+							{'orderable': false, 'className': 'text-center', 'defaultContent': '<i class=\"fa fa-edit\"></i>'}
 						],
 						'order': [1, 'desc']
 					});
@@ -96,6 +96,11 @@ class Transaction extends MY_Controller {
 				$(function () {
 					$('input[name=date]').focus();
 				})
+
+			    $('#input-form-transaction').click(function () {
+			    	console.log($(this).text());
+			    	$(this).addClass('disabled');
+			    });
 			</script>
 		";
 
@@ -103,6 +108,14 @@ class Transaction extends MY_Controller {
 		$this->load->view('root/_menus');
 		$this->load->view('transaction/manage');
 		$this->load->view('root/_footer');
+	}
+
+	function add() {
+		$arr["transaction_date"] = $this->input->post('date');
+		$arr["amount"] = $this->input->post('amount');
+		$arr["category_id"] = $this->input->post('category');
+		$arr["description"] = $this->input->post('description');
+		$this->addNewTransaction($arr);
 	}
 
 	//------ AJAX ------//

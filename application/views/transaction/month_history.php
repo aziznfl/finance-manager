@@ -46,7 +46,7 @@
 					<div class="row">
 						<div class="col-md-8">
 							<h4>List Transaction</h4>
-							<table id="datatable-month-transaction" class="table table-bordered table-striped table-hovered">
+							<table id="datatable-month-transaction" class="table table-bordered table-striped table-hover">
 								<thead>
 									<th class="text-center">No</th>
 									<th class="text-center">Date</th>
@@ -59,7 +59,7 @@
 						</div>
 						<div class="col-md-4">
 							<h4>Top Transaction</h4>
-							<table id="datatable-top-transaction" class="table table-bordered table-striped table-hovered">
+							<table id="datatable-top-transaction" class="table table-bordered table-striped table-hover">
 								<thead>
 									<th class="text-center">No</th>
 									<th class="text-center">Category</th>
