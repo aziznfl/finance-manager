@@ -38,6 +38,18 @@ class MY_Controller extends CI_Controller {
 		header("location:".base_url());
 	}
 
+	function updateTransaction($data, $where) {
+		$result = $this->M_Transaction->updateData("transaction", $data, $where);
+		header("location:".base_url());
+	}
+
+	function transaction($transaction_id) {
+		$result = $this->M_Transaction->getTransaction($transaction_id)->result_array();
+		$result = $result[0];
+		$result["amount"] = (int)$result["amount"];
+		return $result;
+	}
+
 	function lastTransaction($limit) {
 		$result = $this->M_Transaction->getAllTransaction($limit)->result_array();
 		$all = array();

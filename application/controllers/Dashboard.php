@@ -50,7 +50,12 @@ class Dashboard extends MY_Controller {
 						{'data': 'amount_text', 'className': 'text-right'},
 						{'data': 'category_name', 'className': 'text-center'},
 						{'data': 'description', 'className': 'text-center'},
-						{'data': null, 'className': 'text-center', 'defaultContent': '<i class=\"fa fa-edit\"></i>'}
+						{'orderable': false, 
+							'className': 'text-center',
+							'render': function (param, type, data, meta) {
+								return '<a href=\"".base_url('transaction/manage/')."'+data.transaction_id+'\"><i class=\"fa fa-edit\"></i></a>';
+							}
+						}
 					],
 					'order': [1, 'desc']
 				});

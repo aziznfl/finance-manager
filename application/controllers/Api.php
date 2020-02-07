@@ -18,6 +18,23 @@ class API extends MY_Controller {
 		echo json_encode(array("data" => $result));
 	}
 
+	//-------- Transaction ---------//
+
+	function getTransaction($transaction_id) {
+		$result = $this->transaction($transaction_id);
+		echo json_encode($result);
+	}
+
+	function getTopTransaction($year = "", $month = "") {
+		$result = $this->topTransaction($month, $year);
+		echo json_encode(array("data" => $result));
+	}
+
+	function getMonthTransaction($year = "", $month = "") {
+		$result = $this->monthTransaction($month, $year);
+		echo json_encode(array("data" => $result));
+	}
+
 	//-------- Investment --------//
 
 	function getLastTransaction($limit = 10) {
@@ -32,18 +49,6 @@ class API extends MY_Controller {
 
 	function getListInvestment() {
 		$result = $this->listInvestment();
-		echo json_encode(array("data" => $result));
-	}
-
-	//-------- Transaction ---------//
-
-	function getTopTransaction($year = "", $month = "") {
-		$result = $this->topTransaction($month, $year);
-		echo json_encode(array("data" => $result));
-	}
-
-	function getMonthTransaction($year = "", $month = "") {
-		$result = $this->monthTransaction($month, $year);
 		echo json_encode(array("data" => $result));
 	}
 }

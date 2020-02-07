@@ -8,8 +8,10 @@ class Transaction extends MY_Controller {
 
 		if ($this->session->userdata('user') == '') {
 			header("location: ".base_url('account'));
+			exit;
 		}
 
+		$this->load->helper('form');
 		$this->load->model('M_Transaction');
     }
 
@@ -56,7 +58,12 @@ class Transaction extends MY_Controller {
 							{'data': 'amount_text', 'className': 'text-right'},
 							{'data': 'category_name', 'className': 'text-center'},
 							{'data': 'description', 'className': 'text-center'},
-							{'orderable': false, 'className': 'text-center', 'defaultContent': '<i class=\"fa fa-edit\"></i>'}
+							{'orderable': false, 
+								'className': 'text-center',
+								'render': function (param, type, data, meta) {
+									return '<a href=\"".base_url('transaction/manage/')."'+data.transaction_id+'\"><i class=\"fa fa-edit\"></i></a>';
+								}
+							}
 						],
 						'order': [1, 'desc']
 					});
@@ -89,18 +96,62 @@ class Transaction extends MY_Controller {
 		$this->load->view('root/_footer');
 	}
 
-	function manage() {
-		$result["categories"] = $this->listCategories();
+	function manage($transaction_id = "") {
+		$script = "";
+
+		//------- CREATE FORM -------//
+
+		$result["date"] = array(
+			'name'  => 'date',
+			'class' => 'form-control datetimepicker'
+		);
+		$result["amount"] = array(
+			'type'  => 'number',
+			'name'  => 'amount',
+			'class' => 'form-control text-right'
+		);
+
+		$categories = $this->listCategories();
+        $list = array();
+        foreach ($categories as $category) {
+            $list[$category["category_id"]] = ucfirst($category["category_name"]);
+            foreach ($category["child"] as $child) {
+                $list[$child["category_id"]] = "- ".ucfirst($child["category_name"]);
+            }
+        }
+        $result["category"]["list"] = $list;
+        $result["category"]["tag"] = array('class' => 'form-control select2');
+        $result["category"]["value"] = "";
+
+        $result["description"] = array(
+			'name'  => 'description',
+			'class' => 'form-control',
+			'placeholder' => 'Description'
+        );
+
+		//------- /CREATE FORM -------//
+
+		// if edit -> get data from server
+		if ($transaction_id != "") {
+			$old_transaction = $this->transaction($transaction_id);
+			$result["date"]["value"] = $old_transaction["transaction_date"];
+        	$result["amount"]["value"] = $old_transaction["amount"];
+        	$result["category"]["value"] = array($old_transaction["category_id"]);
+        	$result["description"]["value"] = $old_transaction["description"];
+
+			$result["form_hidden"] = array("transaction_id" => $transaction_id);
+		} else {
+			$result["form_hidden"] = null;
+			$script = "$('input[name=date]').focus();";
+		}
+ 
 		$result["add_footer"] = "
 			<script>
-				$(function () {
-					$('input[name=date]').focus();
-				})
+				$(function() {
+				    ".$script."
+				});
 
-			    $('#input-form-transaction').click(function () {
-			    	console.log($(this).text());
-			    	$(this).addClass('disabled');
-			    });
+				// function for choose tabs
 			</script>
 		";
 
@@ -110,45 +161,19 @@ class Transaction extends MY_Controller {
 		$this->load->view('root/_footer');
 	}
 
-	function add() {
+	function manageTransaction() {
 		$arr["transaction_date"] = $this->input->post('date');
 		$arr["amount"] = $this->input->post('amount');
 		$arr["category_id"] = $this->input->post('category');
 		$arr["description"] = $this->input->post('description');
-		$this->addNewTransaction($arr);
-	}
+		$transaction_id = $this->input->post('transaction_id');
 
-	//------ AJAX ------//
-
-	function viewGetMonthTransaction($year = "", $month = "") {
-		if ($year == "") $year = date('Y');
-		if ($month == "") $month = date('n');
-		$result["transactions"] = $this->monthTransaction($month, $year);
-		echo $this->load->view('transaction/ajax/list_month_transaction', $result, TRUE);
-	}
-
-	function viewGetTopTransaction($year = "", $month = "") {
-		if ($year == "") $year = date('Y');
-		if ($month == "") $month = date('n');
-		$result["transactions"] = $this->topTransaction($month, $year);
-		echo $this->load->view('transaction/ajax/list_top_transaction', $result, TRUE);
-	}
-
-	//----- My Function -------//
-
-	// function getMonthTransaction($year = "YEAR(CURRENT_DATE())", $month = "MONTH(CURRENT_DATE())") {
-	// 	$list = $this->M_Transaction->getMonthTransaction($month, $year)->result();
-	// 	print_r(json_encode($list));
-	// }
-
-	function changeNullChar($result) {
-		foreach ($result->result() as $key => $value) {
-			$val = array_map(function($val) {
-				return is_null($val) ? "-" : $val;
-			}, $value);
-			$result[$key] = $val;
+		if ($transaction_id != "") {
+			$where = "transaction_id = ".$this->input->post('transaction_id');
+			$this->updateTransaction($arr, $where);
+		} else {
+			$this->addNewTransaction($arr);
 		}
-		return $result;
 	}
 
 	//------ GET -------//

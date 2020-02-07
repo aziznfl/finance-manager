@@ -66,6 +66,12 @@ class M_Transaction extends CI_Model {
 		return $this->db->affected_rows();
 	}
 
+	function updateData($table, $data, $where) {
+		$this->db->where($where);
+		$this->db->update($table, $data);
+		return $this->db->affected_rows();
+	}
+
 	//-------- Transaction ---------//
 
 	function getAllTransaction($limit, $type = "outcome") {
@@ -73,6 +79,7 @@ class M_Transaction extends CI_Model {
 		$this->db->join("category", "category.category_id = transaction.category_id");
 		$this->db->order_by("type", "DESC");
 		$this->db->order_by("transaction_date", "DESC");
+		$this->db->order_by("added_date", "DESC");
 		$this->db->order_by("category.category_id", "ASC");
 		$this->db->where("type", $type);
 		$this->db->limit($limit);
@@ -83,6 +90,7 @@ class M_Transaction extends CI_Model {
 		$this->db->join("category", "category.category_id = transaction.category_id", "left");
 		$this->db->order_by("type", "DESC");
 		$this->db->order_by("transaction_date", "DESC");
+		$this->db->order_by("added_date", "DESC");
 		$this->db->order_by("category.category_id", "ASC");
 		$this->db->where("type", $type);
 		$this->db->where("MONTH(transaction_date) = ".$month);
@@ -105,6 +113,11 @@ class M_Transaction extends CI_Model {
 			ORDER BY total DESC
 		";
 		return $this->db->query($query);
+	}
+
+	function getTransaction($transaction_id) {
+		$this->db->where("transaction_id", $transaction_id);
+		return $this->db->get('transaction');
 	}
 
 	//-------- Investment --------//
