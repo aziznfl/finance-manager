@@ -152,6 +152,11 @@ class Transaction extends MY_Controller {
 				});
 
 				// function for choose tabs
+				$('.nav-tabs li').click(function() {
+					var tab = $(this).attr('data-tab');
+					console.log(tab);
+					$('#'+tab+'-transaction').removeClass('hide').siblings().addClass('hide');
+				});
 			</script>
 		";
 
