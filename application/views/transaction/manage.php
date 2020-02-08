@@ -11,8 +11,8 @@
             <div class="col-sm-12 col-md-4">
                 <div class="nav-tabs-custom">
                     <ul class="nav nav-tabs">
-                        <li class="active" data-tab="default"><a href="javascript:void(0)">Transaction</a></li>
-                        <li data-tab="investment"><a href="javascript:void(0)">Investment</a></li>
+                        <li id="tr" class="active" data-tab="default"><a href="javascript:void(0)">Transaction</a></li>
+                        <li id="iv" data-tab="investment"><a href="javascript:void(0)">Investment</a></li>
                     </ul>
                     <div class="tab-content">
                         <div id="default-transaction">

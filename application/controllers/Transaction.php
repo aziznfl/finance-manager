@@ -61,7 +61,7 @@ class Transaction extends MY_Controller {
 							{'orderable': false, 
 								'className': 'text-center',
 								'render': function (param, type, data, meta) {
-									return '<a href=\"".base_url('transaction/manage/')."'+data.transaction_id+'\"><i class=\"fa fa-edit\"></i></a>';
+									return '<a href=\"".base_url('transaction/manage/tr/')."'+data.transaction_id+'\"><i class=\"fa fa-edit\"></i></a>';
 								}
 							}
 						],
@@ -96,7 +96,7 @@ class Transaction extends MY_Controller {
 		$this->load->view('root/_footer');
 	}
 
-	function manage($transaction_id = "") {
+	function manage($type = "tr", $transaction_id = "") {
 		$script = "";
 
 		//------- CREATE FORM -------//
@@ -155,6 +155,7 @@ class Transaction extends MY_Controller {
 				    ".$script."
 
 				    $('#default-transaction').siblings().addClass('hide');
+				    $('#".$type."').trigger('click');
 				});
 
 				// function for choose tabs
