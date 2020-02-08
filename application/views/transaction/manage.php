@@ -64,7 +64,7 @@
                                 <div id="input-category-investment" class="form-group">
                                     <label>Category *</label>
                                     <?php // echo form_dropdown('category', $category_investment["list"], $category_investment["value"], $category_investment["tag"]); ?>
-                                    <select class="form-control select2">
+                                    <select class="form-control select2" name="category">
                                         <option></option>
                                         <?php
                                         foreach ($category_investment as $category) {
