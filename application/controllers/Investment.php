@@ -53,8 +53,16 @@ class Investment extends MY_Controller {
 									}
 								}
 							},
-							{'targets': 4, 'data': 'description', 'className': 'text-center'},
-							{'targets': 5, 'data': 'invest', 'className': 'text-center'},
+							{
+								'targets': 4, 
+								'className': 'text-center',
+								'render': function (param, type, data, meta) {
+									var valueText = '';
+									if (data.value_text != null) valueText = ' ('+data.value_text+')'
+									return data.description + valueText;
+								}
+							},
+							{'targets': 5, 'data': 'manager', 'className': 'text-center'}
 						],
 						'order': [1, 'desc']
 					});
@@ -86,7 +94,10 @@ class Investment extends MY_Controller {
 						html += '<tr><td width=\"5%\" class=\"text-center\">-</td>';
 						html += '<td class=\"text-center\">'+data[i].transaction_date+'</td>';
 						html += '<td class=\"text-right\">'+amount+'</td>';
-						html += '<td colspan=3 width=\"60%\"></td></tr>';
+						var value = '';
+						if (data[i].unit != null) value = data[i].value+' '+data[i].unit;
+						html += '<td class=\"text-right\" width=\"10%\">'+value+'</td>';
+						html += '<td colspan=2 width=\"50%\"></td></tr>';
 					}
 					html += '</table>';
 

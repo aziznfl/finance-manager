@@ -14,6 +14,10 @@ class M_Transaction extends CI_Model {
 		return $this->db->get('category');
 	}
 
+	function getCategoriesInvestment() {
+		return $this->db->get('category_investment');
+	}
+
 	function getDashboardTransaction($type = "outcome") {
 		$this->db->select("*");
 		$this->db->select("SUM(amount) as total");
@@ -123,6 +127,7 @@ class M_Transaction extends CI_Model {
 	//-------- Investment --------//
 
 	function getInvestment() {
+		$this->db->join("category_investment", "transaction_investment.category_id = category_investment.category_id", "left");
 		$this->db->order_by("transaction_date", "ASC");
 		return $this->db->get('transaction_investment');
 	}

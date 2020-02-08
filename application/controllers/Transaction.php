@@ -108,7 +108,8 @@ class Transaction extends MY_Controller {
 		$result["amount"] = array(
 			'type'  => 'number',
 			'name'  => 'amount',
-			'class' => 'form-control text-right'
+			'class' => 'form-control text-right',
+			'value' => 0
 		);
 
 		$categories = $this->listCategories();
@@ -122,6 +123,9 @@ class Transaction extends MY_Controller {
         $result["category"]["list"] = $list;
         $result["category"]["tag"] = array('class' => 'form-control select2');
         $result["category"]["value"] = "";
+
+		$categories = $this->listCategoriesInvestment();
+        $result["category_investment"] = $categories;
 
         $result["description"] = array(
 			'name'  => 'description',
@@ -149,13 +153,28 @@ class Transaction extends MY_Controller {
 			<script>
 				$(function() {
 				    ".$script."
+
+				    $('#default-transaction').siblings().addClass('hide');
 				});
 
 				// function for choose tabs
 				$('.nav-tabs li').click(function() {
+					$(this).addClass('active').siblings().removeClass('active');
+
 					var tab = $(this).attr('data-tab');
-					console.log(tab);
 					$('#'+tab+'-transaction').removeClass('hide').siblings().addClass('hide');
+				});
+
+				// function for choose category investment to show input value or not
+				$('#input-category-investment select').change(function () {
+					var unit = $('option:selected', this).attr('data-unit');
+
+					if (unit != null) {
+						$('#input-value').removeClass('hide');
+						$('#label-unit-investment-category').text(unit);
+					} else {
+						$('#input-value').addClass('hide');
+					}
 				});
 			</script>
 		";
@@ -178,6 +197,24 @@ class Transaction extends MY_Controller {
 			$this->updateTransaction($arr, $where);
 		} else {
 			$this->addNewTransaction($arr);
+		}
+	}
+
+	function manageInvestment() {
+		$arr["transaction_date"] = $this->input->post('date');
+		$arr["amount"] = $this->input->post('amount');
+		$arr["category_id"] = $this->input->post('category');
+		$arr["description"] = $this->input->post('description');
+		$arr["value"] = $this->input->post('value');
+		$arr["manager"] = $this->input->post('manager');
+		$arr["account_id"] = $this->session->userdata('user')->account_id;
+
+		$transaction_id = $this->input->post('transaction_investment_id');
+		if ($transaction_id != "") {
+			$where = "transaction_investment_id = ".$this->input->post('transaction_investment_id');
+			$this->updateInvestment($arr, $where);
+		} else {
+			$this->addNewInvestment($arr);
 		}
 	}
 

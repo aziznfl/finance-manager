@@ -18,6 +18,11 @@ class API extends MY_Controller {
 		echo json_encode(array("data" => $result));
 	}
 
+	function getCategoriesInvestment() {
+		$result = $this->listCategoriesInvestment();
+		echo json_encode(array("data" => $result));
+	}
+
 	//-------- Transaction ---------//
 
 	function getTransaction($transaction_id) {

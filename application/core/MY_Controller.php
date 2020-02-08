@@ -31,6 +31,10 @@ class MY_Controller extends CI_Controller {
 		return $all;
 	}
 
+	function listCategoriesInvestment() {
+		return $this->M_Transaction->getCategoriesInvestment()->result_array();
+	}
+
 	//-------- Transaction ---------//
 
 	function addNewTransaction($data) {
@@ -90,6 +94,11 @@ class MY_Controller extends CI_Controller {
 
 	//-------- Investment --------//
 
+	function addNewInvestment($data) {
+		$result = $this->M_Transaction->addData("transaction_investment", $data);
+		header("location:".base_url());
+	}
+
 	function totalInvestment() {
 		$investment = $this->M_Transaction->getTotalInvestment()->result();
 		$investment = $investment[0]->total_investment;
@@ -106,14 +115,22 @@ class MY_Controller extends CI_Controller {
 			$arr["date"] = $portfolio["transaction_date"];
 			$arr["amount"] = (int)$portfolio["amount"];
 			$arr["amount_text"] = number_format($arr["amount"]);
+			$arr["value"] = (float)$portfolio["value"];
+			if ($portfolio["unit"] != "") $arr["value_text"] = $portfolio["value"] ." ". $portfolio["unit"];
+			else $arr["value_text"] = null;
 			$arr["state_text"] = !$portfolio["is_done"] ? "Progress" : "Done";
 			$arr["description"] = $portfolio["description"];
-			$arr["invest"] = $portfolio["invest"];
+			$arr["manager"] = $portfolio["manager"];
 			$arr["child"] = array($portfolio);
 			if (array_key_exists($portfolio["description"], $portfolios)) {
 				$amount = $portfolios[$portfolio["description"]]["amount"];
 				$amount += $portfolio["is_done"] == 0 ? $portfolio["amount"] : -$portfolio["amount"];
 				$portfolios[$portfolio["description"]]["amount"] = (int)$amount;
+
+				$portfolios[$portfolio["description"]]["value"] += (float)$portfolio["value"];
+				if ($portfolio["unit"] != "") {
+					$portfolios[$portfolio["description"]]["value_text"] = $portfolios[$portfolio["description"]]["value"] ." ". $portfolio["unit"];
+				}
 
 				if ($portfolio["is_done"]) {
 					$amount *= -1;

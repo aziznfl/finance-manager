@@ -18,7 +18,7 @@
         	    			<th class='text-center'>Amount</th>
                             <th class='text-center'>Status</th>
         	    			<th class='text-center'>Description</th>
-                            <th class='text-center'>Invest</th>
+                            <th class='text-center'>Manager</th>
         	    		</tr>
         	    	</thead>
             	</table>
