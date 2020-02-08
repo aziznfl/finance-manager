@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<meta name="google-signin-client_id" content="693599868927-im5b3bk3pknrf7mfiev2retgu7uinkvf.apps.googleusercontent.com">
+	<meta name="google-signin-client_id" content="693599868927-nj3unofacq74dfasmgd3rshnuol0a6s8.apps.googleusercontent.com">
 	<title>Codeigniter Sign In With Google+</title>
 
 	<style type="text/css">
