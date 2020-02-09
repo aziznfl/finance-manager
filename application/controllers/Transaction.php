@@ -83,6 +83,12 @@ class Transaction extends MY_Controller {
 			                }},
 							{'data': 'category_name', 'className': 'text-center'},
 							{'data': 'percentage', 'className': 'text-right'}
+							{
+								'className': 'text-center',
+								'render': function (param, type, data, meta) {
+									return data.total_text+' (<b>'+data.percentage+'</b>)';
+								}
+							}
 						],
 						'order': [2, 'desc']
 					});
