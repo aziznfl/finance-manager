@@ -39,27 +39,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 		<!-- Footer -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
-		<script type="text/javascript">
-			function signin() {
-				var username = $('input[name="username"]').val();
-				var password = $('input[name="password"]').val();
-				password = CryptoJS.MD5(password).toString();
-				
-				$.ajax({
-					type: 'POST',
-					url: '<?php echo base_url('account/login'); ?>',
-					data: {username: username, password: password},
-					cache: false,
-					success: function(result) {
-						if (result) {
-							window.location.replace("<?php echo base_url(); ?>");
-						} else {
-							console.log("error");
-						}
-					}
-				});
-			}
-		</script>
 		<!-- jQuery 3 -->
 		<script src="<?php echo base_url(); ?>assets/jquery/jquery.min.js"></script>
 		<!-- jQuery UI 1.11.4 -->
@@ -80,7 +59,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 			function onSignIn(googleUser) {
 				var profile = googleUser.getBasicProfile();
-				console.log(profile);
+				console.log("profile: "+profile);
 
 				var user = {
 					email: profile.getEmail(),
@@ -97,7 +76,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 							if (countUser == 1) {
 								window.location.href("<?php echo base_url(); ?>");
 							} else {
-								signUp(user);
+								alert("User" + user.name + " not yet registered. Register?");
+								// signUp(user);
 							}
 						}
 					});
@@ -119,7 +99,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				var auth2 = gapi.auth2.getAuthInstance();
 				auth2.signOut().then(function () {
 					console.log('User signed out.');
-					window.location.replace("<?php echo base_url('account/logout'); ?>");
+					// window.location.replace("<?php echo base_url('account/logout'); ?>");
 				});
 			}
 		</script>
