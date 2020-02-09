@@ -32,86 +32,103 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	</head>
 	<body style="background-color: #eaeaea;">
 
+		<div style="width: 400px; height: auto; background-color: white; margin: 0; position: absolute; top: 50%; left: 50%; -ms-transform: translate(-50%, -100%); transform: translate(-50%, -100%); border: 1px solid #cacaca; border-radius: 4px; padding: 16px;">
+			<h3 style="margin: 0"><center>Finance Manager</center></h3>
+			<hr style="border-color: #aaaaaa" />
+			<div class="g-signin2" data-onsuccess="onSignIn" style="margin: 0 auto;"></div>
+			<p style="margin-top: 10px;">Please login with your google account!</p>
+		</div>
 
-			<div style="width: 400px; height: auto; background-color: white; margin: 0; position: absolute; top: 50%; left: 50%; -ms-transform: translate(-50%, -100%); transform: translate(-50%, -100%); border: 1px solid #cacaca; border-radius: 4px; padding: 16px;">
-				<h3 style="margin: 0"><center>Finance Manager</center></h3>
-				<hr style="border-color: #aaaaaa" />
-				<div class="g-signin2" data-onsuccess="onSignIn" style="margin: 0 auto;"></div>
-				<p style="margin-top: 10px;">Please login with your google account!</p>
-			</div>
+		<!-- Footer -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
+		<script type="text/javascript">
+			function signin() {
+				var username = $('input[name="username"]').val();
+				var password = $('input[name="password"]').val();
+				password = CryptoJS.MD5(password).toString();
+				
+				$.ajax({
+					type: 'POST',
+					url: '<?php echo base_url('account/login'); ?>',
+					data: {username: username, password: password},
+					cache: false,
+					success: function(result) {
+						if (result) {
+							window.location.replace("<?php echo base_url(); ?>");
+						} else {
+							console.log("error");
+						}
+					}
+				});
+			}
+		</script>
+		<!-- jQuery 3 -->
+		<script src="<?php echo base_url(); ?>assets/jquery/jquery.min.js"></script>
+		<!-- jQuery UI 1.11.4 -->
+		<script src="<?php echo base_url(); ?>assets/jquery-ui/jquery-ui.min.js"></script>
+		<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+		<script>
+			$.widget.bridge('uibutton', $.ui.button);
 
-			<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
-			<script type="text/javascript">
-				function signin() {
-					var username = $('input[name="username"]').val();
-					var password = $('input[name="password"]').val();
-					password = CryptoJS.MD5(password).toString();
-					
+			$(function () {
+				if (typeof googleUser !== "undefined") {
+					onSignIn();
+				} else {
+					console.log("profile is null");
+				}
+			});
+
+			function onSignIn(googleUser) {
+				var profile = googleUser.getBasicProfile();
+
+				var user = {
+					email: profile.getEmail(),
+					name: profile.getName(),
+					imageUrl: profile.getImageUrl()
+				};
+
+				if (profile != null) {
 					$.ajax({
-						type: 'POST',
-						url: '<?php echo base_url('account/login'); ?>',
-						data: {username: username, password: password},
-						cache: false,
-						success: function(result) {
-							if (result) {
-								window.location.replace("<?php echo base_url(); ?>");
+						method: "POST",
+						url: "<?php echo base_url('account/login'); ?>",
+						data: user,
+						success: function(countUser) {
+							if (countUser == 1) {
+								window.location.href("<?php echo base_url(); ?>");
 							} else {
-								console.log("error");
+								signUp(user);
 							}
 						}
 					});
 				}
-			</script>
-
-
-	<!-- jQuery 3 -->
-	<script src="<?php echo base_url(); ?>assets/jquery/jquery.min.js"></script>
-	<!-- jQuery UI 1.11.4 -->
-	<script src="<?php echo base_url(); ?>assets/jquery-ui/jquery-ui.min.js"></script>
-	<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-	<script>
-		$.widget.bridge('uibutton', $.ui.button);
-
-		$(function () {
-			if (typeof googleUser !== "undefined") {
-				onSignIn();
-			} else {
-				console.log("profile is null");
 			}
-		});
 
-		function onSignIn(googleUser) {
-			var profile = googleUser.getBasicProfile();
-
-			$.ajax({
-				method: "POST",
-				url: "<?php echo base_url('account/login'); ?>",
-				data: {email: profile.getEmail(), name: profile.getName(), imageUrl: profile.getImageUrl()},
-				success: function(countUser) {
-					if (countUser == 1) {
+			function signUp(user) {
+				$.ajax({
+					method: "POST",
+					url: "<?php echo base_url('account/register'); ?>",
+					data: user,
+					success: function(data) {
 						window.location.href("<?php echo base_url(); ?>");
-					} else {
-						alert("User belum terdaftar, lanjutkan?");
 					}
-				}
-			});
-		}
-	</script>
-	<!-- Bootstrap 3.3.7 -->
-	<script src="<?php echo base_url(); ?>assets/bootstrap/js/bootstrap.min.js"></script>
-	<!-- highcharts -->
-	<script src="<?php echo base_url(); ?>assets/highcharts/highcharts.js"></script>
-	<!-- Slimscroll -->
-	<script src="<?php echo base_url(); ?>assets/jquery-slimscroll/jquery.slimscroll.min.js"></script>
-	<!-- datatables -->
-	<script src="<?php echo base_url(); ?>assets/datatables/datatables.min.js"></script>
-	<!-- AdminLTE App -->
-	<script src="<?php echo base_url(); ?>assets/admin-lte/js/adminlte.min.js"></script>
-	<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-	<script src="<?php echo base_url(); ?>assets/admin-lte/js/pages/dashboard.js"></script>
-	<!-- AdminLTE for demo purposes -->
-	<script src="<?php echo base_url(); ?>assets/admin-lte/js/demo.js"></script>
-	<script src="https://apis.google.com/js/platform.js" async defer></script>
+				});
+			}
+		</script>
+		<!-- Bootstrap 3.3.7 -->
+		<script src="<?php echo base_url(); ?>assets/bootstrap/js/bootstrap.min.js"></script>
+		<!-- highcharts -->
+		<script src="<?php echo base_url(); ?>assets/highcharts/highcharts.js"></script>
+		<!-- Slimscroll -->
+		<script src="<?php echo base_url(); ?>assets/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+		<!-- datatables -->
+		<script src="<?php echo base_url(); ?>assets/datatables/datatables.min.js"></script>
+		<!-- AdminLTE App -->
+		<script src="<?php echo base_url(); ?>assets/admin-lte/js/adminlte.min.js"></script>
+		<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+		<script src="<?php echo base_url(); ?>assets/admin-lte/js/pages/dashboard.js"></script>
+		<!-- AdminLTE for demo purposes -->
+		<script src="<?php echo base_url(); ?>assets/admin-lte/js/demo.js"></script>
+		<script src="https://apis.google.com/js/platform.js" async defer></script>
 
 	<!-- add script of each module -->
 	</body>

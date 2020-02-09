@@ -17,9 +17,7 @@ class Account extends MY_Controller {
 	}
 
 	function login() {
-		$user["name"] = $this->input->post('email');
 		$user["email"] = $this->input->post('name');
-		$user["imageUrl"] = $this->input->post('imageUrl');
 		$user = $this->loginUser($User);
 
 		if (count($user) == 1) {
@@ -27,6 +25,19 @@ class Account extends MY_Controller {
 		}
 
 		return $countUser;
+	}
+
+	function register() {
+		$user["name"] = $this->input->post('email');
+		$user["email"] = $this->input->post('name');
+		$user["imageUrl"] = $this->input->post('imageUrl');
+		$result = $this->register($user);
+
+		if ($result) {
+			$this->session->set_userdata('user', $user[0]);
+		}
+
+		return $result
 	}
 
 	function logout() {
