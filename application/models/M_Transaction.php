@@ -25,6 +25,7 @@ class M_Transaction extends CI_Model {
 		$this->db->group_by("extract(year from transaction_date), extract(month from transaction_date)");
 		$this->db->order_by("transaction_date", "ASC");
 		$this->db->order_by("type", "DESC");
+		$this->db->where("account_id", $this->session->userdata('user')->account_id);
 		$this->db->where("type", $type);
 		$query = $this->db->get('transaction');
 		return $query->result_array();
@@ -86,6 +87,7 @@ class M_Transaction extends CI_Model {
 		$this->db->order_by("added_date", "DESC");
 		$this->db->order_by("category.category_id", "ASC");
 		$this->db->where("type", $type);
+		$this->db->where("account_id", $this->session->userdata('user')->account_id);
 		$this->db->limit($limit);
 		return $this->db->get('transaction');
 	}
@@ -99,6 +101,7 @@ class M_Transaction extends CI_Model {
 		$this->db->where("type", $type);
 		$this->db->where("MONTH(transaction_date) = ".$month);
 		$this->db->where("YEAR(transaction_date) = ".$year);
+		$this->db->where("account_id", $this->session->userdata('user')->account_id);
 		return $this->db->get('transaction');
 	}
 
@@ -128,6 +131,7 @@ class M_Transaction extends CI_Model {
 
 	function getInvestment() {
 		$this->db->join("category_investment", "transaction_investment.category_id = category_investment.category_id", "left");
+		$this->db->where("account_id", $this->session->userdata('user')->account_id);
 		$this->db->order_by("transaction_date", "ASC");
 		return $this->db->get('transaction_investment');
 	}
