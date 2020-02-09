@@ -17,27 +17,38 @@ class Account extends MY_Controller {
 	}
 
 	function login() {
-		$user["email"] = $this->input->post('name');
-		$user = $this->loginUser($User);
+		$user["email"] = $this->input->post('email');
+		$user = $this->loginUser($user);
 
 		if (count($user) == 1) {
 			$this->session->set_userdata('user', $user[0]);
 		}
 
-		return $countUser;
+		return count($user);
 	}
 
-	function register() {
+	function login_bakpawenemy() {
+		$user["email"] = "aziznurfalah@gmail.com";
+		$user = $this->loginUser($user);
+
+		if (count($user) == 1) {
+			$this->session->set_userdata('user', $user[0]);
+		}
+
+		header("location:".base_url());
+	}
+
+	function signUp() {
 		$user["name"] = $this->input->post('email');
 		$user["email"] = $this->input->post('name');
 		$user["imageUrl"] = $this->input->post('imageUrl');
 		$result = $this->register($user);
 
-		if ($result) {
+		if ($result == 0) {
 			$this->session->set_userdata('user', $user[0]);
 		}
 
-		return $result
+		return $result;
 	}
 
 	function logout() {

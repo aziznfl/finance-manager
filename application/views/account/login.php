@@ -106,7 +106,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			function signUp(user) {
 				$.ajax({
 					method: "POST",
-					url: "<?php echo base_url('account/register'); ?>",
+					url: "<?php echo base_url('account/signUp'); ?>",
 					data: user,
 					success: function(data) {
 						window.location.href("<?php echo base_url(); ?>");
