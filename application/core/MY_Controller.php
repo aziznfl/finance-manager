@@ -35,6 +35,12 @@ class MY_Controller extends CI_Controller {
 		return $this->M_Transaction->getCategoriesInvestment()->result_array();
 	}
 
+	function loginUser($user) {
+		$email = $user["email"];
+		$user = $this->M_User->login($email)->result();
+		return $user;
+	}
+
 	//-------- Transaction ---------//
 
 	function addNewTransaction($data) {

@@ -5,6 +5,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <html>
 	<head>
 		<meta charset="utf-8">
+		<meta name="google-signin-client_id" content="693599868927-im5b3bk3pknrf7mfiev2retgu7uinkvf.apps.googleusercontent.com">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<title>AdminLTE 2 | Dashboard</title>
 		<!-- Tell the browser to be responsive to screen width -->
@@ -32,25 +33,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<body style="background-color: #eaeaea;">
 
 
-			<div style="width: 400px; height: auto; background-color: #dfdfdf; margin: 0; position: absolute; top: 50%; left: 50%; -ms-transform: translate(-50%, -50%); transform: translate(-50%, -50%); border: 1px solid #cacaca; border-radius: 4px; padding: 16px;">
-				<div class="form">
-					<div class="form-group">
-						<label style="">Finance Manager</label>
-					</div>
-					<div class="form-group">
-						<div class="input-group">
-							<div class="input-group-addon"><div class="glyphicon glyphicon-user"></div></div>
-							<input type="text" name="username" class="form-control" placeholder="Username" />
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="input-group">
-							<div class="input-group-addon"><div class="glyphicon glyphicon-lock"></div></div>
-							<input type="password" name="password" class="form-control" placeholder="Password" />
-						</div>
-					</div>
-					<button class="btn btn-primary form-control" onclick="signin()">Login</button>
-				</div>
+			<div style="width: 400px; height: auto; background-color: white; margin: 0; position: absolute; top: 50%; left: 50%; -ms-transform: translate(-50%, -100%); transform: translate(-50%, -100%); border: 1px solid #cacaca; border-radius: 4px; padding: 16px;">
+				<h3 style="margin: 0"><center>Finance Manager</center></h3>
+				<hr style="border-color: #aaaaaa" />
+				<div class="g-signin2" data-onsuccess="onSignIn" style="margin: 0 auto;"></div>
+				<p style="margin-top: 10px;">Please login with your google account!</p>
 			</div>
 
 			<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
@@ -83,7 +70,32 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<script src="<?php echo base_url(); ?>assets/jquery-ui/jquery-ui.min.js"></script>
 	<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 	<script>
-	$.widget.bridge('uibutton', $.ui.button);
+		$.widget.bridge('uibutton', $.ui.button);
+
+		$(function () {
+			if (typeof googleUser !== "undefined") {
+				onSignIn();
+			} else {
+				console.log("profile is null");
+			}
+		});
+
+		function onSignIn(googleUser) {
+			var profile = googleUser.getBasicProfile();
+
+			$.ajax({
+				method: "POST",
+				url: "<?php echo base_url('account/login'); ?>",
+				data: {email: profile.getEmail(), name: profile.getName(), imageUrl: profile.getImageUrl()},
+				success: function(countUser) {
+					if (countUser == 1) {
+						window.location.href("<?php echo base_url(); ?>");
+					} else {
+						alert("User belum terdaftar, lanjutkan?");
+					}
+				}
+			});
+		}
 	</script>
 	<!-- Bootstrap 3.3.7 -->
 	<script src="<?php echo base_url(); ?>assets/bootstrap/js/bootstrap.min.js"></script>
@@ -99,6 +111,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<script src="<?php echo base_url(); ?>assets/admin-lte/js/pages/dashboard.js"></script>
 	<!-- AdminLTE for demo purposes -->
 	<script src="<?php echo base_url(); ?>assets/admin-lte/js/demo.js"></script>
+	<script src="https://apis.google.com/js/platform.js" async defer></script>
 
 	<!-- add script of each module -->
 	</body>

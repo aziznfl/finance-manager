@@ -194,7 +194,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   <a href="<?php echo base_url('account'); ?>" class="btn btn-primary btn-flat"><fa class="fa fa-user"></fa> Profile</a>
                 </div>
                 <div class="pull-right">
-                  <a href="<?php echo base_url('account/logout'); ?>" class="btn btn-danger btn-flat"><fa class="fa fa-sign-out"></fa> Sign out</a>
+                  <a href="javascript:void(0)" onclick="signOut()" class="btn btn-danger btn-flat"><fa class="fa fa-sign-out"></fa> Sign out</a>
                 </div>
               </li>
             </ul>

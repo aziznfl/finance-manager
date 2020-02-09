@@ -5,25 +5,7 @@ class Account extends MY_Controller {
 
 	function __construct() {
 		parent::__construct();
-		$this->load->model('User');
-	}
-
-	function loginGoogle() {
-		if($this->session->userdata('login') == true){
-			redirect('welcome/profile');
-		}
-		
-		if (isset($_GET['code'])) {
-			
-			$this->google->getAuthenticate();
-			$this->session->set_userdata('login',true);
-			$this->session->set_userdata('user_profile',$this->google->getUserInfo());
-			redirect('welcome/profile');
-			
-		} 
-			
-		$contents['login_url'] = $this->google->loginURL();
-		$this->load->view('account/welcome_message',$contents);
+		$this->load->model('M_User');
 	}
 
 	function index() {
@@ -35,16 +17,16 @@ class Account extends MY_Controller {
 	}
 
 	function login() {
-		$username = htmlspecialchars($_POST['username']);
-		$password = htmlspecialchars($_POST['password']);
-		$user = $this->User->login($username, $password)->result();
-		
+		$user["name"] = $this->input->post('email');
+		$user["email"] = $this->input->post('name');
+		$user["imageUrl"] = $this->input->post('imageUrl');
+		$user = $this->loginUser($User);
+
 		if (count($user) == 1) {
 			$this->session->set_userdata('user', $user[0]);
-			echo true;
-		} else {
-			echo false;
 		}
+
+		return $countUser;
 	}
 
 	function logout() {
