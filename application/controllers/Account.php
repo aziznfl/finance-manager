@@ -9,12 +9,14 @@ class Account extends MY_Controller {
 		$this->load->model('M_Transaction');
 	}
 
-	function index() {
+	function index($opt = "") {
 		if ($this->session->userdata('user') != '') {
 			header("location: ".base_url('dashboard'));
 		}
 
-		$this->load->view('account/login');
+		$result["opt"] = $opt;
+		if ($opt == "logout") $this->session->sess_destroy();
+		$this->load->view('account/login', $result);
 	}
 
 	function login() {
@@ -35,7 +37,7 @@ class Account extends MY_Controller {
 	function signUp() {
 		$user["name"] = $this->input->post('email');
 		$user["email"] = $this->input->post('name');
-		$user["imageUrl"] = $this->input->post('imageUrl');
+		$user["image"] = $this->input->post('imageUrl');
 		$result = $this->register($user);
 
 		if ($result == 0) {
@@ -47,7 +49,7 @@ class Account extends MY_Controller {
 
 	function logout() {
 		$this->session->sess_destroy();
-		header('location:'.base_url());
+		header('location:'.base_url('account/logout'));
 	}
 
 	function general() {

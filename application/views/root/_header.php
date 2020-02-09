@@ -5,7 +5,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <html>
 <head>
   <meta charset="utf-8">
-  <meta name="google-signin-client_id" content="693599868927-im5b3bk3pknrf7mfiev2retgu7uinkvf.apps.googleusercontent.com">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Finance Manager</title>
   <!-- Tell the browser to be responsive to screen width -->
@@ -195,7 +194,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   <a href="<?php echo base_url('account'); ?>" class="btn btn-primary btn-flat"><fa class="fa fa-user"></fa> Profile</a>
                 </div>
                 <div class="pull-right">
-                  <a href="javascript:void(0)" onclick="signOut()" class="btn btn-danger btn-flat"><fa class="fa fa-sign-out"></fa> Sign out</a>
+                  <a href="<?php echo base_url('account/index/logout'); ?>" class="btn btn-danger btn-flat"><fa class="fa fa-sign-out"></fa> Sign out</a>
                 </div>
               </li>
             </ul>

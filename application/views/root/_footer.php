@@ -46,7 +46,6 @@
 <!-- bootstrap datetimepicker -->
 <script src="<?php echo base_url(); ?>assets/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
 
-<script src="https://apis.google.com/js/platform.js" async defer></script>
 <script>
   $(function () {
     //Initialize Select2 Elements
@@ -67,15 +66,6 @@
       format: 'YYYY-MM-DD HH:mm:ss'
     })
   });
-
-  function signOut() {
-    console.log(gapi.auth2);
-    var auth2 = gapi.auth2.getAuthInstance();
-    auth2.signOut().then(function () {
-      console.log('User signed out.');
-    });
-    window.location.replace("<?php echo base_url('account/logout'); ?>");
-  }
 </script>
 <!-- add script of each module -->
 <?php if (isset($add_footer)) { echo $add_footer; } ?>
