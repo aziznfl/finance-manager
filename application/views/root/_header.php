@@ -5,6 +5,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <html>
 <head>
   <meta charset="utf-8">
+  <meta name="google-signin-client_id" content="693599868927-im5b3bk3pknrf7mfiev2retgu7uinkvf.apps.googleusercontent.com">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Finance Manager</title>
   <!-- Tell the browser to be responsive to screen width -->

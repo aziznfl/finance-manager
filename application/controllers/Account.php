@@ -17,25 +17,18 @@ class Account extends MY_Controller {
 	}
 
 	function login() {
-		$user["email"] = $this->input->post('email');
-		$user = $this->loginUser($user);
+		if ($this->isLocalhost()) {
+			$email = "aziznurfalah@gmail.com";
+		} else {
+			$email = $this->input->post('email');
+		}
+		$user = $this->loginUser($email);
 
 		if (count($user) == 1) {
 			$this->session->set_userdata('user', $user[0]);
 		}
 
 		return count($user);
-	}
-
-	function login_bakpawenemy() {
-		$user["email"] = "aziznurfalah@gmail.com";
-		$user = $this->loginUser($user);
-
-		if (count($user) == 1) {
-			$this->session->set_userdata('user', $user[0]);
-		}
-
-		header("location:".base_url());
 	}
 
 	function signUp() {
@@ -65,6 +58,10 @@ class Account extends MY_Controller {
 	function logoutUserSettings() {
 		$result = array("status_code" => 300, "status_text" => "You are logged out, please loggin back!");
 		echo json_encode($result);
+	}
+
+	function isLocalhost($whitelist = ['127.0.0.1', '::1']) {
+	    return in_array($_SERVER['REMOTE_ADDR'], $whitelist);
 	}
 }
 ?>
