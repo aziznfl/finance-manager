@@ -54,7 +54,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					console.log("profile is null");
 				}
 
-				<?php if ($opt == "logout") echo "signOut()"; ?>
+				<?php if ($opt == "logout") // echo "signOut()"; ?>
 			});
 
 			function onSignIn(googleUser) {
@@ -74,9 +74,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 						data: user,
 						success: function(countUser) {
 							if (countUser == 1) {
-								window.location.href("<?php echo base_url(); ?>");
+								// window.location.href("<?php echo base_url(); ?>");
 							} else {
-								alert("User" + user.name + " not yet registered. Register?");
+								alert("User " + user.name + " not yet registered. Register?");
 								// signUp(user);
 							}
 						}
@@ -90,7 +90,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					url: "<?php echo base_url('account/signUp'); ?>",
 					data: user,
 					success: function(data) {
-						window.location.href("<?php echo base_url(); ?>");
+						// window.location.href("<?php echo base_url(); ?>");
 					}
 				});
 			}
