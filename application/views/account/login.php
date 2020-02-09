@@ -3,8 +3,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 ?><!DOCTYPE html>
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
+	<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		
 		<meta name="google-signin-client_id" content="693599868927-im5b3bk3pknrf7mfiev2retgu7uinkvf.apps.googleusercontent.com">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<title>AdminLTE 2 | Dashboard</title>
@@ -33,7 +33,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		<div style="width: 400px; height: auto; background-color: white; margin: 0; position: absolute; top: 50%; left: 50%; -ms-transform: translate(-50%, -100%); transform: translate(-50%, -100%); border: 1px solid #cacaca; border-radius: 4px; padding: 16px;">
 			<h3 style="margin: 0"><center>Finance Manager</center></h3>
 			<hr style="border-color: #aaaaaa" />
-			<div class="g-signin2" data-onsuccess="onSignIn" style="margin: 0 auto;"></div>
+			<div class="g-signin2" onclick="clickLogin()" data-onsuccess="onSignIn" style="margin: 0 auto;"></div>
 			<p style="margin-top: 10px;">Please login with your google account!</p>
 		</div>
 
@@ -46,41 +46,44 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 		<script>
 			$.widget.bridge('uibutton', $.ui.button);
+			var clicked = false;
 
-			$(function () {
-				if (typeof googleUser !== "undefined") {
-					onSignIn();
-				} else {
-					console.log("profile is null");
-				}
-
-				<?php if ($opt == "logout") // echo "signOut()"; ?>
-			});
-
+			$(function () {});
+			
+			function clickLogin() {
+			    clicked = true;
+			}
+			
 			function onSignIn(googleUser) {
-				var profile = googleUser.getBasicProfile();
-				console.log("profile: "+profile);
+				if (clicked) {
+    				var profile = googleUser.getBasicProfile();
+    				console.log("google: ");
+    				console.log(googleUser);
+    				console.log("profile: ");
+    				console.log(profile);
+    
+    				var user = {
+    					email: profile.getEmail(),
+    					name: profile.getName(),
+    					imageUrl: profile.getImageUrl()
+    				};
 
-				var user = {
-					email: profile.getEmail(),
-					name: profile.getName(),
-					imageUrl: profile.getImageUrl()
-				};
-
-				if (profile != null) {
 					$.ajax({
 						method: "POST",
 						url: "<?php echo base_url('account/login'); ?>",
 						data: user,
 						success: function(countUser) {
+						    console.log(countUser);
 							if (countUser == 1) {
-								// window.location.href("<?php echo base_url(); ?>");
+								window.location.replace("<?php echo base_url(); ?>");
 							} else {
 								alert("User " + user.name + " not yet registered. Register?");
 								// signUp(user);
 							}
 						}
 					});
+					
+					clicked = false;
 				}
 			}
 
@@ -92,14 +95,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					success: function(data) {
 						// window.location.href("<?php echo base_url(); ?>");
 					}
-				});
-			}
-
-			function signOut() {
-				var auth2 = gapi.auth2.getAuthInstance();
-				auth2.signOut().then(function () {
-					console.log('User signed out.');
-					// window.location.replace("<?php echo base_url('account/logout'); ?>");
 				});
 			}
 		</script>

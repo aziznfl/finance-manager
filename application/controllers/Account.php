@@ -31,7 +31,7 @@ class Account extends MY_Controller {
 			$this->session->set_userdata('user', $user[0]);
 		}
 
-		return count($user);
+		echo count($user);
 	}
 
 	function signUp() {
@@ -45,11 +45,6 @@ class Account extends MY_Controller {
 		}
 
 		return $result;
-	}
-
-	function logout() {
-		$this->session->sess_destroy();
-		header('location:'.base_url('account/logout'));
 	}
 
 	function general() {
