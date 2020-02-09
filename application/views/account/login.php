@@ -76,9 +76,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 						    console.log(countUser);
 							if (countUser == 1) {
 								window.location.replace("<?php echo base_url(); ?>");
-							} else {
-								alert("User " + user.name + " not yet registered. Register?");
-								// signUp(user);
+							} else if (confirm("User " + user.name + " not yet registered. Register?")) {
+								signUp(user);
 							}
 						}
 					});
@@ -93,7 +92,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					url: "<?php echo base_url('account/signUp'); ?>",
 					data: user,
 					success: function(data) {
-						// window.location.href("<?php echo base_url(); ?>");
+						window.location.href("<?php echo base_url(); ?>");
 					}
 				});
 			}
