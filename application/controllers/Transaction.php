@@ -202,6 +202,7 @@ class Transaction extends MY_Controller {
 			$where = "transaction_id = ".$this->input->post('transaction_id');
 			$this->updateTransaction($arr, $where);
 		} else {
+			$arr["account_id"] = $this->session->userdata('user')->account_id;
 			$this->addNewTransaction($arr);
 		}
 	}
@@ -220,6 +221,7 @@ class Transaction extends MY_Controller {
 			$where = "transaction_investment_id = ".$this->input->post('transaction_investment_id');
 			$this->updateInvestment($arr, $where);
 		} else {
+			$arr["account_id"] = $this->session->userdata('user')->account_id;
 			$this->addNewInvestment($arr);
 		}
 	}
