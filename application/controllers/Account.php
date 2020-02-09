@@ -6,6 +6,7 @@ class Account extends MY_Controller {
 	function __construct() {
 		parent::__construct();
 		$this->load->model('M_User');
+		$this->load->model('M_Transaction');
 	}
 
 	function index() {
