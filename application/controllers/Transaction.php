@@ -82,7 +82,6 @@ class Transaction extends MY_Controller {
 			                 return meta.row + meta.settings._iDisplayStart + 1;
 			                }},
 							{'data': 'category_name', 'className': 'text-center'},
-							{'data': 'percentage', 'className': 'text-right'}
 							{
 								'className': 'text-center',
 								'render': function (param, type, data, meta) {
