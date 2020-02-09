@@ -33,6 +33,7 @@ class M_Transaction extends CI_Model {
 
 	function getFirstTransaction() {
 		$this->db->order_by("transaction_date", "ASC");
+		$this->db->where("account_id", $this->session->userdata('user')->account_id);
 		$this->db->limit(1);
 		return $this->db->get('transaction');
 	}
@@ -115,7 +116,7 @@ class M_Transaction extends CI_Model {
 			) as percentage
 			FROM transaction
 			JOIN category ON category.category_id = transaction.category_id
-			WHERE ".$where."
+			WHERE ".$where." && account_id = ".$this->session->userdata('user')->account_id."
 			GROUP BY category_id
 			ORDER BY total DESC
 		";
