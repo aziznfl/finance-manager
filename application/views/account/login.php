@@ -76,7 +76,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 						    console.log(countUser);
 							if (countUser == 1) {
 								window.location.replace("<?php echo base_url(); ?>");
-							} else if (confirm("User " + user.name + " not yet registered. Register?")) {
+							} else if (confirm("User -" + user.name + "- not yet registered. Register?")) {
 								signUp(user);
 							}
 						}
