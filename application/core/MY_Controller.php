@@ -40,7 +40,7 @@ class MY_Controller extends CI_Controller {
 		return $user;
 	}
 
-	function register($user) {
+	function register($data) {
 		$result = $this->M_Transaction->addData("account", $data);
 		return $result;
 	}
