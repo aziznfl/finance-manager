@@ -40,11 +40,11 @@ class Account extends MY_Controller {
 		$user["image"] = $this->input->post('imageUrl');
 		$result = $this->register($user);
 
-		if ($result == 0) {
+		if ($result == 1) {
 			$this->session->set_userdata('user', $user[0]);
 		}
 
-		return $result;
+		echo $result;
 	}
 
 	function general() {
