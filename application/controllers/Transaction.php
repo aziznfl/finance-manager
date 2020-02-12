@@ -41,7 +41,8 @@ class Transaction extends MY_Controller {
 				function changeDate() {
 					var date = $('#date').val().split('-');
 					params = date[0] + '/' + date[1];
-					window.history.pushState('object or string', 'Title', '".base_url('transaction/history/')."' + params + '/' + category_id);
+					category_id = 0;
+					window.history.pushState('object or string', 'Title', '".base_url('transaction/history/')."' + params);
 
 					reloadMonthTransaction();
 					reloadTopTransaction();
