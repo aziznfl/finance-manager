@@ -10,18 +10,20 @@
                 List Transaction
             </div>
             <div class="box-body">
-            	<table id="transaction_table" class="table table-bordered table-striped table-hover">
-            		<thead>
-            			<tr>
-        	    			<th class='text-center'>No</th>
-        	    			<th class='text-center'>Date</th>
-        	    			<th class='text-center'>Amount</th>
-                            <th class='text-center'>Status</th>
-        	    			<th class='text-center'>Description</th>
-                            <th class='text-center'>Manager</th>
-        	    		</tr>
-        	    	</thead>
-            	</table>
+                <div class="table-responsive">
+                	<table id="transaction_table" class="table table-bordered table-striped table-hover">
+                		<thead>
+                			<tr>
+            	    			<th class='text-center'>No</th>
+            	    			<th class='text-center'>Date</th>
+            	    			<th class='text-center'>Amount</th>
+                                <th class='text-center'>Status</th>
+            	    			<th class='text-center'>Description</th>
+                                <th class='text-center'>Manager</th>
+            	    		</tr>
+            	    	</thead>
+                	</table>
+                </div>
             </div>
         </div>
     </section>

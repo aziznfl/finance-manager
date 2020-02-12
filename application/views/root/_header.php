@@ -27,6 +27,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/admin-lte/css/skins/_all-skins.min.css">
 
+  <style type="text/css">
+    .floating-rounded-default {
+      position: absolute;
+      right: 16px;
+      top: 4px;
+      padding: 4px 12px;
+      border-radius: 16px;
+      font-size: 16px;
+    }
+  </style>
+
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>

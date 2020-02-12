@@ -92,6 +92,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					url: "<?php echo base_url('account/signUp'); ?>",
 					data: user,
 					success: function(data) {
+						console.log(data);
 						if (data == 1) window.location.replace("<?php echo base_url(); ?>");
 						else alert("Something wrong, my bad.");
 					}

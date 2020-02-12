@@ -44,28 +44,35 @@
 				</div>
 				<div class="box-body">
 					<div class="row">
+						<div class="col-md-4">
+							<div class="title">
+								<h4>Top Transaction</h4>
+								<div class="floating-rounded-default bg-primary">Total: <span id="top-floating-amount-table">-</span></div>
+							</div>
+							<div class="table-responsive">
+								<table id="datatable-top-transaction" class="table table-bordered table-striped table-hover">
+									<thead>
+										<th class="text-center">No</th>
+										<th class="text-center">Category</th>
+										<th class="text-center">%</th>
+									</thead>
+								</table>
+							</div>
+						</div>
 						<div class="col-md-8">
 							<h4>List Transaction</h4>
-							<table id="datatable-month-transaction" class="table table-bordered table-striped table-hover">
-								<thead>
-									<th class="text-center">No</th>
-									<th class="text-center">Date</th>
-									<th class="text-center">Rp</th>
-									<th class="text-center">Category</th>
-									<th class="text-center">Desc</th>
-									<th class="text-center"></th>
-								</thead>
-							</table>
-						</div>
-						<div class="col-md-4">
-							<h4>Top Transaction</h4>
-							<table id="datatable-top-transaction" class="table table-bordered table-striped table-hover">
-								<thead>
-									<th class="text-center">No</th>
-									<th class="text-center">Category</th>
-									<th class="text-center">%</th>
-								</thead>
-							</table>
+							<div class="table-responsive">
+								<table id="datatable-month-transaction" class="table table-bordered table-striped table-hover">
+									<thead>
+										<th class="text-center" width="10">No</th>
+										<th class="text-center" width="200">Date</th>
+										<th class="text-center">Rp</th>
+										<th class="text-center">Category</th>
+										<th class="text-center">Desc</th>
+										<th class="text-center"></th>
+									</thead>
+								</table>
+							</div>
 						</div>
 					</div>
 				</div>

@@ -32,11 +32,11 @@ class API extends MY_Controller {
 
 	function getTopTransaction($year = "", $month = "") {
 		$result = $this->topTransaction($month, $year);
-		echo json_encode(array("data" => $result));
+		echo json_encode($result);
 	}
 
-	function getMonthTransaction($year = "", $month = "") {
-		$result = $this->monthTransaction($month, $year);
+	function getMonthTransaction($year = "", $month = "", $category_id = 0) {
+		$result = $this->monthTransaction($month, $year, $category_id);
 		echo json_encode(array("data" => $result));
 	}
 

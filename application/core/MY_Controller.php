@@ -76,8 +76,8 @@ class MY_Controller extends CI_Controller {
 		return $all;
 	}
 
-	function monthTransaction($month, $year) {
-		$result = $this->M_Transaction->getMonthTransaction($month, $year)->result_array();
+	function monthTransaction($month, $year, $category_id = 0) {
+		$result = $this->M_Transaction->getMonthTransaction($month, $year, $category_id)->result_array();
 		$all = array();
 		foreach ($result as $transaction) {
 			$transaction["amount"] = (int)$transaction["amount"];
@@ -90,15 +90,17 @@ class MY_Controller extends CI_Controller {
 
 	function topTransaction($month, $year) {
 		$result = $this->M_Transaction->getTopTransaction($month, $year)->result_array();
-		$all = array();
+		$all = array("data" => array(), "total" => 0);
 		foreach ($result as $transaction) {
 			$transaction["category_id"] = (int)$transaction["category_id"];
 			$transaction["category_name"] = ucwords($transaction["category_name"]);
 			$transaction["total"] = (int)$transaction["total"];
 			$transaction["total_text"] = number_format($transaction["total"]);
 			$transaction["percentage"] = number_format($transaction["percentage"], 2)."%";
-			array_push($all, $transaction);
+			array_push($all["data"], $transaction);
+			$all["total"] += $transaction["total"];
 		}
+		$all["total_text"] = number_format($all["total"]);
 		return $all;
 	}
 

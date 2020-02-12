@@ -15,7 +15,7 @@ class Transaction extends MY_Controller {
 		$this->load->model('M_Transaction');
     }
 
-	function history($year = "", $month = "") {
+	function history($year = "", $month = "", $category_id = 0) {
 		if ($year == "") $year = date('Y');
 		if ($month == "") $month = date('n');
 		$result["first_transaction"] = $this->getFirstTransaction()->result();
@@ -42,13 +42,15 @@ class Transaction extends MY_Controller {
 
 					var date = $('#date').val().split('-');
 					var params = date[0] + '/' + date[1];
-					reloadMonthTransaction(params);
+					var paramsWithCategory = params + '/' + '7';
+					reloadMonthTransaction(paramsWithCategory);
 					reloadTopTransaction(params);
-					window.history.pushState('object or string', 'Title', '".base_url('transaction/history/')."' + params);
+					window.history.pushState('object or string', 'Title', '".base_url('transaction/history/')."' + paramsWithCategory);
 				}
 
 				function reloadMonthTransaction(params) {
 					var link = '".base_url()."'+'api/getMonthTransaction/'+params;
+					console.log(link);
 					tableMonthTrans = $('#datatable-month-transaction').DataTable({
 						'ajax': link,
 						'destroy': true,
@@ -76,7 +78,13 @@ class Transaction extends MY_Controller {
 						'searching': false,
 						'paging': false,
 						'destroy': true,
-						'ajax': link,
+						'ajax': {
+							'url': link,
+							'dataSrc': function(json) {
+								$('#top-floating-amount-table').html(json.total_text);
+								return json.data;
+							}
+						},
 						'columns': [
 							{'data': null, 'defaultContent': '', 'className': 'text-center', 'target': 0, 'render': function (data, type, row, meta) {
 			                 return meta.row + meta.settings._iDisplayStart + 1;

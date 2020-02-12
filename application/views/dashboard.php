@@ -44,16 +44,18 @@
                         Last Transaction
                     </div>
                     <div class="box-body">
-                        <table id="datatable-last-transaction" class="table table-bordered table-striped table-hovered">
-                            <thead>
-                                <th class="text-center">No</th>
-                                <th class="text-center">Date</th>
-                                <th class="text-center">Rp</th>
-                                <th class="text-center">Category</th>
-                                <th class="text-center">Desc</th>
-                                <th class="text-center"></th>
-                            </thead>
-                        </table>
+                        <div class="table-responsive">
+                            <table id="datatable-last-transaction" class="table table-bordered table-striped table-hovered">
+                                <thead>
+                                    <th class="text-center">No</th>
+                                    <th class="text-center">Date</th>
+                                    <th class="text-center">Rp</th>
+                                    <th class="text-center">Category</th>
+                                    <th class="text-center">Desc</th>
+                                    <th class="text-center"></th>
+                                </thead>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
