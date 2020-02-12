@@ -24,6 +24,8 @@ class Transaction extends MY_Controller {
 			<script>
 				var tableMonthTrans;
 				var tableTopTrans;
+				var params = '';
+				var category_id = ".$category_id.";
 
 				$(function() {
 					$('#date').val('".$year."-".$month."');
@@ -37,19 +39,23 @@ class Transaction extends MY_Controller {
 				});
 
 				function changeDate() {
-					$('#load_transactions_month').html('loading...');
-					// $('#load_transactions_top').html('loading...');
-
 					var date = $('#date').val().split('-');
-					var params = date[0] + '/' + date[1];
-					var paramsWithCategory = params + '/' + '7';
-					reloadMonthTransaction(paramsWithCategory);
-					reloadTopTransaction(params);
-					window.history.pushState('object or string', 'Title', '".base_url('transaction/history/')."' + paramsWithCategory);
+					params = date[0] + '/' + date[1];
+					window.history.pushState('object or string', 'Title', '".base_url('transaction/history/')."' + params + '/' + category_id);
+
+					reloadMonthTransaction();
+					reloadTopTransaction();
 				}
 
-				function reloadMonthTransaction(params) {
-					var link = '".base_url()."'+'api/getMonthTransaction/'+params;
+				function selectCategory(category) {
+					category_id = category;
+					window.history.pushState('object or string', 'Title', '".base_url('transaction/history/')."' + params + '/' + category_id);
+
+					reloadMonthTransaction();
+				}
+
+				function reloadMonthTransaction() {
+					var link = '".base_url()."'+'api/getMonthTransaction/'+params + '/' + category_id;
 					console.log(link);
 					tableMonthTrans = $('#datatable-month-transaction').DataTable({
 						'ajax': link,
@@ -71,7 +77,7 @@ class Transaction extends MY_Controller {
 					});
 				}
 
-				function reloadTopTransaction(params) {
+				function reloadTopTransaction() {
 					var link = '".base_url()."'+'api/getTopTransaction/'+params;
 					tableTopTrans = $('#datatable-top-transaction').DataTable({
 						'ordering': false,
@@ -86,13 +92,22 @@ class Transaction extends MY_Controller {
 							}
 						},
 						'columns': [
-							{'data': null, 'defaultContent': '', 'className': 'text-center', 'target': 0, 'render': function (data, type, row, meta) {
-			                 return meta.row + meta.settings._iDisplayStart + 1;
-			                }},
-							{'data': 'category_name', 'className': 'text-center'},
+							{
+								'className': 'text-center', 
+								'render': function(param, type, data, meta) {
+			                		return meta.row + meta.settings._iDisplayStart + 1;
+			                	}
+			                },
+							{
+								'className': 'text-center', 
+								'render': function(param, type, data, meta) {
+									console.log(data);
+									return '<a href=\"javascript:void(0)\" onclick=\"selectCategory('+data.category_id+')\">'+data.category_name+'</a>';
+								}
+							},
 							{
 								'className': 'text-right',
-								'render': function (param, type, data, meta) {
+								'render': function(param, type, data, meta) {
 									return data.total_text+' (<b>'+data.percentage+'</b>)';
 								}
 							}
