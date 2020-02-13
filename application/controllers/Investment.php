@@ -27,11 +27,10 @@ class Investment extends MY_Controller {
 				$(function() {
 					var table = $('#transaction_table').DataTable({
 						'ajax': '".base_url('api/getListInvestment')."',
-						'columnDefs': [
-							{'targets': 0, 'data': null, 'className': 'text-center', 'orderable': false, 'searching': false},
-							{'targets': 1, 'data': 'date', 'className': 'text-center'},
+						'columns': [
+							{'data': null, 'className': 'text-center', 'orderable': false, 'searching': false},
+							{'data': 'date', 'className': 'text-center'},
 							{
-								'targets': 2, 
 								'data': 'amount_text', 
 								'className': 'text-right',
 								'createdCell': function(td, cellData, rowData, row, col) {
@@ -42,7 +41,6 @@ class Investment extends MY_Controller {
 								}
 							},
 							{
-								'targets': 3, 
 								'data': 'state_text',
 								'className': 'text-center text-bold',
 								'createdCell': function(td, cellData, rowData, row, col) {
@@ -54,7 +52,6 @@ class Investment extends MY_Controller {
 								}
 							},
 							{
-								'targets': 4, 
 								'className': 'text-center',
 								'render': function (param, type, data, meta) {
 									var valueText = '';
@@ -62,7 +59,11 @@ class Investment extends MY_Controller {
 									return data.description + valueText;
 								}
 							},
-							{'targets': 5, 'data': 'manager', 'className': 'text-center'}
+							{
+								'data': 'instrument',
+								'className': 'text-center'
+							},
+							{'data': 'manager', 'className': 'text-center'}
 						],
 						'order': [1, 'desc']
 					});

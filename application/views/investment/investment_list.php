@@ -18,7 +18,8 @@
             	    			<th class='text-center'>Date</th>
             	    			<th class='text-center'>Amount</th>
                                 <th class='text-center'>Status</th>
-            	    			<th class='text-center'>Description</th>
+                                <th class='text-center'>Description</th>
+            	    			<th class='text-center'>Instrument</th>
                                 <th class='text-center'>Manager</th>
             	    		</tr>
             	    	</thead>

@@ -132,7 +132,11 @@ class MY_Controller extends CI_Controller {
 			else $arr["value_text"] = null;
 			$arr["state_text"] = !$portfolio["is_done"] ? "Progress" : "Done";
 			$arr["description"] = $portfolio["description"];
+			$arr["instrument"] = ucwords($portfolio["category_name"]);
 			$arr["manager"] = $portfolio["manager"];
+			$arr["profit"] = "";
+
+			// set child array
 			$arr["child"] = array($portfolio);
 			if (array_key_exists($portfolio["description"], $portfolios)) {
 				$amount = $portfolios[$portfolio["description"]]["amount"];
