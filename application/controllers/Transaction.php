@@ -39,8 +39,14 @@ class Transaction extends MY_Controller {
 
 					$('#datatable-top-transaction tbody').on('click', 'tr', function() {
 						var row = tableTopTrans.row(this);
-						$(this).attr('style', 'background-color: #dff0d8').siblings().attr('style', '');
-						selectCategory(row.data().category_id);
+
+						if(category_id != row.data().category_id) {
+							$(this).attr('style', 'background-color: #dff0d8').siblings().attr('style', '');
+							selectCategory(row.data().category_id);
+						} else {
+							$(this).attr('style', '');
+							selectCategory(0);
+						}
 					});
 				});
 
