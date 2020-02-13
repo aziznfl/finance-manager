@@ -34,10 +34,6 @@
 <script src="<?php echo base_url(); ?>assets/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 <!-- AdminLTE App -->
 <script src="<?php echo base_url(); ?>assets/admin-lte/js/adminlte.min.js"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="<?php echo base_url(); ?>assets/admin-lte/js/pages/dashboard.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="<?php echo base_url(); ?>assets/admin-lte/js/demo.js"></script>
   <!-- select 2 -->
 <script src="<?php echo base_url(); ?>assets/select2/js/select2.js"></script>
 <!-- bootstrap datepicker -->
