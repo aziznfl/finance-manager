@@ -36,6 +36,12 @@ class Transaction extends MY_Controller {
 				            cell.innerHTML = i+1;
 				        } );
 				    }).draw();
+
+					$('#datatable-top-transaction tbody').on('click', 'tr', function() {
+						var row = tableTopTrans.row(this);
+						$(this).attr('style', 'background-color: #dff0d8').siblings().attr('style', '');
+						selectCategory(row.data().category_id);
+					});
 				});
 
 				function changeDate() {
@@ -57,7 +63,6 @@ class Transaction extends MY_Controller {
 
 				function reloadMonthTransaction() {
 					var link = '".base_url()."'+'api/getMonthTransaction/'+params + '/' + category_id;
-					console.log(link);
 					tableMonthTrans = $('#datatable-month-transaction').DataTable({
 						'ajax': link,
 						'destroy': true,
@@ -100,11 +105,8 @@ class Transaction extends MY_Controller {
 			                	}
 			                },
 							{
-								'className': 'text-center', 
-								'render': function(param, type, data, meta) {
-									console.log(data);
-									return '<a href=\"javascript:void(0)\" onclick=\"selectCategory('+data.category_id+')\">'+data.category_name+'</a>';
-								}
+								'className': 'text-center',
+								'data': 'category_name'
 							},
 							{
 								'className': 'text-right',

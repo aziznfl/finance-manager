@@ -50,7 +50,7 @@
 								<div class="floating-rounded-default bg-primary">Total: <span id="top-floating-amount-table">-</span></div>
 							</div>
 							<div class="table-responsive">
-								<table id="datatable-top-transaction" class="table table-bordered table-striped table-hover">
+								<table id="datatable-top-transaction" class="table table-bordered table-striped table-hover" style="cursor: pointer">
 									<thead>
 										<th class="text-center">No</th>
 										<th class="text-center">Category</th>
