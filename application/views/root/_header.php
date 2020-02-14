@@ -191,7 +191,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="" class="user-image hide" alt="">
+              <img src="<?php echo ucwords($this->session->userdata('user')->image); ?>" class="user-image" alt="">
               <span class="hidden-xs"><?php echo ucwords($this->session->userdata('user')->name); ?></span>
             </a>
             <ul class="dropdown-menu">
