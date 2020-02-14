@@ -61,6 +61,18 @@
     $('.datetimepicker').datetimepicker({
       format: 'YYYY-MM-DD HH:mm:ss'
     })
+
+    $('input[type="number"]')
+      .focus(function() {
+        if ($(this).val() == "0") {
+          $(this).val("");
+        }
+      })
+      .focusout(function() {
+        if($(this).val() == "") {
+          $(this).val("0");
+        }
+      });
   });
 </script>
 <!-- add script of each module -->
