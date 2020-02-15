@@ -46,7 +46,7 @@
 					<div class="row">
 						<div class="col-md-4">
 							<div class="title">
-								<h4>Top Transaction</h4>
+								<div style="font-size: 18px; margin: 4px 0;">Top Transaction</div>
 								<div class="floating-rounded-default bg-primary">Total: <span id="top-floating-amount-table">-</span></div>
 							</div>
 							<div class="table-responsive">
