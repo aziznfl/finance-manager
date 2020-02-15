@@ -7,6 +7,10 @@ class M_Transaction extends CI_Model {
 		parent::__construct();
 	}
 
+	function getWhereTransaction() {
+		return "(account_id = ".$this->session->userdata('user')->account_id." AND is_deleted = 0)";
+	}
+
 	function getCategories() {
 		$this->db->where("category_id != 1");
 		$this->db->order_by("parent_id", "ASC");
@@ -25,8 +29,8 @@ class M_Transaction extends CI_Model {
 		$this->db->group_by("extract(year from transaction_date), extract(month from transaction_date)");
 		$this->db->order_by("transaction_date", "ASC");
 		$this->db->order_by("type", "DESC");
-		$this->db->where("account_id", $this->session->userdata('user')->account_id);
 		$this->db->where("type", $type);
+		$this->db->where($this->getWhereTransaction());
 		$query = $this->db->get('transaction');
 		return $query->result_array();
 	}
@@ -88,8 +92,8 @@ class M_Transaction extends CI_Model {
 		$this->db->order_by("added_date", "DESC");
 		$this->db->order_by("category.category_id", "ASC");
 		$this->db->where("type", $type);
-		$this->db->where("account_id", $this->session->userdata('user')->account_id);
 		$this->db->limit($limit);
+		$this->db->where($this->getWhereTransaction());
 		return $this->db->get('transaction');
 	}
 
@@ -102,13 +106,15 @@ class M_Transaction extends CI_Model {
 		$this->db->where("type", "outcome");
 		$this->db->where("MONTH(transaction_date)", $month);
 		$this->db->where("YEAR(transaction_date)", $year);
+		$this->db->where($this->getWhereTransaction());
+		
 		if ($category_id != 0) $this->db->where("(category.category_id = ".$category_id." OR category.parent_id = ".$category_id.")");
-		$this->db->where("account_id", $this->session->userdata('user')->account_id);
+
 		return $this->db->get('transaction');
 	}
 
 	function getTopTransaction($month, $year, $type = "outcome") {
-		$where = "MONTH(transaction_date) = '".$month."' AND YEAR(transaction_date) = '".$year."' AND account_id = ".$this->session->userdata('user')->account_id;
+		$where = "MONTH(transaction_date) = '".$month."' AND YEAR(transaction_date) = '".$year."' AND ".$this->getWhereTransaction();
 		$query = "
 			SELECT t.*, category.category_name
 			FROM (
@@ -129,6 +135,7 @@ class M_Transaction extends CI_Model {
 
 	function getTransaction($transaction_id) {
 		$this->db->where("transaction_id", $transaction_id);
+		$this->db->where($this->getWhereTransaction());
 		return $this->db->get('transaction');
 	}
 
