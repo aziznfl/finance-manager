@@ -39,7 +39,7 @@
 		<div class="borderless"></div>
 		<div class="row">
 			<div class="col-md-3">
-				<div class="floating-rounded-default bg-primary">Total: <span id="top-floating-amount-table">-</span></div>
+				<div class="floating-rounded-default bg-primary">Total: Rp. <span id="top-floating-amount-table">-</span></div>
 				<div class="table-responsive">
 					<table id="datatable-top-transaction" class="table table-bordered table-striped table-hover" style="cursor: pointer">
 						<thead>
@@ -51,7 +51,14 @@
 				</div>
 			</div>
 			<div class="col-md-9">
-				<h3 style="margin-top: 0;">List Transaction</h3>
+				<h3 style="margin: 0 0 20px;">
+					List Transaction
+					<small class="pull-right">
+						<a class="btn btn-primary btn-sm" href="<?php echo base_url('transaction/manage'); ?>">
+							<i class="fa fa-plus"></i> Add Transaction
+						</a>
+					</small>
+				</h3>
 				<div class="table-responsive">
 					<table id="datatable-month-transaction" class="table table-bordered table-striped table-hover">
 						<thead>
