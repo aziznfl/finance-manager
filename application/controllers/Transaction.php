@@ -15,7 +15,7 @@ class Transaction extends MY_Controller {
 		$this->load->model('M_Transaction');
     }
 
-	function history($year = "", $month = "", $category_id = 0) {
+	function history($year = "", $month = "") {
 		if ($year == "") $year = date('Y');
 		if ($month == "") $month = date('n');
 		$result["first_transaction"] = $this->getFirstTransaction()->result();
@@ -25,7 +25,7 @@ class Transaction extends MY_Controller {
 				var tableMonthTrans;
 				var tableTopTrans;
 				var params = '';
-				var category_id = ".$category_id.";
+				var category_id = 0;
 
 				$(function() {
 					$('#date').val('".$year."-".$month."');
@@ -50,6 +50,18 @@ class Transaction extends MY_Controller {
 					});
 				});
 
+				// filter table
+				$.fn.dataTable.ext.search.push(
+				    function(settings, data, dataIndex) {
+				        var row = tableMonthTrans.row(dataIndex);
+				        var data = row.data();
+				        if (category_id == 0 || category_id == data.category_id || category_id == data.parent_id) {
+				        	return true
+				        }
+				        return false;
+				    }
+				);
+
 				function changeDate() {
 					var date = $('#date').val().split('-');
 					params = date[0] + '/' + date[1];
@@ -62,9 +74,7 @@ class Transaction extends MY_Controller {
 
 				function selectCategory(category) {
 					category_id = category;
-					window.history.pushState('object or string', 'Title', '".base_url('transaction/history/')."' + params + '/' + category_id);
-
-					reloadMonthTransaction();
+					tableMonthTrans.draw();
 				}
 
 				function reloadMonthTransaction() {

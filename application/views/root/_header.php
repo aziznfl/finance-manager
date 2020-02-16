@@ -28,13 +28,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/admin-lte/css/skins/_all-skins.min.css">
 
   <style type="text/css">
+    .borderless {
+      margin: 16px -10px;
+      border: 0.5px solid #f4f4f4;
+    }
     .floating-rounded-default {
-      position: absolute;
-      right: 16px;
-      top: 4px;
-      padding: 4px 12px;
-      border-radius: 16px;
-      font-size: 16px;
+      padding: 4px;
+      margin-bottom: 8px;
+      text-align: center;
+      font-size: 20px;
     }
   </style>
 
