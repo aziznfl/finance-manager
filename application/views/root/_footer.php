@@ -73,6 +73,63 @@
           $(this).val("0");
         }
       });
+
+    $(".items").sortable({
+      connectWith: ".items",
+      placeholder: "placeholder",
+      update: function(event, ui) {
+        // update
+      },
+      start: function(event, ui) {
+        console.log('sort');
+        if(ui.helper.hasClass('second-level')) {
+          ui.placeholder.removeClass('placeholder');
+          ui.placeholder.addClass('placeholder-sub');
+        } else { 
+          ui.placeholder.removeClass('placeholder-sub');
+          ui.placeholder.addClass('placeholder');
+        }
+      },
+      sort: function(event, ui) {
+        var pos;
+        if(ui.helper.hasClass('second-level')) {
+          pos = ui.position.left+20;
+        } else {
+          pos = ui.position.left;
+        }
+        if(pos >= 32 && !ui.helper.hasClass('second-level')) {
+          // sub class
+          ui.placeholder.removeClass('placeholder');
+          ui.placeholder.addClass('placeholder-sub');
+          ui.helper.addClass('second-level');
+        } else if(pos < 25 && ui.helper.hasClass('second-level')) {
+          // set as parent
+          ui.placeholder.removeClass('placeholder-sub');
+          ui.placeholder.addClass('placeholder');
+          ui.helper.removeClass('second-level');
+        }
+      }
+    });
+
+    $(".item").droppable({
+      accept: ".item",
+      hoverClass: "dragHover",
+      drop: function( event, ui ) {
+          if (ui.position.left >= 20) {
+              $(this).removeClass("first-level");
+              $(this).addClass("second-level");
+          } else {
+              $(this).removeClass("second-level");
+              $(this).addClass("first-level");
+          }
+      },
+      over: function( event, ui ) {
+          // over
+      },
+      activate: function( event, ui ) {
+          // activate
+      }
+    });
   });
 </script>
 <!-- add script of each module -->

@@ -29,7 +29,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
   <style type="text/css">
     .borderless {
-      margin: 16px -10px;
+      margin: 10px -10px;
       border: 0.5px solid #f4f4f4;
     }
     .floating-rounded-default {
@@ -37,6 +37,42 @@ defined('BASEPATH') OR exit('No direct script access allowed');
       margin-bottom: 8px;
       text-align: center;
       font-size: 20px;
+    }
+    .items {
+      list-style: none outside none;
+      margin-bottom: 20px;
+      padding: 0;
+      width:480;
+    }
+    .item {
+      background: #fff;
+      border: 1px solid #ddd;
+      cursor: move;
+      height: 40px;
+      line-height: 40px;
+      padding: 0 16px;
+      width: 380px;
+    }
+    .second-level {
+      margin-left: 30px;
+      width: 380px;
+    }
+    .dragHover {
+      border-color: blue;
+      color: blue;
+    }
+    .placeholder {
+      background: #fff;
+      border: 1px dashed #ccc;
+      height: 40px;
+      width: 380px;
+    }
+    .placeholder-sub {
+      background: #fff;
+      border: 1px dashed #ccc;
+      height: 40px;
+      width: 380px;
+      margin-left: 30px;
     }
   </style>
 

@@ -19,6 +19,7 @@ class Transaction extends MY_Controller {
 		if ($year == "") $year = date('Y');
 		if ($month == "") $month = date('n');
 		$result["first_transaction"] = $this->getFirstTransaction()->result();
+		$result["list_categories"] = $this->listCategories();
 
 		$result["add_footer"] = "
 			<script>
@@ -61,6 +62,14 @@ class Transaction extends MY_Controller {
 				        return false;
 				    }
 				);
+
+				// function for choose tabs
+				$('.nav-tabs li').click(function() {
+					$(this).addClass('active').siblings().removeClass('active');
+
+					var tab = $(this).attr('data-tab');
+					$('#tab-'+tab).removeClass('hide').siblings().addClass('hide');
+				});
 
 				function changeDate() {
 					var date = $('#date').val().split('-');

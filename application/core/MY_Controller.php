@@ -16,6 +16,18 @@ class MY_Controller extends CI_Controller {
 		$GLOBALS['menus'] = $this->CoreModel->getMenus();
 	}
 
+	function loginUser($email) {
+		$user = $this->M_User->login($email)->result();
+		return $user;
+	}
+
+	function register($data) {
+		$result = $this->M_Transaction->addData("account", $data);
+		return $result;
+	}
+
+	//-------- Category ---------//
+
 	function listCategories() {
 		$result = $this->M_Transaction->getCategories()->result_array();
 		$all = array();
@@ -35,14 +47,14 @@ class MY_Controller extends CI_Controller {
 		return $this->M_Transaction->getCategoriesInvestment()->result_array();
 	}
 
-	function loginUser($email) {
-		$user = $this->M_User->login($email)->result();
-		return $user;
+	function addNewCategory($data) {
+		$result = $this->M_Transaction->addData("category", $data);
+		header("location:".base_url());
 	}
 
-	function register($data) {
-		$result = $this->M_Transaction->addData("account", $data);
-		return $result;
+	function updateCategory($data, $where) {
+		$result = $this->M_Transaction->updateData("category", $data, $where);
+		header("location:".base_url());
 	}
 
 	//-------- Transaction ---------//

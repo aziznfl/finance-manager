@@ -23,6 +23,19 @@ class API extends MY_Controller {
 		echo json_encode(array("data" => $result));
 	}
 
+	function addCategory() {
+		$arr["category_name"] = $this->input->post('name');
+		$arr["parent_id"] = $this->input->post('parent');
+		$arr["position"] = 0;
+
+		if ($category_id != "") {
+			$where = "category_id = ".$this->input->post('category_id');
+			$this->updateCategory($arr, $where);
+		} else {
+			$this->addNewCategory($arr);
+		}
+	}
+
 	//-------- Transaction ---------//
 
 	function getTransaction($transaction_id) {
