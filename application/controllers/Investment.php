@@ -31,11 +31,11 @@ class Investment extends MY_Controller {
 							{'data': null, 'className': 'text-center', 'orderable': false, 'searching': false},
 							{'data': 'date', 'className': 'text-center'},
 							{
-								'data': 'amount_text', 
+								'data': 'amount_text',
 								'className': 'text-right',
 								'createdCell': function(td, cellData, rowData, row, col) {
 									if (rowData.state_text == 'Done') {
-										if (rowData.amount <= 0) $(td).addClass('text-success');
+										if (rowData.amount > 0) $(td).addClass('text-success');
 										else $(td).addClass('text-danger');
 									}
 								}
@@ -53,7 +53,7 @@ class Investment extends MY_Controller {
 							},
 							{
 								'className': 'text-center',
-								'render': function (param, type, data, meta) {
+								'render': function(param, type, data, meta) {
 									var valueText = '';
 									if (data.value_text != null) valueText = ' ('+data.value_text+')'
 									return data.description + valueText;

@@ -137,33 +137,37 @@ class MY_Controller extends CI_Controller {
 
 			$arr = array();
 			$arr["date"] = $portfolio["transaction_date"];
-			$arr["amount"] = (int)$portfolio["amount"];
-			$arr["amount_text"] = number_format($arr["amount"]);
-			$arr["value"] = (float)$portfolio["value"];
-			if ($portfolio["unit"] != "") $arr["value_text"] = $portfolio["value"] ." ". $portfolio["unit"];
-			else $arr["value_text"] = null;
 			$arr["state_text"] = !$portfolio["is_done"] ? "Progress" : "Done";
 			$arr["description"] = $portfolio["description"];
 			$arr["instrument"] = ucwords($portfolio["category_name"]);
 			$arr["manager"] = $portfolio["manager"];
-			$arr["profit"] = "";
+			$arr["amount"] = (int)$portfolio["amount"];
+			$arr["amount_text"] = number_format($arr["amount"]);
+			$arr["value"] = (float)$portfolio["value"];
+			$arr["value_text"] = $portfolio["unit"] != "" ? $portfolio["value"] ." ". $portfolio["unit"] : null;
+			$arr["outcome"] = $arr["amount"];
 
 			// set child array
 			$arr["child"] = array($portfolio);
 			if (array_key_exists($portfolio["description"], $portfolios)) {
-				$amount = $portfolios[$portfolio["description"]]["amount"];
-				$amount += $portfolio["is_done"] == 0 ? $portfolio["amount"] : -$portfolio["amount"];
-				$portfolios[$portfolio["description"]]["amount"] = (int)$amount;
-
 				$portfolios[$portfolio["description"]]["value"] += (float)$portfolio["value"];
 				if ($portfolio["unit"] != "") {
 					$portfolios[$portfolio["description"]]["value_text"] = $portfolios[$portfolio["description"]]["value"] ." ". $portfolio["unit"];
 				}
+				$addProfitText = '';
 
+				$amount = $portfolios[$portfolio["description"]]["amount"];
 				if ($portfolio["is_done"]) {
+					$amount -= $portfolio["amount"];
 					$amount *= -1;
+					$addProfitText .= " (".number_format($amount/$portfolios[$portfolio["description"]]["outcome"]*100, 2)." %)";
+				} else {
+					$amount += $portfolio["amount"];
+					$portfolios[$portfolio["description"]]["outcome"] += $portfolio["amount"];
 				}
-				$portfolios[$portfolio["description"]]["amount_text"] = number_format($amount);
+				$portfolios[$portfolio["description"]]["amount"] = (int)$amount;
+				$portfolios[$portfolio["description"]]["amount_text"] = number_format($amount) . $addProfitText;
+
 				array_push($portfolios[$portfolio["description"]]["child"], $portfolio);
 			} else {
 				$arr["amount_text"] = number_format($arr["amount"]);
