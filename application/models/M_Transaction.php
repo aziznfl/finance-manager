@@ -84,6 +84,13 @@ class M_Transaction extends CI_Model {
 
 	//-------- Transaction ---------//
 
+	function getOneTransaction($transaction_id) {
+		$this->db->where("transaction_id", $transaction_id);
+		$this->db->where("account_id", $this->session->userdata('user')->account_id);
+		$this->db->where($this->getWhereTransaction());
+		return $this->db->get('transaction');
+	}
+
 	function getAllTransaction($limit, $type = "outcome") {
 		// $this->db->limit($limit);
 		$this->db->join("category", "category.category_id = transaction.category_id");
@@ -133,13 +140,14 @@ class M_Transaction extends CI_Model {
 		return $this->db->query($query);
 	}
 
-	function getTransaction($transaction_id) {
-		$this->db->where("transaction_id", $transaction_id);
-		$this->db->where($this->getWhereTransaction());
-		return $this->db->get('transaction');
-	}
-
 	//-------- Investment --------//
+
+	function getOneInvestment() {
+		$this->db->join("category_investment", "transaction_investment.category_id = category_investment.category_id", "left");
+		$this->db->where("account_id", $this->session->userdata('user')->account_id);
+		$this->db->where("transaction_investment_id", $transaction_id);
+		return $this->db->get('transaction_investment');
+	}
 
 	function getInvestment() {
 		$this->db->join("category_investment", "transaction_investment.category_id = category_investment.category_id", "left");

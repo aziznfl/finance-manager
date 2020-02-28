@@ -63,7 +63,13 @@ class Investment extends MY_Controller {
 								'data': 'instrument',
 								'className': 'text-center'
 							},
-							{'data': 'manager', 'className': 'text-center'}
+							{'data': 'manager', 'className': 'text-center'},
+							{
+								'className': 'text-center',
+								'render': function(param, type, data, meta) {
+									return '<a href=\"#\"><span class=\"fa fa-plus\"></span></a>&nbsp;&nbsp;<a href=\"#\"><span class=\"fa fa-trash\"></span></a>';
+								}
+							}
 						],
 						'order': [1, 'desc']
 					});
@@ -112,4 +118,6 @@ class Investment extends MY_Controller {
 		$this->load->view('investment/investment_list');
 		$this->load->view('root/_footer');
 	}
+
+
 }

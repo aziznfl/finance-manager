@@ -40,6 +40,7 @@ class API extends MY_Controller {
 
 	function getTransaction($transaction_id) {
 		$result = $this->transaction($transaction_id);
+		$result["amount"] = (int)$result["amount"];
 		echo json_encode($result);
 	}
 
@@ -54,6 +55,13 @@ class API extends MY_Controller {
 	}
 
 	//-------- Investment --------//
+
+	function getInvestment($investment_id) {
+		$result = $this->investment($investment_id);
+		$result["amount"] = (int)$result["amount"];
+		$result["value"] = (int)$result["value"];
+		echo json_encode($result);
+	}
 
 	function getLastTransaction($limit = 10) {
 		$result = $this->lastTransaction($limit);

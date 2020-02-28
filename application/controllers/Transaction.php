@@ -152,7 +152,7 @@ class Transaction extends MY_Controller {
 		$this->load->view('root/_footer');
 	}
 
-	function manage($type = "tr", $transaction_id = "") {
+	function manage($type = "tr", $id = "") {
 		$script = "";
 
 		//------- CREATE FORM -------//
@@ -192,14 +192,18 @@ class Transaction extends MY_Controller {
 		//------- /CREATE FORM -------//
 
 		// if edit -> get data from server
-		if ($transaction_id != "") {
-			$old_transaction = $this->transaction($transaction_id);
+		if ($type == "tr" && $id != "") {
+			$old_transaction = $this->transaction($id);
 			$result["date"]["value"] = $old_transaction["transaction_date"];
         	$result["amount"]["value"] = $old_transaction["amount"];
         	$result["category"]["value"] = array($old_transaction["category_id"]);
         	$result["description"]["value"] = $old_transaction["description"];
 
-			$result["form_hidden"] = array("transaction_id" => $transaction_id);
+			$result["form_hidden"] = array("transaction_id" => $id);
+		} else if ($type == "iv" && $id != "") {
+			$investment = $this->investment($id);
+			$result["date_iv"]["value"] = $investment["transaction_date"];
+			$result["amount_iv"]["value"] = $investment["amount"];
 		} else {
 			$result["form_hidden"] = null;
 			$script = "$('input[name=date]').focus();";

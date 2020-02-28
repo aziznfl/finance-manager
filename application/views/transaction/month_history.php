@@ -36,7 +36,7 @@
 			</div>
 			<div class="borderless"></div>
 			<div class="row">
-				<div class="col-md-3">
+				<div class="col-md-4">
 					<div class="floating-rounded-default bg-primary">Total: Rp. <span id="top-floating-amount-table">-</span></div>
 					<div class="table-responsive">
 						<table id="datatable-top-transaction" class="table table-bordered table-striped table-hover" style="cursor: pointer">
@@ -48,7 +48,7 @@
 						</table>
 					</div>
 				</div>
-				<div class="col-md-9">
+				<div class="col-md-8">
 					<h3 style="margin: 0 0 20px;">
 						List Transaction
 						<small class="pull-right">

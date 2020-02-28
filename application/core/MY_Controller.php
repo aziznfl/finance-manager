@@ -59,6 +59,11 @@ class MY_Controller extends CI_Controller {
 
 	//-------- Transaction ---------//
 
+	function transaction($transaction_id) {
+		$result = $this->M_Transaction->getOneTransaction($transaction_id)->result_array();
+		return $result[0];
+	}
+
 	function addNewTransaction($data) {
 		$result = $this->M_Transaction->addData("transaction", $data);
 		header("location:".base_url());
@@ -67,13 +72,6 @@ class MY_Controller extends CI_Controller {
 	function updateTransaction($data, $where) {
 		$result = $this->M_Transaction->updateData("transaction", $data, $where);
 		header("location:".base_url());
-	}
-
-	function transaction($transaction_id) {
-		$result = $this->M_Transaction->getTransaction($transaction_id)->result_array();
-		$result = $result[0];
-		$result["amount"] = (int)$result["amount"];
-		return $result;
 	}
 
 	function lastTransaction($limit) {
@@ -117,6 +115,11 @@ class MY_Controller extends CI_Controller {
 	}
 
 	//-------- Investment --------//
+
+	function investment($investment_id) {
+		$result = $this->M_Transaction->getOneInvestment($investment_id)->result_array();
+		return $result[0];
+	}
 
 	function addNewInvestment($data) {
 		$result = $this->M_Transaction->addData("transaction_investment", $data);

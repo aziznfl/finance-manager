@@ -21,6 +21,7 @@
                                 <th class='text-center'>Description</th>
             	    			<th class='text-center'>Instrument</th>
                                 <th class='text-center'>Manager</th>
+                                <th class='text-center'></th>
             	    		</tr>
             	    	</thead>
                 	</table>
