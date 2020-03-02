@@ -82,6 +82,11 @@ class M_Transaction extends CI_Model {
 		return $this->db->affected_rows();
 	}
 
+	function deleteData($table, $where) {
+		$this->db->delete($table, $where);
+		return $this->db->affected_rows();
+	}
+
 	//-------- Transaction ---------//
 
 	function getOneTransaction($transaction_id) {
@@ -142,7 +147,7 @@ class M_Transaction extends CI_Model {
 
 	//-------- Investment --------//
 
-	function getOneInvestment() {
+	function getOneInvestment($transaction_id) {
 		$this->db->join("category_investment", "transaction_investment.category_id = category_investment.category_id", "left");
 		$this->db->where("account_id", $this->session->userdata('user')->account_id);
 		$this->db->where("transaction_investment_id", $transaction_id);

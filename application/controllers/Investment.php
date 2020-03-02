@@ -67,7 +67,8 @@ class Investment extends MY_Controller {
 							{
 								'className': 'text-center',
 								'render': function(param, type, data, meta) {
-									return '<a href=\"#\"><span class=\"fa fa-plus\"></span></a>&nbsp;&nbsp;<a href=\"#\"><span class=\"fa fa-trash\"></span></a>';
+									return '<a href=\"".base_url("transaction/manage?type=iv&id='+data.id+'")."\"><span class=\"fa fa-plus\"></span></a>&nbsp;&nbsp;' +
+										'<a href=\"".base_url("transaction/delete?type=iv&id='+data.id+'")."\"><span class=\"fa fa-trash\"></span></a>';
 								}
 							}
 						],
@@ -94,17 +95,18 @@ class Investment extends MY_Controller {
 				});
 
 				function childTranscation(data) {
-					var html = '<table class=\"table table-condensed no-margin no-border\" style=\"margin: -8px\">';
+					var html = '<table class=\"table table-condensed no-margin no-border\" style=\"margin: -8px !important;\">';
 					for (i = 0; i < data.length; i++) {
 						var amount = data[i].amount_text;
+						var value = '';
 						amount = data[i].type == \"income\" ? \"+\"+amount : \"-\"+amount;
+						if (data[i].unit != null) value = data[i].value+' '+data[i].unit;
+
 						html += '<tr><td width=\"5%\" class=\"text-center\">-</td>';
 						html += '<td class=\"text-center\">'+data[i].transaction_date+'</td>';
-						html += '<td class=\"text-right\">'+amount+'</td>';
-						var value = '';
-						if (data[i].unit != null) value = data[i].value+' '+data[i].unit;
+						html += '<td class=\"text-right\">'+amount+'&nbsp;&nbsp;<a href=\"".base_url('transaction/manage?type=iv&change=edit&id=')."'+data[i].transaction_investment_id+'\"><span class=\"fa fa-edit\"></span></a></td>';
 						html += '<td class=\"text-right\" width=\"10%\">'+value+'</td>';
-						html += '<td colspan=2 width=\"50%\"></td></tr>';
+						html += '<td width=\"50%\"></td></tr>';
 					}
 					html += '</table>';
 
@@ -118,6 +120,4 @@ class Investment extends MY_Controller {
 		$this->load->view('investment/investment_list');
 		$this->load->view('root/_footer');
 	}
-
-
 }

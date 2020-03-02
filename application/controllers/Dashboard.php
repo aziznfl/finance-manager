@@ -53,7 +53,7 @@ class Dashboard extends MY_Controller {
 						{'orderable': false, 
 							'className': 'text-center',
 							'render': function (param, type, data, meta) {
-								return '<a href=\"".base_url('transaction/manage/tr/')."'+data.transaction_id+'\"><i class=\"fa fa-edit\"></i></a>';
+								return '<a href=\"".base_url('transaction/manage?type=tr&id=')."'+data.transaction_id+'\"><i class=\"fa fa-edit\"></i></a>';
 							}
 						}
 					],

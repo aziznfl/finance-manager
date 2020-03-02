@@ -11,11 +11,11 @@
             <div class="col-sm-12 col-md-4">
                 <div class="nav-tabs-custom">
                     <ul class="nav nav-tabs">
-                        <li id="tr" class="active" data-tab="default"><a href="javascript:void(0)">Transaction</a></li>
-                        <li id="iv" data-tab="investment"><a href="javascript:void(0)">Investment</a></li>
+                        <li id="tr" class="active" data-tab="tr"><a href="javascript:void(0)">Transaction</a></li>
+                        <li id="iv" data-tab="iv"><a href="javascript:void(0)">Investment</a></li>
                     </ul>
                     <div class="tab-content">
-                        <div id="default-transaction">
+                        <div id="tr-transaction">
                             <?php echo form_open(base_url()."transaction/manageTransaction", 'class="form"', $form_hidden); ?>
                                 <div class="form-group">
                                     <label>Date *</label>
@@ -43,34 +43,35 @@
                                     <label>Location</label>
                                     <input name="location" class="form-control">
                                 </div>
-                                <div class="form-group hide">
+                                <div class="form-group">
                                     <label>Tag</label>
-                                    <input name="tag" class="form-control">
+                                    <?php echo form_input($tag); ?>
                                 </div>
                                 <div class="form-group no-margin" style="padding-top: 8px">
                                     <button class="btn btn-primary btn-flat btn-block">Save Transaction</button>
                                 </div>
                             <?php echo form_close(); ?>
                         </div>
-                        <div id="investment-transaction">
-                            <?php echo form_open(base_url()."transaction/manageInvestment", 'class="form"'); ?>
+                        <div id="iv-transaction">
+                            <?php echo form_open(base_url()."transaction/manageInvestment", 'class="form"', $form_hidden); ?>
                                 <div class="form-group">
                                     <label>Date *</label>
                                     <div class="input-group">
                                         <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
-                                        <?php echo form_input($date); ?>
+                                        <?php echo form_input($date_iv); ?>
                                     </div>
                                 </div>
                                 <div id="input-category-investment" class="form-group">
                                     <label>Category *</label>
-                                    <?php // echo form_dropdown('category', $category_investment["list"], $category_investment["value"], $category_investment["tag"]); ?>
-                                    <select class="form-control select2" name="category">
+                                    <select class="form-control select2" name="category_iv">
                                         <option></option>
                                         <?php
                                         foreach ($category_investment as $category) {
                                             $dataUnit = "";
+                                            $selectCategory = "";
                                             if ($category["unit"] != null) $dataUnit = " data-unit='".$category["unit"]."'";
-                                            echo "<option value=".$category["category_id"] . $dataUnit.">".ucwords($category["category_name"])."</option>";
+                                            if ($category["category_id"] == $category_iv) $selectCategory = " selected";
+                                            echo "<option value=".$category["category_id"].$dataUnit.$selectCategory.">".ucwords($category["category_name"])."</option>";
                                         }
                                         ?>
                                     </select>
@@ -79,7 +80,7 @@
                                     <label>Amount *</label>
                                     <div class="input-group">
                                         <div class="input-group-addon">Rp.</div>
-                                        <?php echo form_input($amount); ?>
+                                        <?php echo form_input($amount_iv); ?>
                                     </div>
                                 </div>
                                 <div id="input-value" class="form-group hide">
@@ -91,11 +92,11 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Manager</label>
-                                    <input type="text" name="manager" class="form-control" placeholder="Investment Manager">
+                                    <?php echo form_input($manager); ?>
                                 </div>
                                 <div class="form-group">
                                     <label>Description</label>
-                                    <?php echo form_input($description); ?>
+                                    <?php echo form_input($description_iv); ?>
                                 </div>
                                 <div class="form-group no-margin" style="padding-top: 8px">
                                     <button class="btn btn-primary btn-flat btn-block">Save Investment</button>

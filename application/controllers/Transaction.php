@@ -100,7 +100,7 @@ class Transaction extends MY_Controller {
 							{'orderable': false, 
 								'className': 'text-center',
 								'render': function (param, type, data, meta) {
-									return '<a href=\"".base_url('transaction/manage/tr/')."'+data.transaction_id+'\"><i class=\"fa fa-edit\"></i></a>';
+									return '<a href=\"".base_url('transaction/manage?type=tr&id=')."'+data.transaction_id+'\"><i class=\"fa fa-edit\"></i></a>';
 								}
 							}
 						],
@@ -152,13 +152,18 @@ class Transaction extends MY_Controller {
 		$this->load->view('root/_footer');
 	}
 
-	function manage($type = "tr", $id = "") {
+	function manage() {
+		$type = $this->input->get('type');
+		$id = $this->input->get('id');
+		$change = $this->input->get('change');
 		$script = "";
 
-		//------- CREATE FORM -------//
+		if ($type == null) $type = "tr";
 
+		//------- CREATE FORM -------//
+		$result["form_hidden"] = array();
 		$result["date"] = array(
-			'name'  => 'date',
+			'name'  => 'date_tr',
 			'class' => 'form-control datetimepicker'
 		);
 		$result["amount"] = array(
@@ -180,33 +185,58 @@ class Transaction extends MY_Controller {
         $result["category"]["tag"] = array('class' => 'form-control select2');
         $result["category"]["value"] = "";
 
-		$categories = $this->listCategoriesInvestment();
-        $result["category_investment"] = $categories;
-
         $result["description"] = array(
 			'name'  => 'description',
 			'class' => 'form-control',
 			'placeholder' => 'Description'
         );
+        $result["tag"] = array(
+        	'name' => 'tag',
+        	'class' => 'form-control',
+        	'placeholder' => 'Tag'
+        );
+        $result["date_iv"] = $result["date"];
+        $result["date_iv"]["name"] = 'date_iv';
+        $result["amount_iv"] = $result["amount"];
+        $result["amount_iv"]["name"] = 'amount_iv';
+        $result["manager"] = array(
+        	'name' => 'manager',
+        	'class' => 'form-control',
+        	'placeholder' => 'Manager'
+        );
+        $result["description_iv"] = $result["description"];
+        $result["description_iv"]["name"] = 'description_iv';
 
+		$categories = $this->listCategoriesInvestment();
+        $result["category_investment"] = $categories;
 		//------- /CREATE FORM -------//
 
 		// if edit -> get data from server
-		if ($type == "tr" && $id != "") {
-			$old_transaction = $this->transaction($id);
-			$result["date"]["value"] = $old_transaction["transaction_date"];
-        	$result["amount"]["value"] = $old_transaction["amount"];
-        	$result["category"]["value"] = array($old_transaction["category_id"]);
-        	$result["description"]["value"] = $old_transaction["description"];
+		if ($type == "tr") {
+			$script = "$('input[name=date_tr]').focus();";
+			if ($id != "") {
+				$old_transaction = $this->transaction($id);
+				$result["date"]["value"] = $old_transaction["transaction_date"];
+	        	$result["amount"]["value"] = $old_transaction["amount"];
+	        	$result["category"]["value"] = array($old_transaction["category_id"]);
+	        	$result["description"]["value"] = $old_transaction["description"];
+	        	$result["tag"]["value"] = $old_transaction["tag"];
 
-			$result["form_hidden"] = array("transaction_id" => $id);
-		} else if ($type == "iv" && $id != "") {
-			$investment = $this->investment($id);
-			$result["date_iv"]["value"] = $investment["transaction_date"];
-			$result["amount_iv"]["value"] = $investment["amount"];
-		} else {
-			$result["form_hidden"] = null;
-			$script = "$('input[name=date]').focus();";
+				$result["form_hidden"] = array("transaction_id" => $id);
+			}
+		} else if ($type == "iv") {
+			$script = "$('input[name=date_iv]').focus();";
+			if ($id != "") {
+				$investment = $this->investment($id);
+				$result["date_iv"]["value"] = $investment["transaction_date"];
+				$result["category_iv"] = $investment["category_id"];
+				$result["manager"]["value"] = $investment["manager"];
+				$result["description_iv"]["value"] = $investment["description"];
+				if ($change == "edit") {
+					$result["form_hidden"] = array("transaction_investment_id" => $id);
+					$result["amount_iv"]["value"] = $investment["amount"];
+				}
+			}
 		}
  
 		$result["add_footer"] = "
@@ -214,7 +244,7 @@ class Transaction extends MY_Controller {
 				$(function() {
 				    ".$script."
 
-				    $('#default-transaction').siblings().addClass('hide');
+				    $('#tr-transaction').siblings().addClass('hide');
 				    $('#".$type."').trigger('click');
 				});
 
@@ -224,6 +254,7 @@ class Transaction extends MY_Controller {
 
 					var tab = $(this).attr('data-tab');
 					$('#'+tab+'-transaction').removeClass('hide').siblings().addClass('hide');
+					$('input[name=date_'+tab+']').focus();
 				});
 
 				// function for choose category investment to show input value or not
@@ -251,22 +282,25 @@ class Transaction extends MY_Controller {
 		$arr["amount"] = $this->input->post('amount');
 		$arr["category_id"] = $this->input->post('category');
 		$arr["description"] = $this->input->post('description');
+		$arr["tag"] = $this->input->post('tag');
 		$transaction_id = $this->input->post('transaction_id');
 
 		if ($transaction_id != "") {
 			$where = "transaction_id = ".$this->input->post('transaction_id');
 			$this->updateTransaction($arr, $where);
+			header("location:".base_url());
 		} else {
 			$arr["account_id"] = $this->session->userdata('user')->account_id;
 			$this->addNewTransaction($arr);
+			header("location:".base_url());
 		}
 	}
 
 	function manageInvestment() {
-		$arr["transaction_date"] = $this->input->post('date');
-		$arr["amount"] = $this->input->post('amount');
-		$arr["category_id"] = $this->input->post('category');
-		$arr["description"] = $this->input->post('description');
+		$arr["transaction_date"] = $this->input->post('date_iv');
+		$arr["amount"] = $this->input->post('amount_iv');
+		$arr["category_id"] = $this->input->post('category_iv');
+		$arr["description"] = $this->input->post('description_iv');
 		$arr["value"] = $this->input->post('value');
 		$arr["manager"] = $this->input->post('manager');
 		$arr["account_id"] = $this->session->userdata('user')->account_id;
@@ -275,9 +309,25 @@ class Transaction extends MY_Controller {
 		if ($transaction_id != "") {
 			$where = "transaction_investment_id = ".$this->input->post('transaction_investment_id');
 			$this->updateInvestment($arr, $where);
+			header("location:".base_url());
 		} else {
 			$arr["account_id"] = $this->session->userdata('user')->account_id;
 			$this->addNewInvestment($arr);
+			header("location:".base_url());
+		}
+	}
+
+	function delete() {
+		$type = $this->input->get('type');
+		$id = $this->input->get('id');
+		if ($type == 'tr') {
+			$this->deleteData("transaction", array("transaction_id" => $id));
+			header("location:".base_url());
+		} else if ($type == 'iv') {
+			$this->deleteData("transaction_investment", array("transaction_investment_id" => $id));
+			header("location:".base_url("investment/portofolio"));
+		} else {
+			header("location:".base_url());
 		}
 	}
 

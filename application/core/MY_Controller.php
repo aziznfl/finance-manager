@@ -122,8 +122,11 @@ class MY_Controller extends CI_Controller {
 	}
 
 	function addNewInvestment($data) {
-		$result = $this->M_Transaction->addData("transaction_investment", $data);
-		header("location:".base_url());
+		return $this->M_Transaction->addData("transaction_investment", $data);
+	}
+
+	function updateInvestment($data, $where) {
+		return $this->M_Transaction->updateData("transaction_investment", $data, $where);
 	}
 
 	function totalInvestment() {
@@ -139,6 +142,7 @@ class MY_Controller extends CI_Controller {
 			$portfolio["amount_text"] = number_format($portfolio["amount"]);
 
 			$arr = array();
+			$arr["id"] = $portfolio["transaction_investment_id"];
 			$arr["date"] = $portfolio["transaction_date"];
 			$arr["state_text"] = !$portfolio["is_done"] ? "Progress" : "Done";
 			$arr["description"] = $portfolio["description"];
@@ -179,5 +183,11 @@ class MY_Controller extends CI_Controller {
 		}
 		$portfolios = array_values($portfolios);
 		return $portfolios;
+	}
+
+	/*--------- DELETE DATA ---------*/
+	
+	function deleteData($table, $where) {
+		return $this->M_Transaction->deleteData($table, $where);
 	}
 }
