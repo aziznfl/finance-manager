@@ -288,11 +288,11 @@ class Transaction extends MY_Controller {
 		if ($transaction_id != "") {
 			$where = "transaction_id = ".$this->input->post('transaction_id');
 			$this->updateTransaction($arr, $where);
-			header("location:".base_url());
+			header("location:".base_url("transaction/history"));
 		} else {
 			$arr["account_id"] = $this->session->userdata('user')->account_id;
 			$this->addNewTransaction($arr);
-			header("location:".base_url());
+			header("location:".base_url("transaction/history"));
 		}
 	}
 
@@ -309,11 +309,11 @@ class Transaction extends MY_Controller {
 		if ($transaction_id != "") {
 			$where = "transaction_investment_id = ".$this->input->post('transaction_investment_id');
 			$this->updateInvestment($arr, $where);
-			header("location:".base_url());
+			header("location:".base_url("investment/portfolio"));
 		} else {
 			$arr["account_id"] = $this->session->userdata('user')->account_id;
 			$this->addNewInvestment($arr);
-			header("location:".base_url());
+			header("location:".base_url("investment/portfolio"));
 		}
 	}
 
