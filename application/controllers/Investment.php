@@ -67,8 +67,7 @@ class Investment extends MY_Controller {
 							{
 								'className': 'text-center',
 								'render': function(param, type, data, meta) {
-									return '<a href=\"".base_url("transaction/manage?type=iv&id='+data.id+'")."\"><span class=\"fa fa-plus\"></span></a>&nbsp;&nbsp;' +
-										'<a href=\"".base_url("transaction/delete?type=iv&id='+data.id+'")."\"><span class=\"fa fa-trash\"></span></a>';
+									return '<a class=\"btn btn-xs btn-primary\" href=\"".base_url("transaction/manage?type=iv&id='+data.id+'")."\"><span class=\"fa fa-plus\"></span> Add New</a>';
 								}
 							}
 						],
@@ -102,9 +101,15 @@ class Investment extends MY_Controller {
 						amount = data[i].type == \"income\" ? \"+\"+amount : \"-\"+amount;
 						if (data[i].unit != null) value = data[i].value+' '+data[i].unit;
 
-						html += '<tr><td width=\"5%\" class=\"text-center\">-</td>';
+						html += '<tr><td width=\"1%\" class=\"text-center\">-</td>';
 						html += '<td class=\"text-center\">'+data[i].transaction_date+'</td>';
-						html += '<td class=\"text-right\">'+amount+'&nbsp;&nbsp;<a href=\"".base_url('transaction/manage?type=iv&change=edit&id=')."'+data[i].transaction_investment_id+'\"><span class=\"fa fa-edit\"></span></a></td>';
+						html += '<td class=\"text-right\">' +
+							amount+'&nbsp;&nbsp;&nbsp;&nbsp;' +
+							'<a href=\"".base_url('transaction/manage?type=iv&change=edit&id=')."'+data[i].transaction_investment_id+'\" title=\"Edit Transaction\">' +
+								'<span class=\"fa fa-edit\"></span>' +
+							'</a>&nbsp;&nbsp;' +
+							'<a href=\"#\"><span class=\"fa fa-trash text-danger\" title=\"Delete Transaction\"></span></a>' +
+							'</td>';
 						html += '<td class=\"text-right\" width=\"10%\">'+value+'</td>';
 						html += '<td width=\"50%\"></td></tr>';
 					}

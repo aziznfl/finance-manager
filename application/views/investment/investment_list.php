@@ -14,7 +14,7 @@
                 	<table id="transaction_table" class="table table-bordered table-striped table-hover">
                 		<thead>
                 			<tr>
-            	    			<th class='text-center'>No</th>
+            	    			<th class='text-center' width="1%">No</th>
             	    			<th class='text-center'>Date</th>
             	    			<th class='text-center'>Amount</th>
                                 <th class='text-center'>Status</th>

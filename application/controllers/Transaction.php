@@ -278,7 +278,7 @@ class Transaction extends MY_Controller {
 	}
 
 	function manageTransaction() {
-		$arr["transaction_date"] = $this->input->post('date');
+		$arr["transaction_date"] = $this->input->post('date_tr');
 		$arr["amount"] = $this->input->post('amount');
 		$arr["category_id"] = $this->input->post('category');
 		$arr["description"] = $this->input->post('description');
