@@ -36,7 +36,8 @@ class Investment extends MY_Controller {
 								'createdCell': function(td, cellData, rowData, row, col) {
 									if (rowData.state_text == 'Done') {
 										if (rowData.amount > 0) $(td).addClass('text-success');
-										else $(td).addClass('text-danger');
+										else if (rowData.amount < 0) $(td).addClass('text-danger');
+										else $(td).addClass('text-primary');
 									}
 								}
 							},

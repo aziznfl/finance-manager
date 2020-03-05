@@ -144,7 +144,7 @@ class MY_Controller extends CI_Controller {
 			$arr = array();
 			$arr["id"] = $portfolio["transaction_investment_id"];
 			$arr["date"] = $portfolio["transaction_date"];
-			$arr["state_text"] = !$portfolio["is_done"] ? "Progress" : "Done";
+			$arr["state_text"] = "Progress";
 			$arr["description"] = $portfolio["description"];
 			$arr["instrument"] = ucwords($portfolio["category_name"]);
 			$arr["manager"] = $portfolio["manager"];
@@ -165,10 +165,11 @@ class MY_Controller extends CI_Controller {
 
 				$amount = $portfolios[$portfolio["description"]]["amount"];
 				if ($portfolio["is_done"]) {
+					$portfolios[$portfolio["description"]]["state_text"] = "Done";
 					$amount -= $portfolio["amount"];
 					$amount *= -1;
 					$addProfitText .= " (".number_format($amount/$portfolios[$portfolio["description"]]["outcome"]*100, 2)." %)";
-				} else {
+				} else if ($portfolio["type"] == "outcome") {
 					$amount += $portfolio["amount"];
 					$portfolios[$portfolio["description"]]["outcome"] += $portfolio["amount"];
 				}
