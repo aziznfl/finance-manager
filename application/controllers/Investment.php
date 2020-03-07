@@ -99,7 +99,7 @@ class Investment extends MY_Controller {
 					for (i = 0; i < data.length; i++) {
 						var amount = data[i].amount_text;
 						var value = '';
-						amount = data[i].type == \"income\" ? \"+\"+amount : \"-\"+amount;
+						amount = data[i].type != \"outcome\" ? \"+\"+amount : \"-\"+amount;
 						if (data[i].unit != null) value = data[i].value+' '+data[i].unit;
 
 						html += '<tr><td width=\"1%\" class=\"text-center\">-</td>';

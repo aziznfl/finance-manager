@@ -159,12 +159,14 @@ class Transaction extends MY_Controller {
 		$script = "";
 
 		if ($type == null) $type = "tr";
+		else if ($type == "iv" && $id != "") $script .= "$('#input-type').removeClass('hide');";
 
 		//------- CREATE FORM -------//
 		$result["form_hidden"] = array();
 		$result["date"] = array(
 			'name'  => 'date_tr',
-			'class' => 'form-control datetimepicker'
+			'class' => 'form-control datetimepicker',
+			'placeholder' => "Now"
 		);
 		$result["amount"] = array(
 			'type'  => 'number',
@@ -209,33 +211,31 @@ class Transaction extends MY_Controller {
 
 		$categories = $this->listCategoriesInvestment();
         $result["category_investment"] = $categories;
-		//------- /CREATE FORM -------//
+		//------- /.CREATE FORM -------//
 
 		// if edit -> get data from server
-		if ($type == "tr") {
-			$script = "$('input[name=date_tr]').focus();";
-			if ($id != "") {
-				$old_transaction = $this->transaction($id);
-				$result["date"]["value"] = $old_transaction["transaction_date"];
-	        	$result["amount"]["value"] = $old_transaction["amount"];
-	        	$result["category"]["value"] = array($old_transaction["category_id"]);
-	        	$result["description"]["value"] = $old_transaction["description"];
-	        	$result["tag"]["value"] = $old_transaction["tag"];
+		if ($type == "tr" && $id != "") {
+			$old_transaction = $this->transaction($id);
+			$result["date"]["value"] = $old_transaction["transaction_date"];
+			$result["amount"]["value"] = $old_transaction["amount"];
+			$result["category"]["value"] = array($old_transaction["category_id"]);
+			$result["description"]["value"] = $old_transaction["description"];
+			$result["tag"]["value"] = $old_transaction["tag"];
 
-				$result["form_hidden"] = array("transaction_id" => $id);
-			}
-		} else if ($type == "iv") {
-			$script = "$('input[name=date_iv]').focus();";
-			if ($id != "") {
-				$investment = $this->investment($id);
+			$result["form_hidden"] = array("transaction_id" => $id);
+		} else if ($type == "iv" && $id != "") {
+			$investment = $this->investment($id);
+			$result["category_iv"] = $investment["category_id"];
+			$result["manager"]["value"] = $investment["manager"];
+			$result["description_iv"]["value"] = $investment["description"];
+			if ($change == "edit") {
 				$result["date_iv"]["value"] = $investment["transaction_date"];
-				$result["category_iv"] = $investment["category_id"];
-				$result["manager"]["value"] = $investment["manager"];
-				$result["description_iv"]["value"] = $investment["description"];
-				if ($change == "edit") {
-					$result["form_hidden"] = array("transaction_investment_id" => $id);
-					$result["amount_iv"]["value"] = $investment["amount"];
-				}
+				$result["form_hidden"] = array("transaction_investment_id" => $id);
+				$result["amount_iv"]["value"] = $investment["amount"];
+			} else {
+				$result["type"]["value"] = $investment["type"];
+				$result["manager"]["readonly"] = "";
+				$result["description_iv"]["readonly"] = "";
 			}
 		}
  
@@ -278,7 +278,7 @@ class Transaction extends MY_Controller {
 	}
 
 	function manageTransaction() {
-		$arr["transaction_date"] = $this->input->post('date_tr');
+		if ($this->input->post('date_tr') != "") $arr["transaction_date"] = $this->input->post('date_tr');
 		$arr["amount"] = $this->input->post('amount');
 		$arr["category_id"] = $this->input->post('category');
 		$arr["description"] = $this->input->post('description');
@@ -297,7 +297,8 @@ class Transaction extends MY_Controller {
 	}
 
 	function manageInvestment() {
-		$arr["transaction_date"] = $this->input->post('date_iv');
+		if ($this->input->post('date_iv') != "") $arr["transaction_date"] = $this->input->post('date_iv');
+		$arr["type"] = $this->input->post('type');
 		$arr["amount"] = $this->input->post('amount_iv');
 		$arr["category_id"] = $this->input->post('category_iv');
 		$arr["description"] = $this->input->post('description_iv');

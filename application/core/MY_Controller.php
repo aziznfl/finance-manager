@@ -164,11 +164,13 @@ class MY_Controller extends CI_Controller {
 				$addProfitText = '';
 
 				$amount = $portfolios[$portfolio["description"]]["amount"];
-				if ($portfolio["is_done"]) {
-					$portfolios[$portfolio["description"]]["state_text"] = "Done";
+				if ($portfolio["type"] == "income" || $portfolio["type"] == "done") {
 					$amount -= $portfolio["amount"];
-					$amount *= -1;
-					$addProfitText .= " (".number_format($amount/$portfolios[$portfolio["description"]]["outcome"]*100, 2)." %)";
+					if ($portfolio["type"] == "done") {
+						$amount *= -1;
+						$addProfitText .= " (".number_format($amount/$portfolios[$portfolio["description"]]["outcome"]*100, 2)." %)";
+						$portfolios[$portfolio["description"]]["state_text"] = "Done";
+					}
 				} else if ($portfolio["type"] == "outcome") {
 					$amount += $portfolio["amount"];
 					$portfolios[$portfolio["description"]]["outcome"] += $portfolio["amount"];

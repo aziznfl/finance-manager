@@ -83,12 +83,17 @@
                                         <?php echo form_input($amount_iv); ?>
                                     </div>
                                 </div>
-                                <div id="input-value" class="form-group hide">
+                                <div class="form-group hide" id="input-value">
                                     <label>Value</label>
                                     <div class="input-group">
                                         <input type="number" name="value" class="form-control text-right" value="0" step="0.001" />
                                         <div id="label-unit-investment-category" class="input-group-addon">-</div>
                                     </div>
+                                </div>
+                                <div class="form-group hide" id="input-type">
+                                    <input type="radio" name="type" value="outcome" checked="checked">&nbsp;&nbsp;&nbsp;<span style="margin-right: 16px;">Outcome</span>
+                                    <input type="radio" name="type" value="income">&nbsp;&nbsp;&nbsp;<span style="margin-right: 16px;">Income</span>
+                                    <input type="radio" name="type" value="done">&nbsp;&nbsp;&nbsp;Done
                                 </div>
                                 <div class="form-group">
                                     <label>Manager</label>
