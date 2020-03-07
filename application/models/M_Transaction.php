@@ -163,9 +163,9 @@ class M_Transaction extends CI_Model {
 
 	function getTotalInvestment() {
 		$query = "
-			SELECT SUM(amount) as total_investment 
+			SELECT SUM(CASE WHEN type = 'outcome' THEN amount ELSE -amount END) as total_investment
 			FROM transaction_investment 
-			WHERE account_id = ".$this->session->userdata('user')->account_id." && type = 'done'
+			WHERE account_id = ".$this->session->userdata('user')->account_id."
 		";
 		return $this->db->query($query);
 	}

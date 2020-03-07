@@ -68,7 +68,11 @@ class Investment extends MY_Controller {
 							{
 								'className': 'text-center',
 								'render': function(param, type, data, meta) {
-									return '<a class=\"btn btn-xs btn-primary\" href=\"".base_url("transaction/manage?type=iv&id='+data.id+'")."\"><span class=\"fa fa-plus\"></span> Add New</a>';
+									if (data.state_text != 'Done') {
+										return '<a class=\"btn btn-xs btn-primary\" href=\"".base_url("transaction/manage?type=iv&id='+data.id+'")."\"><span class=\"fa fa-plus\"></span> Add New</a>';
+									} else {
+										return '';
+									}
 								}
 							}
 						],
