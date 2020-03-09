@@ -291,7 +291,7 @@ class Transaction extends MY_Controller {
 		$transaction_id = $this->input->post('transaction_id');
 
 		$date = strtotime($arr["transaction_date"]);
-		$params = date('n', $date) . '/' . date('Y', $date);
+		$params = date('Y', $date) . '/' . date('n', $date);
 
 		if ($transaction_id != "") {
 			$where = "transaction_id = ".$this->input->post('transaction_id');
