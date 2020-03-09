@@ -35,8 +35,10 @@
             }
 
             // add treeview text and icon on the right menu
+            $treeview = "";
             $treeviewIcon = "";
             if ($submenus != "") {
+              $treeview = " treeview";
               $treeviewIcon = '
                 <span class="pull-right-container">
                   <i class="fa fa-angle-left pull-right"></i>
@@ -44,7 +46,7 @@
             }
 
             // print menus
-            echo '<li class="'.$activeMenu.' treeview">
+            echo '<li class="'.$activeMenu.$treeview.'">
               <a href="'.$link.'">
                 <i class="'.$menu['menu_icon'].'"></i> <span>'.ucwords($menu['menu_name']).'</span>
                 '.$treeviewIcon.'
