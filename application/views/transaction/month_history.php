@@ -52,7 +52,7 @@
 					<h3 style="margin: 0 0 20px;">
 						List Transaction
 						<small class="pull-right">
-							<a class="btn btn-primary btn-sm" href="<?php echo base_url('transaction/manage'); ?>">
+							<a class="btn btn-primary btn-sm" id="buttonAddTransaction">
 								<i class="fa fa-plus"></i> Add Transaction
 							</a>
 						</small>

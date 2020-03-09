@@ -18,6 +18,9 @@ class Transaction extends MY_Controller {
 	function history($year = "", $month = "") {
 		if ($year == "") $year = date('Y');
 		if ($month == "") $month = date('n');
+		$result["year"] = $year;
+		$result["month"] = $month;
+
 		$result["first_transaction"] = $this->getFirstTransaction()->result();
 		$result["list_categories"] = $this->listCategories();
 
@@ -29,6 +32,7 @@ class Transaction extends MY_Controller {
 				var category_id = 0;
 
 				$(function() {
+					$('#buttonAddTransaction').attr('href', '".base_url('transaction/manage/'.$year.'/'.$month)."');
 					$('#date').val('".$year."-".$month."');
 					changeDate();
 
@@ -75,6 +79,7 @@ class Transaction extends MY_Controller {
 					var date = $('#date').val().split('-');
 					params = date[0] + '/' + date[1];
 					category_id = 0;
+					$('#buttonAddTransaction').attr('href', '".base_url('transaction/manage/')."'+params);
 					window.history.pushState('object or string', 'Title', '".base_url('transaction/history/')."' + params);
 
 					reloadMonthTransaction();
@@ -285,14 +290,17 @@ class Transaction extends MY_Controller {
 		$arr["tag"] = $this->input->post('tag');
 		$transaction_id = $this->input->post('transaction_id');
 
+		$date = strtotime($arr["transaction_date"]);
+		$params = date('n', $date) . '/' . date('Y', $date);
+
 		if ($transaction_id != "") {
 			$where = "transaction_id = ".$this->input->post('transaction_id');
 			$this->updateTransaction($arr, $where);
-			header("location:".base_url("transaction/history"));
+			header("location:".base_url("transaction/history/".$params));
 		} else {
 			$arr["account_id"] = $this->session->userdata('user')->account_id;
 			$this->addNewTransaction($arr);
-			header("location:".base_url("transaction/history"));
+			header("location:".base_url("transaction/history/".$params));
 		}
 	}
 
