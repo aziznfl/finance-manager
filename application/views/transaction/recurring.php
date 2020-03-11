@@ -35,11 +35,11 @@
 									// not every weekend
 									if ($arr[3] != "*") {
 										// every year
-										$repetition_text .= " Year<br/>(on ".dateOnYear($arr).")";
+										$repetition_text .= " Year<br/>(on ".dateText($arr, "F jS - H:i").")";
 									} else if ($arr[3] == "*") {
 										// not every year
 										if ($arr[2] != "*") {
-											$repetition_text .= " Month<br/>(on ".ordinal($arr[2])." - ".numberDate($arr[1]).":".numberDate($arr[0]).")";
+											$repetition_text .= " Month<br/>(on ".dateText($arr, "jS - H:i").")";
 										}
 									}
 								}
@@ -66,18 +66,8 @@
 </section>
 
 <?php
-	function numberDate($number) {
-		if (intval($number) < 9) return "0".$number;
-		else return $number;
-	}
-	function dateOnYear($arr) {
-		echo intval($arr[3]).", ".intval($arr[4]).", 0, ".intval($arr[0]).", ".intval($arr[1]);
+	function dateText($arr, $return) {
 		$makeTime = mktime(intval($arr[1]), intval($arr[0]), 0, intval($arr[3]), intval($arr[2]));
-		return date("F jS - H:i", $makeTime);
-	}
-	function ordinal($number) {
-		$ends = array('th','st','nd','rd','th','th','th','th','th','th');
-		if ((($number % 100) >= 11) && (($number%100) <= 13)) return $number. 'th';
-		else return $number. $ends[$number % 10];
+		return date($return, $makeTime);
 	}
 ?>
