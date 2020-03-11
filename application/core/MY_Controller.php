@@ -114,6 +114,10 @@ class MY_Controller extends CI_Controller {
 		return $all;
 	}
 
+	function recurringTransaction() {
+		return $this->M_Transaction->getRecurringTransaction()->result_array();
+	}
+
 	//-------- Investment --------//
 
 	function investment($investment_id) {

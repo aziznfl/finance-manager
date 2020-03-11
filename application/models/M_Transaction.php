@@ -145,6 +145,11 @@ class M_Transaction extends CI_Model {
 		return $this->db->query($query);
 	}
 
+	function getRecurringTransaction() {
+		$this->db->join("category", "category.category_id = transaction_recurring.category_id", "left");
+		return $this->db->get("transaction_recurring");
+	}
+
 	//-------- Investment --------//
 
 	function getOneInvestment($transaction_id) {

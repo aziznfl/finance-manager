@@ -15,6 +15,8 @@ class Transaction extends MY_Controller {
 		$this->load->model('M_Transaction');
     }
 
+    /*------------ MAIN ------------*/
+
 	function history($year = "", $month = "") {
 		if ($year == "") $year = date('Y');
 		if ($month == "") $month = date('n');
@@ -32,7 +34,7 @@ class Transaction extends MY_Controller {
 				var category_id = 0;
 
 				$(function() {
-					$('#buttonAddTransaction').attr('href', '".base_url('transaction/manage/'.$year.'/'.$month)."');
+					$('#buttonAddTransaction').attr('href', '".base_url('transaction/manage?year='.$year.'&month='.$month)."');
 					$('#date').val('".$year."-".$month."');
 					changeDate();
 
@@ -79,7 +81,7 @@ class Transaction extends MY_Controller {
 					var date = $('#date').val().split('-');
 					params = date[0] + '/' + date[1];
 					category_id = 0;
-					$('#buttonAddTransaction').attr('href', '".base_url('transaction/manage/')."'+params);
+					$('#buttonAddTransaction').attr('href', '".base_url('transaction/manage?year=')."'+date[0]+'&month='+date[1]);
 					window.history.pushState('object or string', 'Title', '".base_url('transaction/history/')."' + params);
 
 					reloadMonthTransaction();
@@ -158,6 +160,8 @@ class Transaction extends MY_Controller {
 	}
 
 	function manage() {
+		$month = $this->input->get('month');
+		$year = $this->input->get('year');
 		$type = $this->input->get('type');
 		$id = $this->input->get('id');
 		$change = $this->input->get('change');
@@ -219,15 +223,21 @@ class Transaction extends MY_Controller {
 		//------- /.CREATE FORM -------//
 
 		// if edit -> get data from server
-		if ($type == "tr" && $id != "") {
-			$old_transaction = $this->transaction($id);
-			$result["date"]["value"] = $old_transaction["transaction_date"];
-			$result["amount"]["value"] = $old_transaction["amount"];
-			$result["category"]["value"] = array($old_transaction["category_id"]);
-			$result["description"]["value"] = $old_transaction["description"];
-			$result["tag"]["value"] = $old_transaction["tag"];
+		if ($type == "tr") {
+			if ($id != "") {
+				$old_transaction = $this->transaction($id);
+				$result["date"]["value"] = $old_transaction["transaction_date"];
+				$result["amount"]["value"] = $old_transaction["amount"];
+				$result["category"]["value"] = array($old_transaction["category_id"]);
+				$result["description"]["value"] = $old_transaction["description"];
+				$result["tag"]["value"] = $old_transaction["tag"];
 
-			$result["form_hidden"] = array("transaction_id" => $id);
+				$result["form_hidden"] = array("transaction_id" => $id);
+			} else {
+				if ($amount = $this->input->get('amount')) $result["amount"]["value"] = $amount;
+				if ($category = $this->input->get('category')) $result["category"]["value"] = array($category);
+				if ($description = $this->input->get('desc')) $result["description"]["value"] = $description;
+			}
 		} else if ($type == "iv" && $id != "") {
 			$investment = $this->investment($id);
 			$result["category_iv"] = $investment["category_id"];
@@ -282,6 +292,17 @@ class Transaction extends MY_Controller {
 		$this->load->view('root/_footer');
 	}
 
+	function recurring() {
+		$result["transaction"] = $this->recurringTransaction();
+
+		$this->load->view('root/_header', $result);
+		$this->load->view('root/_menus');
+		$this->load->view('transaction/recurring');
+		$this->load->view('root/_footer');
+	}
+
+    /*------------ /.MAIN ------------*/
+    
 	function manageTransaction() {
 		if ($this->input->post('date_tr') != "") $arr["transaction_date"] = $this->input->post('date_tr');
 		$arr["amount"] = $this->input->post('amount');
