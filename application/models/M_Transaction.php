@@ -31,6 +31,7 @@ class M_Transaction extends CI_Model {
 		$this->db->order_by("type", "DESC");
 		$this->db->where("type", $type);
 		$this->db->where($this->getWhereTransaction());
+		$this->db->where("YEAR(transaction_date) = YEAR(NOW())");
 		$query = $this->db->get('transaction');
 		return $query->result_array();
 	}
