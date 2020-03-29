@@ -172,7 +172,7 @@ class MY_Controller extends CI_Controller {
 					$amount -= $portfolio["amount"];
 					if ($portfolio["type"] == "done") {
 						$amount *= -1;
-						$addProfitText .= " (".number_format($amount/$portfolios[$portfolio["description"]]["outcome"]*100, 2)." %)";
+						$addProfitText .= " (".number_format($amount/$portfolios[$portfolio["description"]]["outcome"]*100, 2)."%)";
 						$portfolios[$portfolio["description"]]["state_text"] = "Done";
 					}
 				} else if ($portfolio["type"] == "outcome") {
