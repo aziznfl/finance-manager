@@ -18,16 +18,16 @@ class Dashboard extends MY_Controller {
 		// get transaction history for charts
 		$months = array();
 		$category = [];
-		$amounts = array();
-		$dashboards = $this->M_Transaction->getDashboardTransaction();
-		foreach ($dashboards as $val) {
-			$month = date("M-y", strtotime($val['transaction_date']));
-			if (!(in_array($month, $months))) { 
-				array_push($months, $month);
-			}
-			array_push($amounts, $val['total']);
+		$total_transaction = array();
+		$total_investment = array();
+		$arrTrans = $this->M_Transaction->getDashboardTransaction()->result_array();
+		foreach($arrTrans as $val) {
+			$month = date("M-y", strtotime($val["month"]."/1/".$val["year"]));
+			array_push($months, $month);
+			array_push($total_transaction, (int)$val['total_transaction']);
+			array_push($total_investment, (int)$val['total_investment']);
 		}
-		$amounts = array_map(function($val) { return (int)$val; }, $amounts);  // change value of amunts to numeric
+		$value = array(array("name" => "Transaction", "data" => $total_transaction, "stack" => "Transaction"), array("name" => "Investment", "data" => $total_investment, "stack" => "Investment"));
 		
 		// get several tag
 		$yatim = $this->M_Transaction->getAmountTag("yatim")->result();
@@ -95,32 +95,35 @@ class Dashboard extends MY_Controller {
 			    },
 			    legend: {
 			        align: 'right',
-			        x: -30,
+			        x: 0,
 			        verticalAlign: 'top',
-			        y: 25,
+			        y: 0,
 			        floating: true,
-			        backgroundColor:
-			            Highcharts.defaultOptions.legend.backgroundColor || 'white',
+			        backgroundColor: Highcharts.defaultOptions.legend.backgroundColor || 'white',
 			        borderColor: '#CCC',
 			        borderWidth: 1,
 			        shadow: false
 			    },
 			    tooltip: {
 			        headerFormat: '<b>{point.x}</b><br/>',
-			        pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+			        pointFormat: '{series.name}: {point.y}' //<br/>Total: {point.stackTotal}
 			    },
 			    plotOptions: {
 			        column: {
-			            stacking: 'normal',
-			            dataLabels: {
-			                enabled: true
-			            }
-			        }
-			    },
-			    series: [{
-			        name: 'All',
-			        data: ".json_encode($amounts)."
-			    }]
+			            stacking: 'normal'
+			        },
+					series: {
+						cursor: 'pointer',
+						point: {
+							events: {
+								click: function () {
+									console.log(this.options.key);
+								}
+							}
+						}
+					}
+				},
+			    series: ".json_encode($value)."
 			});
 		</script>
 		";

@@ -8,7 +8,7 @@ class M_Transaction extends CI_Model {
 	}
 
 	function getWhereTransaction() {
-		return "(account_id = ".$this->session->userdata('user')->account_id." AND is_deleted = 0)";
+		return "(account_id = ".$this->session->userdata('user')->account_id.")";
 	}
 
 	function getCategories() {
@@ -23,17 +23,24 @@ class M_Transaction extends CI_Model {
 	}
 
 	function getDashboardTransaction($type = "outcome") {
-		$this->db->select("*");
-		$this->db->select("SUM(amount) as total");
-		$this->db->join("category", "category.category_id = transaction.category_id");
-		$this->db->group_by("extract(year from transaction_date), extract(month from transaction_date)");
-		$this->db->order_by("transaction_date", "ASC");
-		$this->db->order_by("type", "DESC");
-		$this->db->where("type", $type);
-		$this->db->where($this->getWhereTransaction());
-		$this->db->where("YEAR(transaction_date) = YEAR(NOW())");
-		$query = $this->db->get('transaction');
-		return $query->result_array();
+		$where = " WHERE type = '".$type."' AND transaction_date > DATE_ADD(NOW(), INTERVAL -1 YEAR) AND ".$this->getWhereTransaction() ." ";
+
+		$query = "
+			SELECT a.year, a.month, total_transaction, total_investment
+			FROM (
+			    SELECT extract(year FROM transaction_date) year, extract(month FROM transaction_date) month, SUM(amount) as total_transaction
+			    FROM transaction
+			    ".$where."
+			    GROUP BY extract(year FROM transaction_date), extract(month FROM transaction_date)
+			) a
+			LEFT JOIN (
+			    SELECT extract(year FROM transaction_date) year, extract(month FROM transaction_date) month, SUM(amount) as total_investment
+			    FROM transaction_investment
+			    ".$where."
+			    GROUP BY extract(year FROM transaction_date), extract(month FROM transaction_date)
+			) b ON a.year = b.year AND a.month = b.month
+		";
+		return $this->db->query($query);
 	}
 
 	function getFirstTransaction() {

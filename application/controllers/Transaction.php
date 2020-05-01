@@ -150,6 +150,14 @@ class Transaction extends MY_Controller {
 						'order': [2, 'desc']
 					});
 				}
+
+				// function for choose tabs
+				$('.nav-tabs li').click(function() {
+					$(this).addClass('active').siblings().removeClass('active');
+
+					var tab = $(this).attr('data-tab');
+					$('#'+tab+'-tab').removeClass('hide').siblings().addClass('hide');
+				});
 			</script>
 		";
 

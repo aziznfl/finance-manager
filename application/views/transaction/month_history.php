@@ -8,7 +8,7 @@
     <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
             <li id="month" class="active" data-tab="month"><a href="javascript:void(0)">Filter by Month</a></li>
-            <li id="Category" data-tab="Category"><a href="javascript:void(0)">Filter by Category</a></li>
+            <li id="Category" data-tab="category"><a href="javascript:void(0)">Filter by Category</a></li>
         </ul>
         <div class="tab-content">
             <div id="month-tab">
@@ -76,7 +76,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="category-tab hide">
+			<div id="category-tab" class="hide">
 				<div class="row">
 					<div class="col-md-4">
 						<div class="table-responsive" style="margin-bottom: 32px;">
