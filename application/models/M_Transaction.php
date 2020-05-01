@@ -36,7 +36,7 @@ class M_Transaction extends CI_Model {
 			LEFT JOIN (
 			    SELECT extract(year FROM transaction_date) year, extract(month FROM transaction_date) month, SUM(amount) as total_investment
 			    FROM transaction_investment
-			    ".$where."
+			    ".$where." AND category_id != 0
 			    GROUP BY extract(year FROM transaction_date), extract(month FROM transaction_date)
 			) b ON a.year = b.year AND a.month = b.month
 		";
