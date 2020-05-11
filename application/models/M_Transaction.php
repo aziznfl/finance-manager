@@ -43,6 +43,34 @@ class M_Transaction extends CI_Model {
 		return $this->db->query($query);
 	}
 
+	function createTransactionView() {
+		$query = "
+			CREATE OR REPLACE VIEW transaction_view AS
+			SELECT account_id, AVG(total) as average_amount_per_month, AVG(count) as average_item_per_month
+			FROM (
+			    SELECT account_id, SUM(amount) as total, COUNT(transaction_id) as count
+			    FROM transaction
+			    GROUP BY account_id, EXTRACT(YEAR FROM transaction_date), EXTRACT(MONTH FROM transaction_date)
+			) transaction_extract
+			GROUP BY account_id
+		";
+
+		$query_event = "
+			CREATE EVENT update_transaction_view
+			ON SCHEDULE EVERY 1 MINUTE
+			STARTS '2020-05-09 11:25:00'
+			DO
+			CREATE OR REPLACE VIEW transaction_view AS
+			SELECT account_id, AVG(total) as average_amount_per_month, AVG(count) as average_item_per_month
+			FROM (
+			    SELECT account_id, SUM(amount) as total, COUNT(transaction_id) as count
+			    FROM transaction
+			    GROUP BY account_id, EXTRACT(YEAR FROM transaction_date), EXTRACT(MONTH FROM transaction_date)
+			) transaction_extract
+			GROUP BY account_id
+		";
+	}
+
 	function getFirstTransaction() {
 		$this->db->order_by("transaction_date", "ASC");
 		$this->db->where("account_id", $this->session->userdata('user')->account_id);

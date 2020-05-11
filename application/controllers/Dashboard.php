@@ -48,8 +48,17 @@ class Dashboard extends MY_Controller {
 						{'searchable': false, 'orderable': false, 'defaultContent': '', 'className': 'text-center'},
 						{'data': 'transaction_date', 'className': 'text-center'},
 						{'data': 'amount_text', 'className': 'text-right'},
-						{'data': 'category_name', 'className': 'text-center'},
-						{'data': 'description', 'className': 'text-center'},
+						{
+							'render': function (param, type, data, meta) {
+								var descView = '<br/>-';
+								var tagView = '';
+								
+								if (data.description != null && data.description != '') { descView = '<br/><span style=\"color: #888;\">'+data.description+'</span>' }
+								if (data.tag != null) { tagView = '<br/><span class=\"label bg-blue\">'+data.tag+'</span>' }
+
+								return data.category_name+descView+tagView;
+							}
+						},
 						{'orderable': false, 
 							'className': 'text-center',
 							'render': function (param, type, data, meta) {

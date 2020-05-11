@@ -51,7 +51,6 @@
                                     <th class="text-center">Date</th>
                                     <th class="text-center">Rp</th>
                                     <th class="text-center">Category</th>
-                                    <th class="text-center">Desc</th>
                                     <th class="text-center"></th>
                                 </thead>
                             </table>

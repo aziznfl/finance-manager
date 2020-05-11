@@ -49,7 +49,13 @@ class API extends MY_Controller {
 		echo json_encode($result);
 	}
 
-	function getMonthTransaction($year = "", $month = "", $category_id = 0) {
+	function getMonthTransaction() {
+		$month = $this->input->get('month');
+   		$year = $this->input->get('year');
+   		$category_id = $this->input->get('category_id');
+
+   		if (!isset($category_id)) $category_id = 0;
+
 		$result = $this->monthTransaction($month, $year, $category_id);
 		echo json_encode(array("data" => $result));
 	}

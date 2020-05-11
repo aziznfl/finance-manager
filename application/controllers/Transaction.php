@@ -31,10 +31,11 @@ class Transaction extends MY_Controller {
 				var tableMonthTrans;
 				var tableTopTrans;
 				var params = '';
+				var paramsGet = 'year=".$year."&month=".$month."';
 				var category_id = 0;
 
 				$(function() {
-					$('#buttonAddTransaction').attr('href', '".base_url('transaction/manage?year='.$year.'&month='.$month)."');
+					$('#buttonAddTransaction').attr('href', '".base_url('transaction/manage?')."'+paramsGet);
 					$('#date').val('".$year."-".$month."');
 					changeDate();
 
@@ -80,6 +81,7 @@ class Transaction extends MY_Controller {
 				function changeDate() {
 					var date = $('#date').val().split('-');
 					params = date[0] + '/' + date[1];
+					paramsGet = 'year='+date[0]+'&month='+date[1];
 					category_id = 0;
 					$('#buttonAddTransaction').attr('href', '".base_url('transaction/manage?year=')."'+date[0]+'&month='+date[1]);
 					window.history.pushState('object or string', 'Title', '".base_url('transaction/history/')."' + params);
@@ -94,7 +96,7 @@ class Transaction extends MY_Controller {
 				}
 
 				function reloadMonthTransaction() {
-					var link = '".base_url()."'+'api/getMonthTransaction/'+params + '/' + category_id;
+					var link = '".base_url()."' + 'api/getMonthTransaction?' + paramsGet + '&category_id=' + category_id;
 					tableMonthTrans = $('#datatable-month-transaction').DataTable({
 						'ajax': link,
 						'destroy': true,
@@ -102,8 +104,17 @@ class Transaction extends MY_Controller {
 							{'searchable': false, 'orderable': false, 'defaultContent': '', 'className': 'text-center'},
 							{'data': 'transaction_date', 'className': 'text-center'},
 							{'data': 'amount_text', 'className': 'text-right'},
-							{'data': 'category_name', 'className': 'text-center'},
-							{'data': 'description', 'className': 'text-center'},
+							{
+								'render': function (param, type, data, meta) {
+									var descView = '<br/>-';
+									var tagView = '';
+									
+									if (data.description != null && data.description != '') { descView = '<br/><span style=\"color: #888;\">'+data.description+'</span>'; }
+									if (data.tag != null) { tagView = '<br/><span class=\"label bg-blue\">'+data.tag+'</span>'; }
+
+									return data.category_name+descView+tagView;
+								}
+							},
 							{'orderable': false, 
 								'className': 'text-center',
 								'render': function (param, type, data, meta) {
