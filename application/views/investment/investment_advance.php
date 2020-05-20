@@ -7,7 +7,7 @@
     <section class="content">
         <div class="box box-primary">
             <div class="box-header">
-                List Transaction
+                <h3 class="box-title">List Transaction</h3>
             </div>
             <div class="box-body no-padding">
                 <div class="table-responsive">

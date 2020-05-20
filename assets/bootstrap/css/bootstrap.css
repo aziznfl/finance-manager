@@ -1343,6 +1343,13 @@ a.text-primary:hover,
 a.text-primary:focus {
   color: #286090;
 }
+.text-secondary {
+  color: #6c757d !important;
+}
+a.text-secondary:hover,
+a.text-secondary:focus {
+  color: #545b62 !important;
+}
 .text-success {
   color: #3c763d;
 }

@@ -41,7 +41,7 @@
             <div class="col-md-12">
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        Last Transaction
+                        <h3 class="box-title">Last Transaction</h3>
                     </div>
                     <div class="box-body">
                         <div class="table-responsive">
