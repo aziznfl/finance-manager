@@ -1,0 +1,36 @@
+.card-box {
+    display: block;
+	height: auto;
+    margin-bottom: 16px;
+    overflow: auto;
+    white-space: nowrap;
+}
+.card-view {
+	background-color: #849aaf;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    display: inline-block;
+    font-weight: 600;
+    margin-bottom: 12px;
+    margin-right: 12px;
+    padding: 20px 12px;
+    text-align: center;
+    top: 0;
+	width: 225px;
+}
+.card-view.active {
+	background-color: #337ab7;
+	border: 3px solid #0559a9;
+}
+.card-title {
+    border-bottom: 1px solid;
+    margin-top: 0;
+	padding-bottom: 4px;
+}
+.card-body {
+	font-size: 28px;
+}
+.table>tbody>tr>td.text-middle {
+	vertical-align: middle
+}
