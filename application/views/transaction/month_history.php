@@ -14,33 +14,21 @@
             <div id="month-tab">
 		        <div class="box-body">
 					<div class="form-horizontal">
-						<select id="date" class="form-control" onchange="changeDate()">
+						<div class="card-box">
 						<?php
-							$nowDate = $first_transaction[0]->transaction_date;
-							$nowDates = explode("-", $nowDate);
-							$yearFirst = $nowDates[0];
-							$monthFirst = $nowDates[1];
-							$yearNow = date('Y');
-							$monthNow = date('m');
-
-							for ($i = (int)$yearFirst; $i <= (int)$yearNow; $i++) {
-								$month = $i == $yearFirst ? $monthFirst : '01';
-								$year = $i < $yearNow ? '12' : $monthNow;
-								for ($j = (int)$month; $j <= (int)$year; $j++) {
-									$time = strtotime($j.'/01/'.$i);
-									$date = date("M Y", $time);
-									echo '<option value="'.$i.'-'.$j.'">'.$date.'</option>';
-								}
-							}
-
-							$timeTransaction = strtotime($monthFirst."/01/".$yearFirst);
-						?>
-						</select>
+							foreach ($total_month_transaction->result() as $trans) {
+								$time = strtotime($trans->month.'/01/'.$trans->year);
+								$date = date("M Y", $time);
+								?>
+								<div class="card-view" id="card-<?php echo $trans->year."-".$trans->month; ?>" onclick="changeDate(<?php echo $trans->year.", ".$trans->month?>)">
+									<h4 class="card-title"><?php echo $date; ?></h4>
+									<div class="card-body">Rp. <?php echo number_format($trans->total_monthly) ?></div>
+								</div>
+						<?php } ?>
 					</div>
 					<div class="borderless"></div>
 					<div class="row">
 						<div class="col-md-4">
-							<div class="floating-rounded-default bg-primary">Total: Rp. <span id="top-floating-amount-table">-</span></div>
 							<div class="table-responsive" style="margin-bottom: 32px;">
 								<table id="datatable-top-transaction" class="table table-bordered table-striped table-hover" style="cursor: pointer;">
 									<thead>

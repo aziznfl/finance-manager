@@ -44,7 +44,9 @@ class API extends MY_Controller {
 		echo json_encode($result);
 	}
 
-	function getTopTransaction($year = "", $month = "") {
+	function getTopTransaction() {
+		$month = $this->input->get('month');
+   		$year = $this->input->get('year');
 		$result = $this->topTransaction($month, $year);
 		echo json_encode($result);
 	}

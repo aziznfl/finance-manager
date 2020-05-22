@@ -17,27 +17,27 @@ class Transaction extends MY_Controller {
 
     /*------------ MAIN ------------*/
 
-	function history($year = "", $month = "") {
+	function history() {
+		$month = $this->input->get('month');
+		$year = $this->input->get('year');
 		if ($year == "") $year = date('Y');
 		if ($month == "") $month = date('n');
 		$result["year"] = $year;
 		$result["month"] = $month;
 
-		$result["first_transaction"] = $this->getFirstTransaction()->result();
-		$result["list_categories"] = $this->listCategories();
+		$result["total_month_transaction"] = $this->M_Transaction->getTotalPerMonthTransaction();
+		// $result["list_categories"] = $this->listCategories();
 
 		$result["add_footer"] = "
 			<script>
 				var tableMonthTrans;
 				var tableTopTrans;
-				var params = '';
-				var paramsGet = 'year=".$year."&month=".$month."';
+				var params = 'year=".$year."&month=".$month."';
 				var category_id = 0;
 
 				$(function() {
-					$('#buttonAddTransaction').attr('href', '".base_url('transaction/manage?')."'+paramsGet);
-					$('#date').val('".$year."-".$month."');
-					changeDate();
+					$('#buttonAddTransaction').attr('href', '".base_url('transaction/manage?')."'+params);
+					changeDate(".$year.",".$month.");
 
 					tableMonthTrans.on('order.dt search.dt', function() {
 				        tableMonthTrans.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
@@ -78,13 +78,11 @@ class Transaction extends MY_Controller {
 					$('#tab-'+tab).removeClass('hide').siblings().addClass('hide');
 				});
 
-				function changeDate() {
-					var date = $('#date').val().split('-');
-					params = date[0] + '/' + date[1];
-					paramsGet = 'year='+date[0]+'&month='+date[1];
-					category_id = 0;
-					$('#buttonAddTransaction').attr('href', '".base_url('transaction/manage?year=')."'+date[0]+'&month='+date[1]);
-					window.history.pushState('object or string', 'Title', '".base_url('transaction/history/')."' + params);
+				function changeDate(year, month) {
+					params = 'year='+year+'&month='+month;
+					$('#card-'+year+'-'+month).addClass('active').siblings().removeClass('active');
+					$('#buttonAddTransaction').attr('href', '".base_url('transaction/manage?')."'+params);
+					window.history.pushState('object or string', 'Title', '".base_url('transaction/history?')."' + params);
 
 					reloadMonthTransaction();
 					reloadTopTransaction();
@@ -96,7 +94,7 @@ class Transaction extends MY_Controller {
 				}
 
 				function reloadMonthTransaction() {
-					var link = '".base_url()."' + 'api/getMonthTransaction?' + paramsGet + '&category_id=' + category_id;
+					var link = '".base_url()."' + 'api/getMonthTransaction?' + params + '&category_id=' + category_id;
 					tableMonthTrans = $('#datatable-month-transaction').DataTable({
 						'ajax': link,
 						'destroy': true,
@@ -127,7 +125,7 @@ class Transaction extends MY_Controller {
 				}
 
 				function reloadTopTransaction() {
-					var link = '".base_url()."'+'api/getTopTransaction/'+params;
+					var link = '".base_url()."'+'api/getTopTransaction?'+params;
 					tableTopTrans = $('#datatable-top-transaction').DataTable({
 						'ordering': false,
 						'searching': false,
@@ -331,16 +329,16 @@ class Transaction extends MY_Controller {
 		$transaction_id = $this->input->post('transaction_id');
 
 		$date = strtotime($arr["transaction_date"]);
-		$params = date('Y', $date) . '/' . date('n', $date);
+		$params = "year=".date('Y', $date).'&month='.date('n', $date);
 
 		if ($transaction_id != "") {
 			$where = "transaction_id = ".$this->input->post('transaction_id');
 			$this->updateTransaction($arr, $where);
-			header("location:".base_url("transaction/history/".$params));
+			header("location:".base_url("transaction/history?".$params));
 		} else {
 			$arr["account_id"] = $this->session->userdata('user')->account_id;
 			$this->addNewTransaction($arr);
-			header("location:".base_url("transaction/history/".$params));
+			header("location:".base_url("transaction/history?".$params));
 		}
 	}
 

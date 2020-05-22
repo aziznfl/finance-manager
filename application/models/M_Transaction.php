@@ -145,6 +145,17 @@ class M_Transaction extends CI_Model {
 		return $this->db->get('transaction');
 	}
 
+	function getTotalPerMonthTransaction() {
+		$query = "
+			SELECT EXTRACT(YEAR FROM transaction_date) AS year, EXTRACT(MONTH FROM transaction_date) AS month, SUM(amount) AS total_monthly
+			FROM transaction
+			WHERE ".$this->getWhereTransaction()." AND type = 'outcome'
+			GROUP BY EXTRACT(YEAR FROM transaction_date), EXTRACT(MONTH FROM transaction_date)
+			ORDER BY transaction_date DESC
+		";
+		return $this->db->query($query);
+	}
+
 	function getMonthTransaction($month, $year, $category_id) {
 		$this->db->join("category", "category.category_id = transaction.category_id", "left");
 		$this->db->order_by("type", "DESC");
