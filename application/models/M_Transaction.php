@@ -221,5 +221,27 @@ class M_Transaction extends CI_Model {
 		";
 		return $this->db->query($query);
 	}
+
+	//--------- Debts ---------//
+
+	function getDebtsBalance() {
+		$query = "
+			SELECT to_who, SUM(
+			    IF (type = 'debts' OR type = 'transfer_from', -amount, amount)
+			) AS balance
+			FROM `debts` WHERE ".$this->getWhereTransaction()."
+			GROUP BY to_who
+		";
+		return $this->db->query($query);
+	}
+
+	function getDebtsList() {
+		$query = "
+			SELECT * FROM `debts`
+			WHERE ".$this->getWhereTransaction()."
+			ORDER BY transaction_date DESC
+		";
+		return $this->db->query($query);
+	}
 }
 ?>

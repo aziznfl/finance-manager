@@ -43,22 +43,29 @@
                                     <th class="text-right">Amount (Rp.)</th>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td class="text-center">1</td>
-                                        <td class="text-center">Aldi</td>
-                                        <td class="text-center text-red"><span class="fa fa-long-arrow-left"></span></td>
-                                        <td class="text-right text-red"><strong>Rp. -1.000.000</strong></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">2</td>
-                                        <td class="text-center">Rino</td>
-                                        <td class="text-center text-green"><span class="fa fa-long-arrow-right"></span></td>
-                                        <td class="text-right text-green"><strong>Rp. 250.000</strong></td>
-                                    </tr>
+                                <?php 
+                                $i = 0;
+                                $balance = 0;
+                                foreach($debts_balance as $list) {
+                                    $i++;
+                                    $balance += $list->balance;
+                                    $arrow = "left";
+                                    $color = "red";
+                                    if ($list->balance > 0) {
+                                        $arrow = "right";
+                                        $color = "green";
+                                    }
+                                    echo '<tr>';
+                                        echo '<td class="text-center">'.$i.'</td>';
+                                        echo '<td class="text-center text-capitalize">'.$list->to_who.'</td>';
+                                        echo '<td class="text-center text-'.$color.'"><span class="fa fa-long-arrow-'.$arrow.'"></span></td>';
+                                        echo '<td class="text-right text-'.$color.'"><strong>Rp. '.number_format($list->balance).'</strong></td>';
+                                    echo '</tr>';
+                                } ?>
                                 </tbody>
                                 <tfoot>
                                     <th colspan="3" class="text-center">Balance</th>
-                                    <th class="text-right text-red"><strong>Rp. -750.000</strong></th>
+                                    <th class="text-right text-red"><strong>Rp. <?php echo number_format($balance); ?></strong></th>
                                 </tfoot>
                             </table>
                         </div>
@@ -67,7 +74,7 @@
             </div>
 
             <div class="col-md-8">
-                <div class="box box-success collapsed-box">
+                <div class="box box-success">
                     <div class="box-header with-border">
                         <h3 class="box-title">Add New Transaction</h3>
                         <div class="box-tools pull-right">
@@ -78,25 +85,34 @@
                     </div>
                     <div class="box-body">
                         <form>
-                            <div class="form-group">
-                                <div class="form-group">
+                            <div class="form-group row">
+                                <div class="form-group col-md-6">
                                     <label>Date</label>
                                     <input class="form-control" type="text" name="" placeholder="Date" />
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group col-md-6">
                                     <label>Who</label>
                                     <input class="form-control" type="text" name="" placeholder="Who" />
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group col-md-6">
                                     <label>Type</label>
                                     <select class="form-control">
                                         <option>Debts</option>
                                         <option>Receivables</option>
-                                        <option>Transfer</option>
+                                        <option>Transfer to</option>
+                                        <option>Transfer from</option>
                                     </select>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group col-md-6">
                                     <label>Amounts</label>
+                                    <input class="form-control" type="number" name="" placeholder="Amounts" />
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Description</label>
+                                    <input class="form-control" type="text" name="description" placeholder="Description" />
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Deadline</label>
                                     <input class="form-control" type="number" name="" placeholder="Amounts" />
                                 </div>
                             </div>
@@ -118,22 +134,27 @@
                                 <th class="text-center">Deadline</th>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td class="text-center text-middle">1</td>
-                                    <td class="text-center text-middle">1 March 2020</td>
-                                    <td class="text-center text-middle">Aldi</td>
-                                    <td class="text-center"><span class="fa fa-long-arrow-left text-red"></span><br/>Beli martabak</td>
-                                    <td class="text-right text-middle text-red">Rp. -2.000.000</td>
-                                    <td class="text-center text-middle">1 April 2020</td>
-                                </tr>
-                                <tr>
-                                    <td class="text-center text-middle">2</td>
-                                    <td class="text-center text-middle">3 April 2020</td>
-                                    <td class="text-center text-middle text-capitalize">rino</td>
-                                    <td class="text-center"><span class="fa fa-long-arrow-right text-green"></span><br/><i class="text-secondary">transfer</i></td>
-                                    <td class="text-right text-middle text-green">Rp. 750.000</td>
-                                    <td class="text-center text-middle">1 Mei 2020</td>
-                                </tr>
+                            <?php 
+                            $i = 0;
+                            foreach($debts_list as $list) {
+                                $i++;
+                                $arrow = "left";
+                                $color = "red";
+                                $description = $list->description;
+                                if ($list->type == "receivables" || $list->type == "transfer_to") {
+                                    $arrow = "right";
+                                    $color = "green";
+                                }
+                                if($description == "" || $description == NULL) $description = '<i class="text-secondary">'.$list->type.'</i>';
+                                echo "<tr>";
+                                    echo '<td class="text-center text-middle">'.$i.'</td>';
+                                    echo '<td class="text-center text-middle">'.$list->transaction_date.'</td>';
+                                    echo '<td class="text-center text-middle text-capitalize">'.$list->to_who.'</td>';
+                                    echo '<td class="text-center"><span class="fa fa-long-arrow-'.$arrow.' text-'.$color.'"></span><br/>'.$description.'</td>';
+                                    echo '<td class="text-right text-middle text-'.$color.'">Rp. '.number_format($list->amount).'</td>';
+                                    echo '<td class="text-center text-middle">'.$list->deadline.'</td>';
+                                echo "</tr>";
+                            } ?>
                             </tbody>
                         </table>
                     </div>
