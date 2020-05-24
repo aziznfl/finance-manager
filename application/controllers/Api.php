@@ -85,5 +85,13 @@ class API extends MY_Controller {
 		$result = $this->listInvestment();
 		echo json_encode(array("data" => $result));
 	}
+
+	//-------- Debts --------//
+
+	function getAllDebts() {
+		$result['debts_list'] = $this->M_Transaction->getDebtsList()->result();
+		$result['debts_balance'] = $this->M_Transaction->getDebtsBalance()->result();
+		echo json_encode($result);
+	}
 }
 ?>

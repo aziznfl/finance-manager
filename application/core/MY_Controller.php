@@ -192,6 +192,22 @@ class MY_Controller extends CI_Controller {
 		return $portfolios;
 	}
 
+	//-------- Debts --------//
+
+	function getAllDebtsData() {
+		$result['debts_list'] = $this->M_Transaction->getDebtsList()->result();
+		$result['debts_balance'] = $this->M_Transaction->getDebtsBalance()->result();
+		return $result;
+	}
+
+	function addNewDebts($data) {
+		return $this->M_Transaction->addData("debts", $data);
+	}
+
+	function updateDebts($data, $where) {
+		return $this->M_Transaction->updateData("debts", $data, $where);
+	}
+
 	/*--------- DELETE DATA ---------*/
 	
 	function deleteData($table, $where) {

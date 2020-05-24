@@ -46,7 +46,7 @@
                                 <?php 
                                 $i = 0;
                                 $balance = 0;
-                                foreach($debts_balance as $list) {
+                                foreach($debts['debts_balance'] as $list) {
                                     $i++;
                                     $balance += $list->balance;
                                     $arrow = "left";
@@ -84,38 +84,57 @@
                         </div>
                     </div>
                     <div class="box-body">
-                        <form>
+                        <form method="GET" action="<?php echo base_url('debts/insert'); ?>">
                             <div class="form-group row">
                                 <div class="form-group col-md-6">
                                     <label>Date</label>
-                                    <input class="form-control" type="text" name="" placeholder="Date" />
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <span class="fa fa-calendar"></span>
+                                        </div>
+                                        <input class="form-control datetimepicker" type="text" name="date" placeholder="Date" />
+                                    </div>
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label>Who</label>
-                                    <input class="form-control" type="text" name="" placeholder="Who" />
+                                    <label>Deadline</label>
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <span class="fa fa-calendar"></span>
+                                        </div>
+                                        <input class="form-control datetimepicker"name="deadline" placeholder="Deadline" />
+                                    </div>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label>Type</label>
-                                    <select class="form-control">
-                                        <option>Debts</option>
-                                        <option>Receivables</option>
-                                        <option>Transfer to</option>
-                                        <option>Transfer from</option>
+                                    <select class="form-control" name="type">
+                                        <option value="debts">Debts</option>
+                                        <option value="receivables">Receivables</option>
+                                        <option value="transfer_to">Transfer to</option>
+                                        <option value="transfer_from">Transfer from</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label>Amounts</label>
-                                    <input class="form-control" type="number" name="" placeholder="Amounts" />
+                                    <label>Who</label>
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <span class="fa fa-user"></span>
+                                        </div>
+                                        <input class="form-control" type="text" name="who" placeholder="Who" />
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Amount</label>
+                                    <div class="input-group">
+                                        <div class="input-group-addon">Rp.</div>
+                                        <input class="form-control" type="number" name="amount" placeholder="Amount" />
+                                    </div>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label>Description</label>
                                     <input class="form-control" type="text" name="description" placeholder="Description" />
                                 </div>
-                                <div class="form-group col-md-6">
-                                    <label>Deadline</label>
-                                    <input class="form-control" type="number" name="" placeholder="Amounts" />
-                                </div>
                             </div>
+                            <button type="submit" class="btn btn-primary pull-right btn-flat" name="submit_debts"><span class="fa fa-plus"></span> Add</button>
                         </form>
                     </div>
                 </div>
@@ -136,7 +155,7 @@
                             <tbody>
                             <?php 
                             $i = 0;
-                            foreach($debts_list as $list) {
+                            foreach($debts['debts_list'] as $list) {
                                 $i++;
                                 $arrow = "left";
                                 $color = "red";
