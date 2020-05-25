@@ -36,14 +36,6 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label>Description</label>
-                                    <?php echo form_input($description); ?>
-                                </div>
-                                <div class="form-group hide">
-                                    <label>Location</label>
-                                    <input name="location" class="form-control">
-                                </div>
-                                <div class="form-group">
                                     <label>Location</label>
                                     <div class="input-group">
                                         <div class="input-group-addon">
@@ -51,6 +43,10 @@
                                         </div>
                                         <?php echo form_input($location); ?>
                                     </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Description</label>
+                                    <?php echo form_input($description); ?>
                                 </div>
                                 <div class="form-group">
                                     <label>Tag</label>
