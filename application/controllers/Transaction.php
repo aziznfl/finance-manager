@@ -101,18 +101,22 @@ class Transaction extends MY_Controller {
 						'columns': [
 							{'searchable': false, 'orderable': false, 'defaultContent': '', 'className': 'text-center'},
 							{'data': 'transaction_date', 'className': 'text-center'},
-							{'data': 'amount_text', 'className': 'text-right'},
 							{
 								'render': function (param, type, data, meta) {
-									var descView = '<br/>-';
+									var categoryView = '<b>'+data.category_name+'</b>';
+									var descView = '';
 									var tagView = '';
 									
-									if (data.description != null && data.description != '') { descView = '<br/><span style=\"color: #888;\">'+data.description+'</span>'; }
+									if (data.description != null && data.description != '') { descView = '<br/><span class=\"text-secondary\">'+data.description+'</span>'; }
+									if (data.location != null && data.location != '') { 
+										categoryView += '&nbsp;&nbsp;&nbsp;<span class=\"text-primary\"><span class=\"fa fa-map-marker\"></span>&nbsp;'+data.location+'</span>';
+									}
 									if (data.tag != null) { tagView = '<br/><span class=\"label bg-blue\">'+data.tag+'</span>'; }
 
-									return data.category_name+descView+tagView;
+									return categoryView+descView+tagView;
 								}
 							},
+							{'data': 'amount_text', 'className': 'text-right'},
 							{'orderable': false, 
 								'className': 'text-center',
 								'render': function (param, type, data, meta) {
@@ -223,6 +227,11 @@ class Transaction extends MY_Controller {
         	'class' => 'form-control',
         	'placeholder' => 'Tag'
         );
+        $result["location"] = array(
+        	'name' => 'location',
+        	'class' => 'form-control',
+        	'placeholder' => 'Location'
+        );
         $result["date_iv"] = $result["date"];
         $result["date_iv"]["name"] = 'date_iv';
         $result["amount_iv"] = $result["amount"];
@@ -247,6 +256,7 @@ class Transaction extends MY_Controller {
 				$result["amount"]["value"] = $old_transaction["amount"];
 				$result["category"]["value"] = array($old_transaction["category_id"]);
 				$result["description"]["value"] = $old_transaction["description"];
+				$result["location"]["value"] = $old_transaction["location"];
 				$result["tag"]["value"] = $old_transaction["tag"];
 
 				$result["form_hidden"] = array("transaction_id" => $id);
@@ -325,6 +335,7 @@ class Transaction extends MY_Controller {
 		$arr["amount"] = $this->input->post('amount');
 		$arr["category_id"] = $this->input->post('category');
 		$arr["description"] = $this->input->post('description');
+		$arr["location"] = $this->input->post('location');
 		$arr["tag"] = $this->input->post('tag');
 		$transaction_id = $this->input->post('transaction_id');
 

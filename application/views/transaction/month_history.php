@@ -53,8 +53,8 @@
 									<thead>
 										<th class="text-center" width="10">No</th>
 										<th class="text-center" width="200">Date</th>
-										<th class="text-center">Rp.</th>
 										<th class="text-center">Category</th>
+										<th class="text-center">Rp.</th>
 										<th class="text-center"></th>
 									</thead>
 								</table>

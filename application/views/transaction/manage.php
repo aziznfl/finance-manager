@@ -44,6 +44,15 @@
                                     <input name="location" class="form-control">
                                 </div>
                                 <div class="form-group">
+                                    <label>Location</label>
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <span class="fa fa-map-marker"></span>
+                                        </div>
+                                        <?php echo form_input($location); ?>
+                                    </div>
+                                </div>
+                                <div class="form-group">
                                     <label>Tag</label>
                                     <?php echo form_input($tag); ?>
                                 </div>
