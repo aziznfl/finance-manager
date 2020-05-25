@@ -147,7 +147,7 @@ class M_Transaction extends CI_Model {
 
 	function getTotalPerMonthTransaction() {
 		$query = "
-			SELECT EXTRACT(YEAR FROM transaction_date) AS year, EXTRACT(MONTH FROM transaction_date) AS month, SUM(amount) AS total_monthly
+			SELECT EXTRACT(YEAR FROM transaction_date) AS year, EXTRACT(MONTH FROM transaction_date) AS month, SUM(amount) AS total_monthly, COUNT(transaction_id) as count_monthly
 			FROM transaction
 			WHERE ".$this->getWhereTransaction()." AND type = 'outcome'
 			GROUP BY EXTRACT(YEAR FROM transaction_date), EXTRACT(MONTH FROM transaction_date)

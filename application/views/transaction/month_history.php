@@ -22,7 +22,10 @@
 								?>
 								<div class="card-view" id="card-<?php echo $trans->year."-".$trans->month; ?>" onclick="changeDate(<?php echo $trans->year.", ".$trans->month?>)">
 									<h4 class="card-title"><?php echo $date; ?></h4>
-									<div class="card-body">Rp. <?php echo number_format($trans->total_monthly) ?></div>
+									<div class="card-body">
+										<h2><b>Rp. <?php echo number_format($trans->total_monthly); ?></b></h2>
+										<div><?php echo number_format($trans->count_monthly); ?> item(s)</div>
+									</div>
 								</div>
 						<?php } ?>
 					</div>
