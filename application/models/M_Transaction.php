@@ -226,11 +226,17 @@ class M_Transaction extends CI_Model {
 
 	function getDebtsBalance() {
 		$query = "
-			SELECT to_who, SUM(
-			    IF (type = 'debts' OR type = 'transfer_from', -amount, amount)
-			) AS balance
-			FROM `debts` WHERE ".$this->getWhereTransaction()."
-			GROUP BY to_who
+			SELECT *
+			FROM (
+			    SELECT to_who, SUM(
+			        IF (type = 'debts' OR type = 'transfer_from', -amount, amount)
+			    ) AS balance
+			    FROM debts
+			    WHERE ".$this->getWhereTransaction()."
+			    GROUP BY to_who
+			    ORDER BY transaction_date ASC
+			) AS debts_view
+			WHERE debts_view.balance != 0
 		";
 		return $this->db->query($query);
 	}

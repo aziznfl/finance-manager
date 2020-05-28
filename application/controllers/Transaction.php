@@ -79,6 +79,7 @@ class Transaction extends MY_Controller {
 				});
 
 				function changeDate(year, month) {
+					category_id = 0;
 					params = 'year='+year+'&month='+month;
 					$('#card-'+year+'-'+month).addClass('active').siblings().removeClass('active');
 					$('#buttonAddTransaction').attr('href', '".base_url('transaction/manage?')."'+params);

@@ -47,18 +47,22 @@ class Dashboard extends MY_Controller {
 					'columns': [
 						{'searchable': false, 'orderable': false, 'defaultContent': '', 'className': 'text-center'},
 						{'data': 'transaction_date', 'className': 'text-center'},
-						{'data': 'amount_text', 'className': 'text-right'},
 						{
 							'render': function (param, type, data, meta) {
-								var descView = '<br/>-';
+								var categoryView = '<b>'+data.category_name+'</b>';
+								var descView = '';
 								var tagView = '';
 								
-								if (data.description != null && data.description != '') { descView = '<br/><span style=\"color: #888;\">'+data.description+'</span>' }
-								if (data.tag != null) { tagView = '<br/><span class=\"label bg-blue\">'+data.tag+'</span>' }
+								if (data.description != null && data.description != '') { descView = '<br/><span class=\"text-secondary\">'+data.description+'</span>'; }
+								if (data.location != null && data.location != '') { 
+									categoryView += '&nbsp;&nbsp;&nbsp;<span class=\"text-primary\"><span class=\"fa fa-map-marker\"></span>&nbsp;'+data.location+'</span>';
+								}
+								if (data.tag != null) { tagView = '<br/><span class=\"label bg-blue\">'+data.tag+'</span>'; }
 
-								return data.category_name+descView+tagView;
+								return categoryView+descView+tagView;
 							}
 						},
+						{'data': 'amount_text', 'className': 'text-right'},
 						{'orderable': false, 
 							'className': 'text-center',
 							'render': function (param, type, data, meta) {
