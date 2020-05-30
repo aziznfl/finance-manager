@@ -195,7 +195,7 @@ class MY_Controller extends CI_Controller {
 	//-------- Debts --------//
 
 	function getAllDebtsData() {
-		$result['debts_list'] = $this->M_Transaction->getDebtsList()->result();
+		$result['debts_list'] = $this->M_Transaction->getDebtsList()->result_array();
 		$result['debts_balance'] = $this->M_Transaction->getDebtsBalance()->result();
 		return $result;
 	}

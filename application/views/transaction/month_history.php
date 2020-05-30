@@ -33,11 +33,11 @@
 					<div class="row">
 						<div class="col-md-4">
 							<div class="table-responsive" style="margin-bottom: 32px;">
-								<table id="datatable-top-transaction" class="table table-bordered table-striped table-hover" style="cursor: pointer;">
+								<table id="datatable-top-transaction" class="table table-striped table-hover" style="cursor: pointer;">
 									<thead>
-										<th class="text-center">No</th>
-										<th class="text-center">Category</th>
-										<th class="text-center">Rp. (%)</th>
+										<th width="10">No</th>
+										<th>Category</th>
+										<th class="text-right">Rp. (%)</th>
 									</thead>
 								</table>
 							</div>
@@ -54,7 +54,7 @@
 							<div class="table-responsive">
 								<table id="datatable-month-transaction" class="table table-bordered table-striped table-hover">
 									<thead>
-										<th class="text-center" width="10">No</th>
+										<th width="10">No</th>
 										<th class="text-center" width="200">Date</th>
 										<th class="text-center">Category</th>
 										<th class="text-center">Rp.</th>

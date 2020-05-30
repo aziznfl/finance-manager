@@ -54,76 +54,14 @@
                 </div>
             </div>
             <div class="col-md-8">
-                <div class="box box-success">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Add New Transaction</h3>
-                        <div class="box-tools pull-right">
-                            <button type="button" class="btn btn-box-tool" data-widget="collapse">
-                                <i class="fa fa-plus"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <form method="GET" action="<?php echo base_url('debts/insert'); ?>">
-                    <div class="box-body">
-                        <div class="form-group row" style="margin-bottom: 0;">
-                            <div class="form-group col-md-6">
-                                <label>Date</label>
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <span class="fa fa-calendar"></span>
-                                    </div>
-                                    <input class="form-control datetimepicker" type="text" name="date" placeholder="Date" />
-                                </div>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label>Who</label>
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <span class="fa fa-user"></span>
-                                    </div>
-                                    <input class="form-control" type="text" name="who" placeholder="Who" />
-                                </div>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label>Type</label>
-                                <select class="form-control" name="type">
-                                    <option value="debts">Debts</option>
-                                    <option value="receivables">Receivables</option>
-                                    <option value="transfer_to">Transfer to</option>
-                                    <option value="transfer_from">Transfer from</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label>Amount</label>
-                                <div class="input-group">
-                                    <div class="input-group-addon">Rp.</div>
-                                    <input class="form-control" type="number" name="amount" placeholder="Amount" />
-                                </div>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label>Description</label>
-                                <input class="form-control" type="text" name="description" placeholder="Description" />
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label>Deadline</label>
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <span class="fa fa-calendar"></span>
-                                    </div>
-                                    <input class="form-control datetimepicker"name="deadline" placeholder="Deadline" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="box-footer">
-                        <button type="submit" class="btn btn-primary btn-flat" name="submit_debts"><span class="fa fa-plus"></span> Add</button>
-                    </div>
-                    </form>
-                </div>
                 <div class="box box-primary box-solid">
                     <div class="box-header with-border">
                         <h3 class="box-title">List of Debts & Receivables</h3>
-                        <div class="box-tolls pull-right"><a class="btn btn-xs btn-info" href="javascript:void(0)" data-toggle="modal" data-target="#modal-default"><span class="fa fa-plus"></span>&nbsp;&nbsp;Add Transaction</a></div>
+                        <div class="box-tolls pull-right">
+                            <a class="btn btn-xs btn-info" href="" data-toggle="modal" data-target="#modal-default" data-id="">
+                                <span class="fa fa-plus"></span>&nbsp;&nbsp;Add Transaction
+                            </a>
+                        </div>
                     </div>
                     <div class="box-body no-padding">
                         <table class="table table-striped table-hover">
@@ -143,20 +81,22 @@
                                 $i++;
                                 $arrow = "left";
                                 $color = "red";
-                                $description = $list->description;
-                                if ($list->type == "receivables" || $list->type == "transfer_to") {
+                                $description = $list['description'];
+                                if ($list['type'] == "receivables" || $list['type'] == "transfer_to") {
                                     $arrow = "right";
                                     $color = "green";
                                 }
-                                if($description == "" || $description == NULL) $description = '<i class="text-secondary">'.$list->type.'</i>';
+                                if($description == "" || $description == NULL) $description = '<i class="text-secondary">'.$list['type'].'</i>';
                                 echo "<tr>";
                                     echo '<td class="text-center text-middle">'.$i.'</td>';
-                                    echo '<td class="text-center text-middle">'.$list->transaction_date.'</td>';
-                                    echo '<td class="text-center text-middle text-capitalize">'.$list->to_who.'</td>';
+                                    echo '<td class="text-center text-middle">'.$list['transaction_date'].'</td>';
+                                    echo '<td class="text-center text-middle text-capitalize">'.$list['to_who'].'</td>';
                                     echo '<td class="text-center"><span class="fa fa-long-arrow-'.$arrow.' text-'.$color.'"></span><br/>'.$description.'</td>';
-                                    echo '<td class="text-right text-middle text-'.$color.'">Rp. '.number_format($list->amount).'</td>';
-                                    echo '<td class="text-center text-middle">'.$list->deadline.'</td>';
-                                    echo '<td class="text-middle"><a href="javascript:void(0)" data-toggle="modal" data-target="#modal-default"><span class="fa fa-edit"></span></a></td>';
+                                    echo '<td class="text-right text-middle text-'.$color.'">Rp. '.number_format($list['amount']).'</td>';
+                                    echo '<td class="text-center text-middle">'.$list['deadline'].'</td>';
+                                    echo '<td class="text-middle">'.
+                                            "<a href='' data-toggle='modal' data-target='#modal-default' data-id='".json_encode($list)."'><span class='fa fa-edit'></span></a>".
+                                        '</td>';
                                 echo "</tr>";
                             } ?>
                             </tbody>

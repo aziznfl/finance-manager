@@ -34,6 +34,9 @@ class Transaction extends MY_Controller {
 				var tableTopTrans;
 				var params = 'year=".$year."&month=".$month."';
 				var category_id = 0;
+				var isFirstClick = true;
+
+				var list = ".json_encode($result["total_month_transaction"]->result_array()).";
 
 				$(function() {
 					$('#buttonAddTransaction').attr('href', '".base_url('transaction/manage?')."'+params);
@@ -58,26 +61,6 @@ class Transaction extends MY_Controller {
 					});
 				});
 
-				// filter table
-				$.fn.dataTable.ext.search.push(
-				    function(settings, data, dataIndex) {
-				        var row = tableMonthTrans.row(dataIndex);
-				        var data = row.data();
-				        if (category_id == 0 || category_id == data.category_id || category_id == data.parent_id) {
-				        	return true
-				        }
-				        return false;
-				    }
-				);
-
-				// function for choose tabs
-				$('.nav-tabs li').click(function() {
-					$(this).addClass('active').siblings().removeClass('active');
-
-					var tab = $(this).attr('data-tab');
-					$('#tab-'+tab).removeClass('hide').siblings().addClass('hide');
-				});
-
 				function changeDate(year, month) {
 					category_id = 0;
 					params = 'year='+year+'&month='+month;
@@ -87,6 +70,20 @@ class Transaction extends MY_Controller {
 
 					reloadMonthTransaction();
 					reloadTopTransaction();
+
+					// set position of month balance
+					var index = $.map(list, function(item, i) {
+						if (item.year == year && item.month == month) { return i; }
+					})[0];
+					var position = index * (225 + 14);
+					if (isFirstClick) {
+						$('.card-box').scrollLeft(position);
+						isFirstClick = false;
+					} else {					
+						$('.card-box').animate({
+					      scrollLeft: position
+					    }, 'slow');
+					}
 				}
 
 				function selectCategory(category) {
@@ -151,7 +148,6 @@ class Transaction extends MY_Controller {
 			                	}
 			                },
 							{
-								'className': 'text-center',
 								'data': 'category_name'
 							},
 							{
@@ -171,6 +167,30 @@ class Transaction extends MY_Controller {
 
 					var tab = $(this).attr('data-tab');
 					$('#'+tab+'-tab').removeClass('hide').siblings().addClass('hide');
+				});
+			</script>
+		";
+
+		$result["add_footer"] .= " // add script for datatables
+			<script>
+				// filter table
+				$.fn.dataTable.ext.search.push(
+				    function(settings, data, dataIndex) {
+				        var row = tableMonthTrans.row(dataIndex);
+				        var data = row.data();
+				        if (category_id == 0 || category_id == data.category_id || category_id == data.parent_id) {
+				        	return true
+				        }
+				        return false;
+				    }
+				);
+
+				// function for choose tabs
+				$('.nav-tabs li').click(function() {
+					$(this).addClass('active').siblings().removeClass('active');
+
+					var tab = $(this).attr('data-tab');
+					$('#tab-'+tab).removeClass('hide').siblings().addClass('hide');
 				});
 			</script>
 		";
