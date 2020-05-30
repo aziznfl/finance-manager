@@ -81,6 +81,7 @@
 
     $('input[type="number"]')
       .focus(function() {
+        console.log("focus number");
         if ($(this).val() == "0") {
           $(this).val("");
         }
