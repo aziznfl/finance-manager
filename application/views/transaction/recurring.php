@@ -57,7 +57,7 @@
 										"<div><span style='font-weight: 600;'>".ucwords($result['category_name'])."</span>".$desc_text."</div>".
 									"</td>";
 								echo "<td class='text-center'>".
-										"<a href=".base_url("transaction/manage?date=".$date."amount=".$result['amount']."&category=".$result['category_id']."&desc=".$result["description"])."><span class='fa fa-plus'></span></a>".
+										"<a href=".base_url("transaction/manage?date=".$date."&amount=".$result['amount']."&category=".$result['category_id']."&desc=".$result["description"])."><span class='fa fa-plus'></span></a>".
 									"</td>";
 								echo "</tr>";
 							}
