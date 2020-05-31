@@ -31,15 +31,20 @@
 
 								$repetition_text = "Every ";
 								$arr = explode(" ", $result["repetition"]);
+								$date = "";
 								if ($arr[4] == "*") {
 									// not every weekend
+									$date .= date("Y");
 									if ($arr[3] != "*") {
 										// every year
 										$repetition_text .= " Year<br/>(on ".dateText($arr, "F jS - H:i").")";
+										$date .= "-".dateText($arr, "m-d H:i:s");
 									} else if ($arr[3] == "*") {
 										// not every year
+										$date .= "-".date("m");
 										if ($arr[2] != "*") {
 											$repetition_text .= " Month<br/>(on ".dateText($arr, "jS - H:i").")";
+											$date .= "-".dateText($arr, "d");
 										}
 									}
 								}
@@ -52,7 +57,7 @@
 										"<div><span style='font-weight: 600;'>".ucwords($result['category_name'])."</span>".$desc_text."</div>".
 									"</td>";
 								echo "<td class='text-center'>".
-										"<a href=".base_url("transaction/manage?amount=".$result['amount']."&category=".$result['category_id']."&desc=".$result["description"])."><span class='fa fa-plus'></span></a>".
+										"<a href=".base_url("transaction/manage?date=".$date."amount=".$result['amount']."&category=".$result['category_id']."&desc=".$result["description"])."><span class='fa fa-plus'></span></a>".
 									"</td>";
 								echo "</tr>";
 							}

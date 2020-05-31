@@ -202,8 +202,7 @@ class Transaction extends MY_Controller {
 	}
 
 	function manage() {
-		$month = $this->input->get('month');
-		$year = $this->input->get('year');
+		$date = $this->input->get('date');
 		$type = $this->input->get('type');
 		$id = $this->input->get('id');
 		$change = $this->input->get('change');
@@ -219,6 +218,7 @@ class Transaction extends MY_Controller {
 			'class' => 'form-control datetimepicker',
 			'placeholder' => "Now"
 		);
+		if ($date != null || $date != '') { $result["date"]["value"] = $date; }
 		$result["amount"] = array(
 			'type'  => 'number',
 			'name'  => 'amount',
