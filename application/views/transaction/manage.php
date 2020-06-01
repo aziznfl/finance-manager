@@ -53,9 +53,22 @@
                                     <?php echo form_input($tag); ?>
                                 </div>
                                 <div class="form-group no-margin" style="padding-top: 8px">
-                                    <button class="btn btn-primary btn-flat btn-block">Save Transaction</button>
+                                    <button class="btn btn-primary btn-flat btn-block"><span class="fa fa-plus"></span>&nbsp;&nbsp;Save Transaction</button>
                                 </div>
-                            <?php echo form_close(); ?>
+                                <?php if ($id != 0 || $id != "") { ?>
+                                <hr/>
+                                <div class="form-group no-margin" style="padding-top: 8px">
+                                    <a class="btn btn-warning btn-flat btn-block" href="<?php echo base_url("transaction/delete?is_deleted=1&id=".$id); ?>">
+                                        <span class="fa fa-trash"></span>&nbsp;&nbsp;Delete Transaction
+                                    </a>
+                                </div>
+                                <div class="form-group no-margin" style="padding-top: 8px">
+                                    <a class="btn btn-danger btn-flat btn-block" href="<?php echo base_url("transaction/delete?id=".$id); ?>">
+                                        <span class="fa fa-remove"></span>&nbsp;&nbsp;Delete Permanently
+                                    </a>
+                                </div>
+                            <?php }
+                            echo form_close(); ?>
                         </div>
                         <div id="iv-transaction">
                             <?php echo form_open(base_url()."transaction/manageInvestment", 'class="form"', $form_hidden); ?>

@@ -30,7 +30,7 @@ class M_Transaction extends CI_Model {
 			FROM (
 			    SELECT extract(year FROM transaction_date) year, extract(month FROM transaction_date) month, SUM(amount) as total_transaction
 			    FROM transaction
-			    ".$where."
+			    ".$where."AND is_deleted = 0
 			    GROUP BY extract(year FROM transaction_date), extract(month FROM transaction_date)
 			) a
 			LEFT JOIN (
@@ -69,13 +69,6 @@ class M_Transaction extends CI_Model {
 			) transaction_extract
 			GROUP BY account_id
 		";
-	}
-
-	function getFirstTransaction() {
-		$this->db->order_by("transaction_date", "ASC");
-		$this->db->where("account_id", $this->session->userdata('user')->account_id);
-		$this->db->limit(1);
-		return $this->db->get('transaction');
 	}
 
 	function get($tag) {
@@ -149,7 +142,7 @@ class M_Transaction extends CI_Model {
 		$query = "
 			SELECT EXTRACT(YEAR FROM transaction_date) AS year, EXTRACT(MONTH FROM transaction_date) AS month, SUM(amount) AS total_monthly, COUNT(transaction_id) as count_monthly
 			FROM transaction
-			WHERE ".$this->getWhereTransaction()." AND type = 'outcome'
+			WHERE ".$this->getWhereTransaction()." AND type = 'outcome' AND is_deleted = 0
 			GROUP BY EXTRACT(YEAR FROM transaction_date), EXTRACT(MONTH FROM transaction_date)
 			ORDER BY transaction_date DESC
 		";
@@ -173,7 +166,7 @@ class M_Transaction extends CI_Model {
 	}
 
 	function getTopTransaction($month, $year, $type = "outcome") {
-		$where = "MONTH(transaction_date) = '".$month."' AND YEAR(transaction_date) = '".$year."' AND ".$this->getWhereTransaction();
+		$where = "MONTH(transaction_date) = '".$month."' AND YEAR(transaction_date) = '".$year."' AND is_deleted = 0 AND ".$this->getWhereTransaction();
 		$query = "
 			SELECT t.*, category.category_name
 			FROM (

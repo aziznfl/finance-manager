@@ -105,10 +105,11 @@ class Transaction extends MY_Controller {
 									var descView = '';
 									var tagView = '';
 									
-									if (data.description != null && data.description != '') { descView = '<br/><span class=\"text-secondary\">'+data.description+'</span>'; }
 									if (data.location != null && data.location != '') { 
 										categoryView += '&nbsp;&nbsp;&nbsp;<span class=\"text-primary\"><span class=\"fa fa-map-marker\"></span>&nbsp;'+data.location+'</span>';
 									}
+									if (data.is_deleted != 0) { categoryView += '&nbsp;&nbsp;<span class=\"label bg-red\">Deleted</span>'; }
+									if (data.description != null && data.description != '') { descView = '<br/><span class=\"text-secondary\">'+data.description+'</span>'; }
 									if (data.tag != null) { tagView = '<br/><span class=\"label bg-blue\">'+data.tag+'</span>'; }
 
 									return categoryView+descView+tagView;
@@ -211,6 +212,7 @@ class Transaction extends MY_Controller {
 		if ($type == null) $type = "tr";
 		else if ($type == "iv" && $id != "") $script .= "$('#input-type').removeClass('hide');";
 
+		$result["id"] = $id;
 		//------- CREATE FORM -------//
 		$result["form_hidden"] = array();
 		$result["date"] = array(
@@ -366,10 +368,15 @@ class Transaction extends MY_Controller {
 		if ($transaction_id != "") {
 			$where = "transaction_id = ".$this->input->post('transaction_id');
 			$this->updateTransaction($arr, $where);
-			header("location:".base_url("transaction/history?".$params));
 		} else {
 			$arr["account_id"] = $this->session->userdata('user')->account_id;
 			$this->addNewTransaction($arr);
+		}
+
+		$from = $this->input->post["from"];
+		if ($from != "" || $from != null) {
+			header("location:".base_url("transaction/".$from));
+		} else {
 			header("location:".base_url("transaction/history?".$params));
 		}
 	}
@@ -399,14 +406,17 @@ class Transaction extends MY_Controller {
 	function delete() {
 		$type = $this->input->get('type');
 		$id = $this->input->get('id');
-		if ($type == 'tr') {
-			$this->deleteData("transaction", array("transaction_id" => $id));
-			header("location:".base_url());
-		} else if ($type == 'iv') {
+		if ($type == 'iv') {
 			$this->deleteData("transaction_investment", array("transaction_investment_id" => $id));
 			header("location:".base_url("investment/portofolio"));
 		} else {
-			header("location:".base_url());
+			if ($this->input->get('is_deleted')) {
+				$arr["is_deleted"] = $this->input->get('is_deleted');
+				$this->updateTransaction($arr, "transaction_id = ".$id);
+			} else {
+				$this->deleteData("transaction", "transaction_id = ".$id);
+			}
+			header("location:".base_url("transaction/history"));
 		}
 	}
 
