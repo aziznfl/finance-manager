@@ -30,8 +30,6 @@ class Dashboard extends MY_Controller {
 		$value = array(array("name" => "Transaction", "data" => $total_transaction, "stack" => "Transaction"), array("name" => "Investment", "data" => $total_investment, "stack" => "Investment"));
 		
 		// get several tag
-		$yatim = $this->M_Transaction->getAmountTag("yatim")->result();
-		$result["amountYatim"] = $yatim[0]->total;
 		$result["amountInvestment"] = $this->totalInvestment();
 
 		$result["add_footer"] = "

@@ -15,7 +15,10 @@ class Investment extends MY_Controller {
 	}
 
 	public function list($tag = "yatim") {
+		$yatim = $this->M_Transaction->getAmountTag("yatim")->result();
+		$result["amountYatim"] = $yatim[0]->total;
 		$result['list'] = $this->M_Transaction->get($tag);
+		
 		$this->load->view('root/_header', $result, $GLOBALS);
 		$this->load->view('root/_menus');
 		$this->load->view('investment/investment_advance');

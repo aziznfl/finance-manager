@@ -123,7 +123,7 @@ class Debts extends MY_Controller {
 
 	function insert() {
 		$arr["transaction_date"] = $this->input->get("date");
-		$arr["to_who"] = $this->input->get("who");
+		$arr["to_who"] = strtolower($this->input->get("who"));
 		$arr["type"] = $this->input->get("type");
 		$arr["amount"] = $this->input->get("amount");
 		$arr["description"] = $this->input->get("description");

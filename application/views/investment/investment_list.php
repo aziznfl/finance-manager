@@ -11,7 +11,7 @@
             </div>
             <div class="box-body">
                 <div class="table-responsive">
-                	<table id="transaction_table" class="table table-bordered table-striped table-hover">
+                	<table id="transaction_table" class="table table-bordered table-striped table-hover" style="cursor: pointer;">
                 		<thead>
                 			<tr>
             	    			<th class='text-center' width="1%">No</th>

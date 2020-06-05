@@ -10,15 +10,6 @@
         <!-- Small box -->
         <div class="row">
             <div class="col-lg-3 col-md-6 col-xs-12">
-                <div class="small-box bg-blue">
-                    <div class="inner">
-                        <h3>Rp. <?php echo number_format($amountYatim); ?></h3>
-                        <p>Yatim</p>
-                    </div>
-                    <a href="investment/list/yatim" class="small-box-footer">More Info <i class="fa fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-xs-12">
                 <div class="small-box bg-green">
                     <div class="inner">
                         <h3>Rp. <?php echo number_format($amountInvestment); ?></h3>

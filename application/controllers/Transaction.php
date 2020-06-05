@@ -75,7 +75,10 @@ class Transaction extends MY_Controller {
 					var index = $.map(list, function(item, i) {
 						if (item.year == year && item.month == month) { return i; }
 					})[0];
-					var position = index * (225 + 14);
+					var cardViewWidth = (225 + 14)
+					var cardWidth = $('.card-box').width();
+					var center = ((cardWidth - cardViewWidth) / 2) - 25;
+					var position = (index * cardViewWidth) - center;
 					if (isFirstClick) {
 						$('.card-box').scrollLeft(position);
 						isFirstClick = false;

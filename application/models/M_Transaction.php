@@ -88,9 +88,9 @@ class M_Transaction extends CI_Model {
 		$query = "
 			SELECT SUM(a.amount) as total
 			FROM (
-				SELECT transaction_date as date, amount, tag FROM `transaction` WHERE tag = '".$tag."'
+				SELECT transaction_date as date, amount, tag FROM `transaction` WHERE tag = '".$tag."' AND ".$this->getWhereTransaction()."
 				UNION
-				SELECT transaction_date as date, (amount * -1) as amount, tag FROM transaction_oop WHERE tag = '".$tag."'
+				SELECT transaction_date as date, (amount * -1) as amount, tag FROM transaction_oop WHERE tag = '".$tag."' AND ".$this->getWhereTransaction()."
 			) a
 			GROUP BY a.tag
 			ORDER BY a.date DESC
