@@ -7,10 +7,14 @@ class API extends MY_Controller {
 		parent::__construct();
 
 		if ($this->session->userdata('user') == '') {
-			header("location: ".base_url('account/logoutUserSettings'));
+			if ($this->input->get('apiKey') == '') {
+				header("location: ".base_url('account/logoutUserSettings'));
+				exit;
+			}
 		}
 
 		$this->load->model('M_Transaction');
+		$this->load->model('M_TransactionV1');
 	}
 
 	function getCategories() {
@@ -60,6 +64,11 @@ class API extends MY_Controller {
 
 		$result = $this->monthTransaction($month, $year, $category_id);
 		echo json_encode(array("data" => $result));
+	}
+
+	function getTotalPerMonthTransaction() {
+		$apiKey = $this->input->get('apiKey');
+		echo json_encode($this->M_TransactionV1->getTotalPerMonthTransaction($apiKey)->result());
 	}
 
 	//-------- Investment --------//

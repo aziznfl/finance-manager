@@ -28,6 +28,7 @@
 									</div>
 								</div>
 						<?php } ?>
+						</div>
 					</div>
 					<div class="borderless"></div>
 					<div class="row">
@@ -68,7 +69,28 @@
 			</div>
 			<div id="category-tab" class="hide">
 				<div class="row">
-					<div class="col-md-4">
+					<div class="col-md-3">
+						<div class="table-responsive" style="margin-bottom: 32px;">
+							<table id="datatable-top-transaction" class="table table-striped table-hover" style="cursor: pointer;">
+								<thead>
+									<th class="text-center">No</th>
+									<th>Category</th>
+								</thead>
+								<tbody>
+									<?php 
+									$i = 0;
+									foreach($list_categories as $list) {
+										$i++;
+										echo "<tr>";
+											echo "<td class='text-center'>".$i."</td>";
+											echo "<td>".ucfirst($list['category_name'])."</td>";
+										echo "</tr>";
+									} ?>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="col-md-9">
 						<div class="table-responsive" style="margin-bottom: 32px;">
 							<table id="datatable-top-transaction" class="table table-bordered table-striped table-hover" style="cursor: pointer;">
 								<thead>

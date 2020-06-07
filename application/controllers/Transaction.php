@@ -26,7 +26,7 @@ class Transaction extends MY_Controller {
 		$result["month"] = $month;
 
 		$result["total_month_transaction"] = $this->M_Transaction->getTotalPerMonthTransaction();
-		// $result["list_categories"] = $this->listCategories();
+		$result["list_categories"] = $this->listCategories();
 
 		$result["add_footer"] = "
 			<script>
@@ -194,6 +194,7 @@ class Transaction extends MY_Controller {
 					$(this).addClass('active').siblings().removeClass('active');
 
 					var tab = $(this).attr('data-tab');
+					console.log(tab);
 					$('#tab-'+tab).removeClass('hide').siblings().addClass('hide');
 				});
 			</script>

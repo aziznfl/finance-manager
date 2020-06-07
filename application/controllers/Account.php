@@ -38,6 +38,7 @@ class Account extends MY_Controller {
 		$user["name"] = $this->input->post('email');
 		$user["email"] = $this->input->post('name');
 		$user["image"] = $this->input->post('imageUrl');
+		$user["api_key"] = md5("fm".$this->input->post('email'));
 		$result = $this->register($user);
 
 		if ($result == 1) {
