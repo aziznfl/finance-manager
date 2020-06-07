@@ -68,7 +68,8 @@ class API extends MY_Controller {
 
 	function getTotalPerMonthTransaction() {
 		$apiKey = $this->input->get('apiKey');
-		echo json_encode($this->M_TransactionV1->getTotalPerMonthTransaction($apiKey)->result());
+		$result = Array("data" => $this->M_TransactionV1->getTotalPerMonthTransaction($apiKey)->result());
+		echo json_encode($result);
 	}
 
 	//-------- Investment --------//
