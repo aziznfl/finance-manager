@@ -72,6 +72,13 @@ class API extends MY_Controller {
 		echo json_encode($result);
 	}
 
+	function getCategoryTransaction() {
+		$categoryId = $this->input->get('categoryId');
+		$apiKey = $this->input->get('apiKey');
+		$result = Array("data" => $this->M_TransactionV1->getCategoryTransaction($categoryId, $apiKey)->result());
+		echo json_encode($result);
+	}
+
 	//-------- Investment --------//
 
 	function getInvestment($investment_id) {
