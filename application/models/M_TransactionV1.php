@@ -69,5 +69,18 @@ class M_TransactionV1 extends CI_Model {
 		";
 		return $this->db->query($query);
 	}
+
+	function getLastTransaction($limit, $apiKey) {
+		$query = "
+			SELECT transaction_id, transaction_date, amount, location, picture, tag, description, coordinate, is_deleted, category.category_id, category.category_name
+			FROM `transaction`
+			LEFT JOIN category ON category.category_id = transaction.category_id
+			LEFT JOIN account ON account.account_id = transaction.account_id
+			WHERE account.api_key = '".$apiKey."'
+			ORDER BY transaction_date DESC
+			LIMIT ".$limit."
+		";
+		return $this->db->query($query);
+	}
 }
 ?>

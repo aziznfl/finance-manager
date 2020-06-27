@@ -75,8 +75,20 @@ class API extends MY_Controller {
 	}
 
 	function getTotalPerMonthTransaction() {
-		$result = Array("data" => $this->M_TransactionV1->getTotalPerMonthTransaction($this->getApiKey())->result());
-		echo json_encode($result);
+		$result = $this->M_TransactionV1->getTotalPerMonthTransaction($this->getApiKey())->result();
+		echo json_encode(Array("data" => $result));
+	}
+
+	function getLastTransaction($limit = 10) {
+		$result = $this->M_TransactionV1->getLastTransaction($limit, $this->getApiKey())->result_array();
+		$arr = array();
+		foreach ($result as $transaction) {
+			$transaction["amount"] = (int)$transaction["amount"];
+			$transaction["amount_text"] = number_format($transaction["amount"]);
+			$transaction["category_name"] = ucwords($transaction["category_name"]);
+			array_push($arr, $transaction);
+		}
+		echo json_encode(array("data" => $arr));
 	}
 
 	function getCategoryTransaction() {
@@ -89,8 +101,7 @@ class API extends MY_Controller {
 			$data['amount_text'] = number_format($data['amount']);
 			array_push($arr, $data);
 		}
-		$result = Array("data" => $arr);
-		echo json_encode($result);
+		echo json_encode(Array("data" => $arr));
 	}
 
 	//-------- Investment --------//
@@ -100,11 +111,6 @@ class API extends MY_Controller {
 		$result["amount"] = (int)$result["amount"];
 		$result["value"] = (int)$result["value"];
 		echo json_encode($result);
-	}
-
-	function getLastTransaction($limit = 10) {
-		$result = $this->lastTransaction($limit);
-		echo json_encode(array("data" => $result));
 	}
 
 	function getTotalInvestment() {
