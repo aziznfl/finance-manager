@@ -79,7 +79,9 @@ class API extends MY_Controller {
 		echo json_encode(Array("data" => $result));
 	}
 
-	function getLastTransaction($limit = 10) {
+	function getLastTransaction() {
+		$limit = $this->input->get('limit');
+		if ($limit == "") $limit = 10;
 		$result = $this->M_TransactionV1->getLastTransaction($limit, $this->getApiKey())->result_array();
 		$arr = array();
 		foreach ($result as $transaction) {
