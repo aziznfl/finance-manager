@@ -6,15 +6,23 @@ class API extends MY_Controller {
 	function __construct() {
 		parent::__construct();
 
-		if ($this->session->userdata('user') == '') {
-			if ($this->input->get('apiKey') == '') {
-				header("location: ".base_url('account/logoutUserSettings'));
-				exit;
-			}
+		if ($this->getApiKey() == "") {
+			header("location: ".base_url('account/logoutUserSettings'));
+			exit;
 		}
 
 		$this->load->model('M_Transaction');
 		$this->load->model('M_TransactionV1');
+	}
+
+	function getApiKey() {
+		$apiKey = $this->input->get('apiKey');
+
+		if ($apiKey != "") {
+			return $apiKey;
+		} else {
+			return $this->session->userdata('user')->api_key;
+		}
 	}
 
 	function getCategories() {
@@ -67,15 +75,21 @@ class API extends MY_Controller {
 	}
 
 	function getTotalPerMonthTransaction() {
-		$apiKey = $this->input->get('apiKey');
-		$result = Array("data" => $this->M_TransactionV1->getTotalPerMonthTransaction($apiKey)->result());
+		$result = Array("data" => $this->M_TransactionV1->getTotalPerMonthTransaction($this->getApiKey())->result());
 		echo json_encode($result);
 	}
 
 	function getCategoryTransaction() {
 		$categoryId = $this->input->get('categoryId');
-		$apiKey = $this->input->get('apiKey');
-		$result = Array("data" => $this->M_TransactionV1->getCategoryTransaction($categoryId, $apiKey)->result());
+		$result = $this->M_TransactionV1->getCategoryTransaction($categoryId, $this->getApiKey())->result_array();
+		$arr = array();
+		foreach ($result as $data) {
+			$data['category_name'] = ucwords($data['category_name']);
+			$data['amount'] = intval($data['amount']);
+			$data['amount_text'] = number_format($data['amount']);
+			array_push($arr, $data);
+		}
+		$result = Array("data" => $arr);
 		echo json_encode($result);
 	}
 

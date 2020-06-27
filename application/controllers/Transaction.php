@@ -32,9 +32,12 @@ class Transaction extends MY_Controller {
 			<script>
 				var tableMonthTrans;
 				var tableTopTrans;
+				var tableCategory;
 				var params = 'year=".$year."&month=".$month."';
 				var category_id = 0;
+				var category_tab_id = 0;
 				var isFirstClick = true;
+				var isFirstCategory = true;
 
 				var list = ".json_encode($result["total_month_transaction"]->result_array()).";
 
@@ -68,8 +71,8 @@ class Transaction extends MY_Controller {
 					$('#buttonAddTransaction').attr('href', '".base_url('transaction/manage?')."'+params);
 					window.history.pushState('object or string', 'Title', '".base_url('transaction/history?')."' + params);
 
-					reloadMonthTransaction();
-					reloadTopTransaction();
+					renderMonthTransaction();
+					renderTopTransaction();
 
 					// set position of month balance
 					var index = $.map(list, function(item, i) {
@@ -94,43 +97,7 @@ class Transaction extends MY_Controller {
 					tableMonthTrans.draw();
 				}
 
-				function reloadMonthTransaction() {
-					var link = '".base_url()."' + 'api/getMonthTransaction?' + params + '&category_id=' + category_id;
-					tableMonthTrans = $('#datatable-month-transaction').DataTable({
-						'ajax': link,
-						'destroy': true,
-						'columns': [
-							{'searchable': false, 'orderable': false, 'defaultContent': '', 'className': 'text-center'},
-							{'data': 'transaction_date', 'className': 'text-center'},
-							{
-								'render': function (param, type, data, meta) {
-									var categoryView = '<b>'+data.category_name+'</b>';
-									var descView = '';
-									var tagView = '';
-									
-									if (data.location != null && data.location != '') { 
-										categoryView += '&nbsp;&nbsp;&nbsp;<span class=\"text-primary\"><span class=\"fa fa-map-marker\"></span>&nbsp;'+data.location+'</span>';
-									}
-									if (data.is_deleted != 0) { categoryView += '&nbsp;&nbsp;<span class=\"label bg-red\">Deleted</span>'; }
-									if (data.description != null && data.description != '') { descView = '<br/><span class=\"text-secondary\">'+data.description+'</span>'; }
-									if (data.tag != null) { tagView = '<br/><span class=\"label bg-blue\">'+data.tag+'</span>'; }
-
-									return categoryView+descView+tagView;
-								}
-							},
-							{'data': 'amount_text', 'className': 'text-right'},
-							{'orderable': false, 
-								'className': 'text-center',
-								'render': function (param, type, data, meta) {
-									return '<a href=\"".base_url('transaction/manage?type=tr&id=')."'+data.transaction_id+'\"><i class=\"fa fa-edit\"></i></a>';
-								}
-							}
-						],
-						'order': [1, 'desc']
-					});
-				}
-
-				function reloadTopTransaction() {
+				function renderTopTransaction() {
 					var link = '".base_url()."'+'api/getTopTransaction?'+params;
 					tableTopTrans = $('#datatable-top-transaction').DataTable({
 						'ordering': false,
@@ -165,6 +132,98 @@ class Transaction extends MY_Controller {
 					});
 				}
 
+				function renderMonthTransaction() {
+					var link = '".base_url()."' + 'api/getMonthTransaction?' + params + '&category_id=' + category_id;
+					tableMonthTrans = $('#datatable-month-transaction').DataTable({
+						'ajax': link,
+						'destroy': true,
+						'columns': [
+							{'searchable': false, 'orderable': false, 'defaultContent': '', 'className': 'text-center'},
+							{'data': 'transaction_date', 'className': 'text-center'},
+							{
+								'render': function (param, type, data, meta) {
+									return textDescription(data);
+								}
+							},
+							{'data': 'amount_text', 'className': 'text-right'},
+							{'orderable': false, 
+								'className': 'text-center',
+								'render': function (param, type, data, meta) {
+									return '<a href=\"".base_url('transaction/manage?type=tr&id=')."'+data.transaction_id+'\"><i class=\"fa fa-edit\"></i></a>';
+								}
+							}
+						],
+						'order': [1, 'desc']
+					});
+				}
+
+				function renderCategory() {
+					var link = '".base_url()."' + 'api/getCategories';
+					tableCategory = $('#datatable-category').DataTable({
+						'ajax': link,
+						'ordering': false,
+						'searching': false,
+						'paging': false,
+						'destroy': true,
+						'columns': [
+							{
+								'className': 'text-center', 
+								'render': function(param, type, data, meta) {
+			                		return meta.row + meta.settings._iDisplayStart + 1;
+			                	}
+			                },
+							{'data': 'category_name', 'className': 'text-capitalize'}
+						]
+					});
+
+					$('#datatable-category tbody').on('click', 'tr', function() {
+						var row = tableCategory.row(this);
+
+						$(this).attr('style', 'background-color: #dff0d8').siblings().attr('style', '');
+						renderSubCategory(row.data().category_id);
+					});
+				}
+
+				function renderSubCategory(categoryId) {
+					var link = '".base_url()."' + 'api/getCategoryTransaction?categoryId=' + categoryId;
+					$.ajax({
+						method: 'GET',
+						url: link,
+						data: {categoryId: categoryId},
+						dataType: 'JSON',
+        				success: function(response){
+							var html = '';
+							let data = response.data;
+							for(var i=0; i<data.length; i++) {
+								let result = data[i];
+
+								html += '<tr>' +
+									'<td class=\"text-center\">'+ (i+1) +'</td>' +
+									'<td class=\"text-center\">'+ result.transaction_date +'</td>' +
+									'<td>'+ textDescription(result) +'</td>' +
+									'<td class=\"text-right\">'+ result.amount_text +'</td>' +
+								'</tr>';
+							}
+							$('#datatable-sub-category tbody').html(html);
+						}
+					});
+				}
+
+				function textDescription(data) {
+					var categoryView = '<b>'+data.category_name+'</b>';
+					var descView = '';
+					var tagView = '';
+					
+					if (data.location != null && data.location != '') { 
+						categoryView += '&nbsp;&nbsp;&nbsp;<span class=\"text-primary\"><span class=\"fa fa-map-marker\"></span>&nbsp;'+data.location+'</span>';
+					}
+					if (data.is_deleted != 0) { categoryView += '&nbsp;&nbsp;<span class=\"label bg-red\">Deleted</span>'; }
+					if (data.description != null && data.description != '') { descView = '<br/><span class=\"text-secondary\">'+data.description+'</span>'; }
+					if (data.tag != null) { tagView = '<br/><span class=\"label bg-blue\">'+data.tag+'</span>'; }
+
+					return categoryView+descView+tagView;
+				}
+
 				// function for choose tabs
 				$('.nav-tabs li').click(function() {
 					$(this).addClass('active').siblings().removeClass('active');
@@ -194,8 +253,12 @@ class Transaction extends MY_Controller {
 					$(this).addClass('active').siblings().removeClass('active');
 
 					var tab = $(this).attr('data-tab');
-					console.log(tab);
 					$('#tab-'+tab).removeClass('hide').siblings().addClass('hide');
+
+					if (tab == 'category' && isFirstCategory) {
+						renderCategory();
+						isFirstCategory = false;
+					}
 				});
 			</script>
 		";
