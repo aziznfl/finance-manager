@@ -31,8 +31,16 @@ class API extends MY_Controller {
 	}
 
 	function getCategoriesTransaction() {
-		$result = $this->M_TransactionV1->getCategories()->result();
-		echo json_encode(array("data" => $result));
+		$result = $this->M_TransactionV1->getCategories()->result_array();
+		$arr = array();
+		foreach ($result as $category) {
+			$category["category_id"] = (int)$category["category_id"];
+			$category["category_name"] = ucwords($category["category_name"]);
+			$category["position"] = (int)$category["position"];
+			$category["parent_id"] = (int)$category["parent_id"];
+			array_push($arr, $category);
+		}
+		echo json_encode(array("data" => $arr));
 	}
 
 	function getCategoriesInvestment() {
