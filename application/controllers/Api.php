@@ -101,9 +101,12 @@ class API extends MY_Controller {
 			$transaction["amount"] = (int)$transaction["amount"];
 			$transaction["amount_text"] = number_format($transaction["amount"]);
 			$transaction["category_name"] = ucwords($transaction["category_name"]);
-			$transaction["category"] = Array("category_id" => $transaction["category_id"], "category_name" => $transaction["category_name"]);
+			$transaction["category"] = Array("category_id" => (int)$transaction["category_id"], "category_name" => $transaction["category_name"], "icon" => $transaction["icon"], "position" => (int)$transaction["position"], "parent_id" => (int)$transaction["parent_id"]);
 			unset($transaction["category_id"]);
 			unset($transaction["category_name"]);
+			unset($transaction["icon"]);
+			unset($transaction["position"]);
+			unset($transaction["parent_id"]);
 			array_push($arr, $transaction);
 		}
 		echo json_encode(array("data" => $arr));
