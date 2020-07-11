@@ -13,6 +13,7 @@ class Transaction extends MY_Controller {
 
 		$this->load->helper('form');
 		$this->load->model('M_Transaction');
+		$this->load->model('M_TransactionV1');
     }
 
     /*------------ MAIN ------------*/
@@ -25,7 +26,7 @@ class Transaction extends MY_Controller {
 		$result["year"] = $year;
 		$result["month"] = $month;
 
-		$result["total_month_transaction"] = $this->M_Transaction->getTotalPerMonthTransaction();
+		$result["total_month_transaction"] = $this->M_TransactionV1->getTotalPerMonthTransaction();
 		$result["list_categories"] = $this->listCategories();
 
 		$result["add_footer"] = "
@@ -80,7 +81,7 @@ class Transaction extends MY_Controller {
 					})[0];
 					var cardViewWidth = (225 + 14)
 					var cardWidth = $('.card-box').width();
-					var center = ((cardWidth - cardViewWidth) / 2) - 25;
+					var center = ((cardWidth - cardViewWidth) / 2) - 5;
 					var position = (index * cardViewWidth) - center;
 					if (isFirstClick) {
 						$('.card-box').scrollLeft(position);
@@ -99,6 +100,7 @@ class Transaction extends MY_Controller {
 
 				function renderTopTransaction() {
 					var link = '".base_url()."'+'api/getTopTransaction?'+params;
+					console.log(link);
 					tableTopTrans = $('#datatable-top-transaction').DataTable({
 						'ordering': false,
 						'searching': false,
@@ -436,7 +438,7 @@ class Transaction extends MY_Controller {
 			$where = "transaction_id = ".$this->input->post('transaction_id');
 			$this->updateTransaction($arr, $where);
 		} else {
-			$arr["account_id"] = $this->session->userdata('user')->account_id;
+			$arr["account_key"] = $this->session->userdata('user')->account_key;
 			$this->addNewTransaction($arr);
 		}
 
@@ -456,7 +458,6 @@ class Transaction extends MY_Controller {
 		$arr["description"] = $this->input->post('description_iv');
 		$arr["value"] = $this->input->post('value');
 		$arr["manager"] = $this->input->post('manager');
-		$arr["account_id"] = $this->session->userdata('user')->account_id;
 
 		$transaction_id = $this->input->post('transaction_investment_id');
 		if ($transaction_id != "") {
@@ -464,7 +465,7 @@ class Transaction extends MY_Controller {
 			$this->updateInvestment($arr, $where);
 			header("location:".base_url("investment/portfolio"));
 		} else {
-			$arr["account_id"] = $this->session->userdata('user')->account_id;
+			$arr["account_key"] = $this->session->userdata('user')->account_key;
 			$this->addNewInvestment($arr);
 			header("location:".base_url("investment/portfolio"));
 		}

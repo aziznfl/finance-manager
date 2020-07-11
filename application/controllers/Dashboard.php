@@ -12,6 +12,7 @@ class Dashboard extends MY_Controller {
 		}
 
 		$this->load->model('M_Transaction');
+		$this->load->model('M_TransactionV1');
     }
 
 	public function index() {
@@ -20,7 +21,7 @@ class Dashboard extends MY_Controller {
 		$category = [];
 		$total_transaction = array();
 		$total_investment = array();
-		$arrTrans = $this->M_Transaction->getDashboardTransaction()->result_array();
+		$arrTrans = $this->M_TransactionV1->getDashboardTransaction()->result_array();
 		foreach($arrTrans as $val) {
 			$month = date("M-y", strtotime($val["month"]."/1/".$val["year"]));
 			array_push($months, $month);
@@ -40,14 +41,18 @@ class Dashboard extends MY_Controller {
 					'searching': false,
 					'paging': false,
 					'bInfo': false,
-					'ajax': '".base_url()."'+'api/getLastTransaction',
+					'ajax': {
+						'url': '".base_url()."'+'api/getLastTransaction', 
+						'type': 'POST',
+						'data': {'accountKey': 'fcef8640f3061af0564eca4c565be47a', 'apiKey': 'qweasd'}
+					},
 					'destroy': true,
 					'columns': [
 						{'searchable': false, 'orderable': false, 'defaultContent': '', 'className': 'text-center'},
 						{'data': 'transaction_date', 'className': 'text-center'},
 						{
 							'render': function (param, type, data, meta) {
-								var categoryView = '<b>'+data.category_name+'</b>';
+								var categoryView = '<b>'+data.category.category_name+'</b>';
 								var descView = '';
 								var tagView = '';
 								

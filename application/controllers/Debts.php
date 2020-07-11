@@ -12,6 +12,7 @@ class Debts extends MY_Controller {
 		}
 
 		$this->load->model('M_Transaction');
+		$this->load->model('M_TransactionV1');
 	}
 
 	function index() { }

@@ -30,7 +30,7 @@ class Investment extends MY_Controller {
 			<script>
 				$(function() {
 					var table = $('#transaction_table').DataTable({
-						'ajax': '".base_url('api/getListInvestment')."',
+						'ajax': '".base_url('api/getInvestmentList')."',
 						'columns': [
 							{'data': null, 'className': 'text-center', 'orderable': false, 'searching': false},
 							{'data': 'date', 'className': 'text-center'},
