@@ -37,8 +37,10 @@ class API extends MY_Controller {
 		$result = $this->M_TransactionV1->getTotalInvestment($this->getAccountKey())->result();
 		$total = $result[0]->total_investment;
 		$investment["title"] = "Investment";
+		$investment["subtitle"] = null;
+		$investment["cardLevel"] = 0;
 		$investment["number"] = (int)$total;
-		$investment["text"] = number_format($total);
+		$investment["number_text"] = number_format($total);
 		echo json_encode(Array("data" => Array($investment)));
 	}
 
