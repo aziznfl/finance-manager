@@ -100,7 +100,7 @@ class API extends MY_Controller {
 		echo json_encode(Array("data" => $result));
 	}
 
-	function updateTransaction() {
+	function editTransaction() {
 		$data['category_id'] = $this->input->post('categoryId');
 		$data['transaction_date'] = $this->input->post('date');
 		$data['amount'] = $this->input->post('amount');
