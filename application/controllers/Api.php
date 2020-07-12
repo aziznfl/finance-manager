@@ -157,6 +157,7 @@ class API extends MY_Controller {
 		$result = $this->M_TransactionV1->getLastTransaction($limit, $this->getAccountKey())->result_array();
 		$arr = array();
 		foreach ($result as $transaction) {
+			$transaction["transaction_id"] = (int)$transaction["transaction_id"];
 			$transaction["amount"] = (int)$transaction["amount"];
 			$transaction["amount_text"] = number_format($transaction["amount"]);
 			$transaction["category_name"] = ucwords($transaction["category_name"]);
