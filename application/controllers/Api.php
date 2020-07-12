@@ -84,7 +84,7 @@ class API extends MY_Controller {
 
 	//-------- Transaction ---------//
 
-	function addTransaction() {
+	function insertTransaction() {
 		$data['category_id'] = $this->input->post('categoryId');
 		$data['transaction_date'] = $this->input->post('date');
 		$data['amount'] = $this->input->post('amount');
@@ -96,6 +96,24 @@ class API extends MY_Controller {
 		$data['account_key'] = $this->input->post('accountKey');
 		
 		$affectedRows = $this->M_TransactionV1->addData("transaction", $data);
+		$result['affectedRows'] = $affectedRows;
+		echo json_encode(Array("data" => $result));
+	}
+
+	function updateTransaction() {
+		$data['category_id'] = $this->input->post('categoryId');
+		$data['transaction_date'] = $this->input->post('date');
+		$data['amount'] = $this->input->post('amount');
+		$data['description'] = $this->input->post('description');
+		$data['tag'] = $this->input->post('tag');
+		$data['location'] = $this->input->post('location');
+		$data['coordinate'] = $this->input->post('coordinate');
+		$data['picture'] = $this->input->post('picture');
+		$data['account_key'] = $this->input->post('accountKey');
+
+		$where = "transaction_id = ".$this->input->post('transactionId');
+		
+		$affectedRows = $this->M_TransactionV1->updateData("transaction", $data, $where);
 		$result['affectedRows'] = $affectedRows;
 		echo json_encode(Array("data" => $result));
 	}
