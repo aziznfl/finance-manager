@@ -93,7 +93,7 @@ class API extends MY_Controller {
 		$data['location'] = $this->input->post('location');
 		$data['coordinate'] = $this->input->post('coordinate');
 		$data['picture'] = $this->input->post('picture');
-		$data['account_id'] = $this->input->post('accountId');
+		$data['account_key'] = $this->input->post('accountKey');
 		
 		$affectedRows = $this->M_TransactionV1->addData("transaction", $data);
 		$result['affectedRows'] = $affectedRows;
