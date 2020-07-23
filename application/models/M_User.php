@@ -8,7 +8,6 @@ class M_User extends CI_Model {
 	}
 
 	function login($email) {
-		echo $email;
 		$this->db->where('email', $email);
 		return $this->db->get('account');
 	}
