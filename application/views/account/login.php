@@ -57,24 +57,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			function onSignIn(googleUser) {
 				if (clicked) {
     				var profile = googleUser.getBasicProfile();
-    				console.log("google: ");
-    				console.log(googleUser);
-    				console.log("profile: ");
-    				console.log(profile);
     
     				var user = {
     					email: profile.getEmail(),
     					name: profile.getName(),
     					imageUrl: profile.getImageUrl()
     				};
-					console.log(user);
 
 					$.ajax({
 						method: "POST",
 						url: "<?php echo base_url('account/login'); ?>",
 						data: user,
 						success: function(countUser) {
-							console.log(countUser);
 							if (countUser == 1) {
 								window.location.replace("<?php echo base_url(); ?>");
 							} else if (confirm("User -" + user.name + "- not yet registered. Register?")) {
