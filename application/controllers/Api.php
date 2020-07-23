@@ -203,6 +203,14 @@ class API extends MY_Controller {
 		echo json_encode(Array("data" => $arr));
 	}
 
+	function getTransactions() {
+		$accountKey = $this->input->get('accountKey');
+		$lastTransaction = $this->input->get('lastTransaction');
+
+		$result = $this->M_TransactionV1->getTransactions($lastTransaction, $accountKey)->result_array();
+		echo json_encode(Array("data" => $result));
+	}
+
 	//-------- Investment --------//
 
 	function getInvestmentList() {

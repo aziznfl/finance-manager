@@ -147,6 +147,16 @@ class M_TransactionV1 extends CI_Model {
 		return $this->db->get('transaction');
 	}
 
+	function getTransactions($lastTransaction, $accountKey) {
+		$query = "
+			SELECT transaction.*, category_name
+			FROM transaction
+			JOIN category ON category.category_id = transaction.category_id
+			WHERE account_key = '".$accountKey."'
+		";
+		return $this->db->query($query);
+	}
+
 	//---------- Investment ----------//
 
 	function getInvestment($accountKey) {
