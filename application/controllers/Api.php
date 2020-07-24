@@ -204,11 +204,19 @@ class API extends MY_Controller {
 	}
 
 	function getTransactions() {
-		$accountKey = $this->input->get('accountKey');
 		$lastTransaction = $this->input->get('lastTransaction');
 
-		$result = $this->M_TransactionV1->getTransactions($lastTransaction, $accountKey)->result_array();
-		echo json_encode(Array("data" => $result));
+		$result = $this->M_TransactionV1->getTransactions($lastTransaction, $this->getAccountKey())->result_array();
+		$arr = array();
+		foreach ($result as $transaction) {
+			$transaction["transaction_id"] = (int)$transaction["transaction_id"];
+			$transaction["amount"] = (int)$transaction["amount"];
+			$transaction["amount_text"] = number_format($transaction["amount"]);
+			$transaction["category_id"] = (int)$transaction["category_id"];
+			unset($transaction["account_key"]);
+			array_push($arr, $transaction);
+		}
+		echo json_encode(array("data" => $arr));
 	}
 
 	//-------- Investment --------//
