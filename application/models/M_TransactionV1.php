@@ -101,7 +101,7 @@ class M_TransactionV1 extends CI_Model {
 
 	function getLastTransaction($limit, $accountKey) {
 		$query = "
-			SELECT transaction_id, transaction_date, amount, location, picture, tag, description, coordinate, is_deleted, category.*
+			SELECT transaction_id, transaction_date, added_date, type, amount, location, picture, tag, description, coordinate, is_deleted, category.*
 			FROM `transaction`
 			LEFT JOIN category ON category.category_id = transaction.category_id
 			WHERE account_key = '".$accountKey."'
