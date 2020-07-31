@@ -147,11 +147,14 @@ class M_TransactionV1 extends CI_Model {
 		return $this->db->get('transaction');
 	}
 
-	function getTransactions($lastTransaction, $accountKey) {
+	function getTransactions($lastTransaction = "", $accountKey) {
+		$where = "account_key = '".$accountKey."'";
+		if ($lastTransaction != "") { $where .= " and added_date > '".$lastTransaction."'"; }
 		$query = "
 			SELECT transaction.*
 			FROM transaction
-			WHERE account_key = '".$accountKey."'
+			WHERE ".$where."
+			ORDER BY transaction_date ASC, category_id ASC
 		";
 		return $this->db->query($query);
 	}

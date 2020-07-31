@@ -204,7 +204,7 @@ class API extends MY_Controller {
 	}
 
 	function getTransactions() {
-		$lastTransaction = $this->input->get('lastTransaction');
+		$lastTransaction = $this->input->get('lastAddedTransaction');
 
 		$result = $this->M_TransactionV1->getTransactions($lastTransaction, $this->getAccountKey())->result_array();
 		$arr = array();
