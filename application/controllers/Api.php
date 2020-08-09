@@ -94,6 +94,11 @@ class API extends MY_Controller {
 		$data['coordinate'] = $this->input->post('coordinate');
 		$data['picture'] = $this->input->post('picture');
 		$data['account_key'] = $this->input->post('accountKey');
+
+		$addedDate = $this->input->post('addedDate');
+		if $addedDate != "" || $addedDate != null {
+			$data['added_date'] = $addedDate;
+		}
 		
 		$affectedRows = $this->M_TransactionV1->addData("transaction", $data);
 		$result['affectedRows'] = $affectedRows;
