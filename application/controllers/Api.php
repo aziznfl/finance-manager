@@ -96,7 +96,7 @@ class API extends MY_Controller {
 		$data['account_key'] = $this->input->post('accountKey');
 
 		$addedDate = $this->input->post('addedDate');
-		if $addedDate != "" || $addedDate != null {
+		if ($addedDate != "" || $addedDate != null) {
 			$data['added_date'] = $addedDate;
 		}
 		
