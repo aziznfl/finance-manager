@@ -220,17 +220,8 @@ class API extends MY_Controller {
 			$transaction["category_id"] = (int)$transaction["category_id"];
 			unset($transaction["account_key"]);
 			array_push($arr, $transaction);
-
-			$identify = $transaction["transaction_identify"];
-			// if ($identify == "") {
-				$addedDate = $transaction["transaction_date"];
-				$data["transaction_identify"] = "FMTR".strtotime($addedDate);
-				$where = "transaction_id = ".$transaction["transaction_id"];
-
-				$this->M_TransactionV1->updateData("transaction", $data, $where);
-			// }
 		}
-		// echo json_encode(array("data" => $arr));
+		echo json_encode(array("data" => $arr));
 	}
 
 	//-------- Investment --------//
