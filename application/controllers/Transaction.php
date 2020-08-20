@@ -426,9 +426,9 @@ class Transaction extends MY_Controller {
 		if ($this->input->post('date_tr') != "") $arr["transaction_date"] = $this->input->post('date_tr');
 		$arr["amount"] = $this->input->post('amount');
 		$arr["category_id"] = $this->input->post('category');
-		$arr["description"] = $this->input->post('description');
-		$arr["location"] = $this->input->post('location');
-		$arr["tag"] = $this->input->post('tag');
+		if ($this->input->post('description') != "") $arr["description"] = $this->input->post('description');
+		if ($this->input->post('location') != "") $arr["location"] = $this->input->post('location');
+		if ($this->input->post('tag') != "") $arr["tag"] = $this->input->post('tag');
 		$arr["transaction_identify"] = $this->input->post('transaction_identify');
 
 		if ($this->input->post('transaction_identify') == "") {
