@@ -429,6 +429,12 @@ class Transaction extends MY_Controller {
 		$arr["description"] = $this->input->post('description');
 		$arr["location"] = $this->input->post('location');
 		$arr["tag"] = $this->input->post('tag');
+		$arr["transaction_identify"] = $this->input->post('transaction_identify');
+
+		if ($this->input->post('transaction_identify') == "") {
+			$timestamp = time();
+			$arr["transaction_identify"] = "FMTR".$timestamp;
+		}
 		$transaction_id = $this->input->post('transaction_id');
 
 		$date = strtotime($arr["transaction_date"]);
