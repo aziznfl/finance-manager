@@ -86,6 +86,7 @@ class API extends MY_Controller {
 
 	function insertTransaction() {
 		$data['category_id'] = $this->input->post('categoryId');
+		$data['transaction_identify'] = $this->input->post('transactionIdentify');
 		$data['transaction_date'] = $this->input->post('date');
 		$data['amount'] = $this->input->post('amount');
 		$data['description'] = $this->input->post('description');
@@ -107,6 +108,7 @@ class API extends MY_Controller {
 
 	function editTransaction() {
 		$data['category_id'] = $this->input->post('categoryId');
+		$data['transaction_identify'] = $this->input->post('transactionIdentify');
 		$data['transaction_date'] = $this->input->post('date');
 		$data['amount'] = $this->input->post('amount');
 		$data['description'] = $this->input->post('description');
