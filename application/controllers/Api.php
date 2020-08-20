@@ -118,7 +118,7 @@ class API extends MY_Controller {
 		$data['picture'] = $this->input->post('picture');
 		$data['account_key'] = $this->input->post('accountKey');
 
-		$where = "transaction_id = ".$this->input->post('transactionId');
+		$where = "transaction_identify = ".$this->input->post('transactionIdentify');
 		
 		$affectedRows = $this->M_TransactionV1->updateData("transaction", $data, $where);
 		$result['affectedRows'] = $affectedRows;
