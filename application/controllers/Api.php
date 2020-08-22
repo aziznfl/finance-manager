@@ -108,7 +108,6 @@ class API extends MY_Controller {
 
 	function editTransaction() {
 		$data['category_id'] = $this->input->post('categoryId');
-		$data['transaction_identify'] = $this->input->post('transactionIdentify');
 		$data['transaction_date'] = $this->input->post('date');
 		$data['amount'] = $this->input->post('amount');
 		$data['description'] = $this->input->post('description');
@@ -116,9 +115,10 @@ class API extends MY_Controller {
 		$data['location'] = $this->input->post('location');
 		$data['coordinate'] = $this->input->post('coordinate');
 		$data['picture'] = $this->input->post('picture');
-		$data['account_key'] = $this->input->post('accountKey');
+		$data['is_deleted'] = $this->input->post('isDeleted');
+		print_r($data);
 
-		$where = "transaction_identify = ".$this->input->post('transactionIdentify');
+		$where = "transaction_identify = '".$this->input->post('transactionIdentify')."'";
 		
 		$affectedRows = $this->M_TransactionV1->updateData("transaction", $data, $where);
 		$result['affectedRows'] = $affectedRows;
