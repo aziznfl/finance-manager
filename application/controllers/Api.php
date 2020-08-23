@@ -116,7 +116,6 @@ class API extends MY_Controller {
 		$data['coordinate'] = $this->input->post('coordinate');
 		$data['picture'] = $this->input->post('picture');
 		$data['is_deleted'] = $this->input->post('isDeleted');
-		print_r($data);
 
 		$where = "transaction_identify = '".$this->input->post('transactionIdentify')."'";
 		
