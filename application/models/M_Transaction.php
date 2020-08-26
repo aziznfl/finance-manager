@@ -54,9 +54,9 @@ class M_Transaction extends CI_Model {
 		$query = "
 			SELECT a.date, a.amount, a.description
 			FROM (
-				SELECT transaction_date as date, amount, description, added_date FROM `transaction` WHERE tag = '".$tag."'
+				SELECT transaction_date as date, amount, description, added_date FROM `transaction` WHERE tag = '".$tag."' AND ".$this->getWhereTransaction()."
 				UNION
-				SELECT transaction_date as date, (amount * -1) as amount, description, added_date FROM transaction_oop WHERE tag = '".$tag."'
+				SELECT transaction_date as date, (amount * -1) as amount, description, added_date FROM transaction_oop WHERE tag = '".$tag."' AND ".$this->getWhereTransaction()."
 			) a
 			ORDER BY a.date DESC
 		";
@@ -119,6 +119,7 @@ class M_Transaction extends CI_Model {
 
 	function getRecurringTransaction() {
 		$this->db->join("category", "category.category_id = transaction_recurring.category_id", "left");
+		$this->db->where($this->getWhereTransaction());
 		return $this->db->get("transaction_recurring");
 	}
 

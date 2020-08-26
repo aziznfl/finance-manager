@@ -33,6 +33,7 @@ class Dashboard extends MY_Controller {
 		// get several tag
 		$result["amountInvestment"] = $this->totalInvestment();
 
+		$apiKey = $this->session->userdata('user')->account_key;
 		$result["add_footer"] = "
 		<script>
 			$(function() {
@@ -44,7 +45,7 @@ class Dashboard extends MY_Controller {
 					'ajax': {
 						'url': '".base_url()."'+'api/getLastTransaction', 
 						'type': 'POST',
-						'data': {'accountKey': 'fcef8640f3061af0564eca4c565be47a', 'apiKey': 'qweasd'}
+						'data': {'accountKey': '".$apiKey."', 'apiKey': '".$apiKey."'}
 					},
 					'destroy': true,
 					'columns': [
