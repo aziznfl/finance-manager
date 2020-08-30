@@ -287,6 +287,11 @@ class API extends MY_Controller {
 		echo json_encode(Array("data" => $result[0]));
 	}
 
+	function getCategoryInvestment() {
+		$result = $this->M_TransactionV1->getCategoriesInvestment()->result();
+		echo json_encode(Array("data" => $result));
+	}
+
 	// old
 
 	function getInvestment($investment_id) {
