@@ -65,8 +65,8 @@ class API extends MY_Controller {
 	}
 
 	function getCategoriesInvestment() {
-		$result = $this->listCategoriesInvestment();
-		echo json_encode(array("data" => $result));
+		$result = $this->M_TransactionV1->getCategoriesInvestment()->result();
+		echo json_encode(Array("data" => $result));
 	}
 
 	function addCategory() {
@@ -196,18 +196,18 @@ class API extends MY_Controller {
 		echo json_encode(array("data" => $arr));
 	}
 
-	function getCategoryTransaction() {
-		$categoryId = $this->input->get('categoryId');
-		$result = $this->M_TransactionV1->getCategoryTransaction($categoryId, $this->getAccountKey())->result_array();
-		$arr = array();
-		foreach ($result as $data) {
-			$data['category_name'] = ucwords($data['category_name']);
-			$data['amount'] = intval($data['amount']);
-			$data['amount_text'] = number_format($data['amount']);
-			array_push($arr, $data);
-		}
-		echo json_encode(Array("data" => $arr));
-	}
+	// function getCategoryTransaction() {
+	// 	$categoryId = $this->input->get('categoryId');
+	// 	$result = $this->M_TransactionV1->getCategoryTransaction($categoryId, $this->getAccountKey())->result_array();
+	// 	$arr = array();
+	// 	foreach ($result as $data) {
+	// 		$data['category_name'] = ucwords($data['category_name']);
+	// 		$data['amount'] = intval($data['amount']);
+	// 		$data['amount_text'] = number_format($data['amount']);
+	// 		array_push($arr, $data);
+	// 	}
+	// 	echo json_encode(Array("data" => $arr));
+	// }
 
 	function getTransactions() {
 		$lastTransaction = $this->input->get('lastAddedTransaction');
@@ -285,11 +285,6 @@ class API extends MY_Controller {
 		$accountKey = $this->input->get('accountKey');
 		$result = $this->M_TransactionV1->getTotalInvestment($accountKey)->result_array();
 		echo json_encode(Array("data" => $result[0]));
-	}
-
-	function getCategoryInvestment() {
-		$result = $this->M_TransactionV1->getCategoriesInvestment()->result();
-		echo json_encode(Array("data" => $result));
 	}
 
 	// old
