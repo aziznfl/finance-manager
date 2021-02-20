@@ -429,12 +429,7 @@ class Transaction extends MY_Controller {
 		if ($this->input->post('description') != "") $arr["description"] = $this->input->post('description');
 		if ($this->input->post('location') != "") $arr["location"] = $this->input->post('location');
 		if ($this->input->post('tag') != "") $arr["tag"] = $this->input->post('tag');
-		$arr["transaction_identify"] = $this->input->post('transaction_identify');
 
-		if ($this->input->post('transaction_identify') == "") {
-			$timestamp = time();
-			$arr["transaction_identify"] = "FMTR".$timestamp;
-		}
 		$transaction_id = $this->input->post('transaction_id');
 
 		$date = strtotime($arr["transaction_date"]);
@@ -444,6 +439,8 @@ class Transaction extends MY_Controller {
 			$where = "transaction_id = ".$this->input->post('transaction_id');
 			$this->updateTransaction($arr, $where);
 		} else {
+			$timestamp = time();
+			$arr["transaction_identify"] = "FMTR".$timestamp;
 			$arr["account_key"] = $this->session->userdata('user')->account_key;
 			$this->addNewTransaction($arr);
 		}
