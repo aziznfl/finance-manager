@@ -141,13 +141,17 @@ class Transaction extends MY_Controller {
 						'destroy': true,
 						'columns': [
 							{'searchable': false, 'orderable': false, 'defaultContent': '', 'className': 'text-center'},
-							{'data': 'transaction_date', 'className': 'text-center'},
 							{
 								'render': function (param, type, data, meta) {
-									return textDescription(data);
+									return getTextDescription(data);
 								}
 							},
-							{'data': 'amount_text', 'className': 'text-right'},
+							{
+								'className': 'text-right',
+								'render': function (param, type, data, meta) {
+									return getTextPrice(data);
+								}
+							},
 							{'orderable': false, 
 								'className': 'text-center',
 								'render': function (param, type, data, meta) {
@@ -211,19 +215,28 @@ class Transaction extends MY_Controller {
 					});
 				}
 
-				function textDescription(data) {
-					var categoryView = '<b>'+data.category_name+'</b>';
+				function getTextDescription(data) {
+					var categoryView = '<br/><b>'+data.category_name+'</b>';
 					var descView = '';
-					var tagView = '';
+
+					var date = Date.parse(data.transaction_date.replace(' ', 'T')).toString('dd MMM yyyy - HH:mm:ss');
+					var dateView = '<span class=\"hidden\">' + data.transaction_date + '</span><span class=\"text-secondary\">' + date + '</span>';
 					
 					if (data.location != null && data.location != '') { 
 						categoryView += '&nbsp;&nbsp;&nbsp;<span class=\"text-primary\"><span class=\"fa fa-map-marker\"></span>&nbsp;'+data.location+'</span>';
 					}
 					if (data.is_deleted != 0) { categoryView += '&nbsp;&nbsp;<span class=\"label bg-red\">Deleted</span>'; }
-					if (data.description != null && data.description != '') { descView = '<br/><span class=\"text-secondary\">'+data.description+'</span>'; }
-					if (data.tag != null) { tagView = '<br/><span class=\"label bg-blue\">'+data.tag+'</span>'; }
+					if (data.description != null && data.description != '') { descView = '<br/>'+data.description; }
 
-					return categoryView+descView+tagView;
+					return dateView+categoryView+descView;
+				}
+
+				function getTextPrice(data) {
+					var text = data.amount_text;
+
+					if (data.tag != null) { text += '<br/><span class=\"label bg-blue\">'+data.tag+'</span>'; }
+					
+					return text;
 				}
 
 				// function for choose tabs

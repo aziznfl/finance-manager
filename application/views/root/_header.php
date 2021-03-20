@@ -26,7 +26,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/admin-lte/css/skins/_all-skins.min.css">
-  <!-- Custom style -->
+  <!-- Date style -->
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/style.css">
 
   <style type="text/css">

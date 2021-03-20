@@ -58,6 +58,8 @@
 <script src="<?php echo base_url(); ?>assets/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
 <!-- bootstrap datetimepicker -->
 <script src="<?php echo base_url(); ?>assets/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<!-- date -->
+<script src="<?php echo base_url(); ?>assets/date.js"></script>
 
 <script>
   $(function () {

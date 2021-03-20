@@ -55,9 +55,8 @@
 							<div class="table-responsive">
 								<table id="datatable-month-transaction" class="table table-bordered table-striped table-hover">
 									<thead>
-										<th width="10">No</th>
-										<th class="text-center" width="200">Date</th>
-										<th class="text-center">Category</th>
+										<th width="50">No</th>
+										<th class="text-center">Detail</th>
 										<th class="text-center">Rp.</th>
 										<th class="text-center"></th>
 									</thead>
