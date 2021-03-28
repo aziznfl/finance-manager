@@ -53,7 +53,7 @@
 								</small>
 							</h3>
 							<div class="table-responsive">
-								<table id="datatable-month-transaction" class="table table-bordered table-striped table-hover">
+								<table id="datatable-month-transaction" class="table table-bordered table-striped table-hover" style="cursor: pointer;">
 									<thead>
 										<th width="50">No</th>
 										<th class="text-center">Detail</th>
@@ -66,34 +66,41 @@
 					</div>
 				</div>
 			</div>
-			<div id="category-tab" class="hide">
-				<div class="row">
-					<div class="col-md-3">
-						<div class="table-responsive" style="margin-bottom: 32px;">
-							<table id="datatable-category" class="table table-striped table-hover" style="cursor: pointer;">
-								<thead>
-									<th class="text-center">No</th>
-									<th>Category</th>
-								</thead>
-							</table>
-						</div>
-					</div>
-					<div class="col-md-9">
-						<div class="table-responsive" style="margin-bottom: 32px;">
-							<table id="datatable-sub-category" class="table table-bordered table-striped table-hover" style="cursor: pointer;">
-								<thead>
-									<th class="text-center">No</th>
-									<th class="text-center">Date</th>
-									<th class="text-center">Category</th>
-									<th class="text-center">Rp. (%)</th>
-								</thead>
-								<tbody></tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
 		</div>
 	</div>
 </section>
 <!-- /.content -->
+
+<!-- .modal -->
+<div id="modal-transaction-detail" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="exampleModalLabel">Transaction Detail</h4>
+			</div>
+			<div class="modal-body">
+				<div>
+					<span id="modal-detail-transaction-date" class="text-secondary"></span>
+				</div>
+				<div>
+					<div id="modal-detail-transaction-category"></div>
+					<p id="modal-detail-transaction-description"></p>
+				</div>
+				<table class="table table-bordered table-hovered table-striped">
+					<thead>
+						<th class="text-center">No</th>
+						<th>Item</th>
+						<th class="text-right">Price (Rp.)</th>
+						<th class="text-right">Qty</th>
+						<th class="text-right">Total (Rp.)</th>
+					</thead>
+					<tbody id="modal-detail-transaction-item-body">
+					</tbody>
+				</table>
+			</div>
+			<div class="modal-footer"></div>
+		</div>
+	</div>
+</div>
+<!-- /.modal -->

@@ -151,6 +151,10 @@
       }
     });
   });
+
+  function baseUrl() {
+    return '<?php echo base_url(); ?>';
+  }
 </script>
 <!-- add script of each module -->
 <?php if (isset($add_footer)) { echo $add_footer; } ?>

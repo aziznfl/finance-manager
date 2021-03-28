@@ -161,10 +161,45 @@ class API extends MY_Controller {
 		$result = $this->M_TransactionV1->getMonthTransaction($month, $year, $category_id, $accountKey)->result_array();
 		$all = array();
 		foreach ($result as $transaction) {
-			$transaction["amount"] = (int)$transaction["amount"];
-			$transaction["amount_text"] = number_format($transaction["amount"]);
-			$transaction["category_name"] = ucwords($transaction["category_name"]);
-			array_push($all, $transaction);
+			$response["transactionId"] = (int)$transaction["transaction_id"];
+			$response["transactionIdentify"] = $transaction["transaction_identify"];
+			$response["transactionDate"] = $transaction["transaction_date"];
+			$response["addedDate"] = $transaction["added_date"];
+			$response["description"] = $transaction["description"];
+			$response["tag"] = $transaction["tag"];
+			$response["type"] = $transaction["type"];
+			$response["place"]["name"] = $transaction["location"];
+			$response["place"]["coordinate"] = $transaction["coordinate"];
+			$response["picture"] = $transaction["picture"];
+			$response["total"]["value"] = (int)$transaction["amount"];
+			$response["total"]["text"] = number_format($transaction["amount"]);
+			$response["category"]["id"] = (int)$transaction["category_id"];
+			$response["category"]["name"] = ucwords($transaction["category_name"]);
+			$response["category"]["icon"] = $transaction["icon"];
+			$response["category"]["parentId"] = $transaction["parent_id"];
+			$response["isDeleted"] = $transaction["is_deleted"];
+			$response["item"]["count"] = (int)$transaction["count_list"];
+			$response["item"]["list"] = array();
+
+			// get transaction list
+			$resultLists = $this->M_TransactionV1->getTransactionListItems($transaction["transaction_identify"])->result_array();
+			$total = 0;
+			foreach ($resultLists as $resultList) {
+				$item["name"] = $resultList["name"];
+				$item["price"]["value"] = (int)$resultList["price"];
+				$item["price"]["text"] = number_format($resultList["price"]);
+				$item["qty"] = $resultList["quantity"];
+				$item["total"]["value"] = (int)$resultList["quantity"] * $resultList["price"];
+				$item["total"]["text"] = number_format($resultList["quantity"] * $resultList["price"]);
+				$item["isDeleted"] = $resultList["is_deleted"];
+
+				$total += $item["total"]["value"];
+				array_push($response["item"]["list"], $item);
+			}
+			$response["item"]["total"]["value"] = (int)$total;
+			$response["item"]["total"]["text"] = number_format($total);
+
+			array_push($all, $response);
 		}
 
 		echo json_encode(array("data" => $all));

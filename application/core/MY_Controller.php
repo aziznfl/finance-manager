@@ -75,20 +75,14 @@ class MY_Controller extends CI_Controller {
 		header("location:".base_url());
 	}
 
-	// function lastTransaction($limit) {
-	// 	$result = $this->M_Transaction->getAllTransaction($limit)->result_array();
-	// 	$all = array();
-	// 	foreach ($result as $transaction) {
-	// 		$transaction["amount"] = (int)$transaction["amount"];
-	// 		$transaction["amount_text"] = number_format($transaction["amount"]);
-	// 		$transaction["category_name"] = ucwords($transaction["category_name"]);
-	// 		array_push($all, $transaction);
-	// 	}
-	// 	return $all;
-	// }
-
 	function recurringTransaction() {
 		return $this->M_Transaction->getRecurringTransaction()->result_array();
+	}
+
+	function getType($string) {
+		$types = trim($string, ""); // remove space
+		$types = explode(",", $types);
+		return $types;
 	}
 
 	//-------- Investment --------//

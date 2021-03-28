@@ -132,19 +132,19 @@ class M_TransactionV1 extends CI_Model {
 	}
 
 	function getMonthTransaction($month, $year, $category_id, $accountKey) {
-		$this->db->join("category", "category.category_id = transaction.category_id", "left");
-		$this->db->order_by("type", "DESC");
-		$this->db->order_by("transaction_date", "DESC");
-		$this->db->order_by("added_date", "DESC");
-		$this->db->order_by("category.category_id", "ASC");
-		$this->db->where("type", "outcome");
-		$this->db->where("MONTH(transaction_date)", $month);
-		$this->db->where("YEAR(transaction_date)", $year);
-		$this->db->where($this->getWhereTransaction($accountKey));
-		
-		if ($category_id != 0) $this->db->where("(category.category_id = ".$category_id." OR category.parent_id = ".$category_id.")");
+		$where = $this->getWhereTransaction($accountKey);
+		if ($category_id != 0) $where .= "AND category.category_id = ".$category_id." OR category.parent_id = ".$category_id;
 
-		return $this->db->get('transaction');
+		$query = "
+			SELECT t.*, c.*, COUNT(tl.transaction_identify) AS count_list
+			FROM transaction t
+			LEFT JOIN category c ON c.category_id = t.category_id
+			LEFT JOIN transaction_list tl ON tl.transaction_identify = t.transaction_identify
+			WHERE t.type = 'outcome' AND MONTH(t.transaction_date) = '$month' AND YEAR(t.transaction_date) = '$year' AND $where
+			GROUP BY t.transaction_identify
+			ORDER BY t.type DESC, t.transaction_date DESC, t.added_date DESC, c.category_id ASC
+		";
+		return $this->db->query($query);
 	}
 
 	function getTransactions($lastTransaction = "", $accountKey) {
@@ -155,6 +155,15 @@ class M_TransactionV1 extends CI_Model {
 			FROM transaction
 			WHERE ".$where."
 			ORDER BY transaction_date ASC, category_id ASC
+		";
+		return $this->db->query($query);
+	}
+
+	function getTransactionListItems($transactionIdentify) {
+		$query = "
+			SELECT * 
+			FROM transaction_list
+			WHERE transaction_identify = '".$transactionIdentify."' AND is_deleted = 0
 		";
 		return $this->db->query($query);
 	}
