@@ -142,6 +142,10 @@
   function baseUrl() {
     return '<?php echo base_url(); ?>';
   }
+
+  function currencyFormat(number) {
+    return number.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,').split('.')[0];
+  }
 </script>
 <!-- add script of each module -->
 <?php if (isset($add_footer)) { echo $add_footer; } ?>

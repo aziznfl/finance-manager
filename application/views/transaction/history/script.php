@@ -209,7 +209,6 @@
                 var styleList = ["text-center", "", "text-right", "text-right", "text-right"];
                 $('#modal-detail-transaction-item-table').append(createHeaderTable(headerList, styleList));
                 $('#modal-detail-transaction-item-table').append(createBodyTable(row));
-                $('#modal-detail-transaction-item-table').append(createFooterTable(row));
             } else {
                 $('#modal-detail-transaction-item-table').addClass('hide');
             }
@@ -225,10 +224,13 @@
 
         function createBodyTable(row) {
             var body = "<tbody>";
+            var total = 0;
             for (var i = 0; i < row.item.count; i++) {
                 var item = row.item.list[i];
+                total += item.total.value;
                 body += addTableRow(i+1, item.name, item.price.text, item.qty, item.total.text);
             }
+            $('#modal-detail-transaction-item-table').append(createFooterTable(total));
             return body += "</tbody>";
         }
 
@@ -242,10 +244,10 @@
             "</tr>";
         }
 
-        function createFooterTable(row) {
+        function createFooterTable(total) {
             return "<tfoot>" +
                 "<th colspan='4' class='text-right'>Total</th>" +
-                "<th class='text-right'>" + row.total.text + "</th>" +
+                "<th class='text-right'>" + currencyFormat(total) + "</th>" +
             "</tfoot>";
         }
         <!------ END OF MODAL ----->
