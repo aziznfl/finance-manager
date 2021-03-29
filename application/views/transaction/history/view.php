@@ -87,16 +87,7 @@
 					<div id="modal-detail-transaction-category"></div>
 					<p id="modal-detail-transaction-description"></p>
 				</div>
-				<table class="table table-bordered table-hovered table-striped">
-					<thead>
-						<th class="text-center">No</th>
-						<th>Item</th>
-						<th class="text-right">Price (Rp.)</th>
-						<th class="text-right">Qty</th>
-						<th class="text-right">Total (Rp.)</th>
-					</thead>
-					<tbody id="modal-detail-transaction-item-body">
-					</tbody>
+				<table id="modal-detail-transaction-item-table" class="table table-bordered table-hovered table-striped no-margin">
 				</table>
 			</div>
 			<div class="modal-footer"></div>

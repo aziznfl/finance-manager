@@ -81,19 +81,6 @@
       format: 'YYYY-MM-DD HH:mm:ss'
     })
 
-    $('input[type="number"]')
-      .focus(function() {
-        console.log("focus number");
-        if ($(this).val() == "0") {
-          $(this).val("");
-        }
-      })
-      .focusout(function() {
-        if($(this).val() == "") {
-          $(this).val("0");
-        }
-      });
-
     $(".items").sortable({
       connectWith: ".items",
       placeholder: "placeholder",
@@ -158,5 +145,3 @@
 </script>
 <!-- add script of each module -->
 <?php if (isset($add_footer)) { echo $add_footer; } ?>
-</body>
-</html>

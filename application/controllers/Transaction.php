@@ -96,149 +96,32 @@ class Transaction extends MY_Controller {
 
 		$this->load->view('root/_header', $result);
 		$this->load->view('root/_menus');
-		$this->load->view('transaction/history/month_history');
-		$this->load->view('transaction/history/function_script');
+		$this->load->view('transaction/history/view');
 		$this->load->view('root/_footer');
+		$this->load->view('transaction/history/script');
+		$this->load->view('root/_end');
 	}
 
 	function manage() {
-		$date = $this->input->get('date');
-		$type = $this->input->get('type');
-		$id = $this->input->get('id');
-		$change = $this->input->get('change');
-		$script = "";
+		$transactionId = $this->input->get("transactionId");
+		
+		$result['categories'] = $this->listCategories();
 
-		if ($type == null) $type = "tr";
-		else if ($type == "iv" && $id != "") $script .= "$('#input-type').removeClass('hide');";
-
-		$result["id"] = $id;
-		//------- CREATE FORM -------//
-		$result["form_hidden"] = array();
-		$result["date"] = array(
-			'name'  => 'date_tr',
-			'class' => 'form-control datetimepicker',
-			'placeholder' => "Now"
-		);
-		if ($date != null || $date != '') { $result["date"]["value"] = $date; }
-		$result["amount"] = array(
-			'type'  => 'number',
-			'name'  => 'amount',
-			'class' => 'form-control text-right',
-			'value' => 0
-		);
-
-		$categories = $this->listCategories();
-        $list = array();
-        foreach ($categories as $category) {
-            $list[$category["category_id"]] = ucfirst($category["category_name"]);
-            foreach ($category["child"] as $child) {
-                $list[$child["category_id"]] = "- ".ucfirst($child["category_name"]);
-            }
-        }
-        $result["category"]["list"] = $list;
-        $result["category"]["tag"] = array('class' => 'form-control select2');
-        $result["category"]["value"] = "";
-
-        $result["description"] = array(
-			'name'  => 'description',
-			'class' => 'form-control',
-			'placeholder' => 'Description'
-        );
-        $result["tag"] = array(
-        	'name' => 'tag',
-        	'class' => 'form-control',
-        	'placeholder' => 'Tag'
-        );
-        $result["location"] = array(
-        	'name' => 'location',
-        	'class' => 'form-control',
-        	'placeholder' => 'Location'
-        );
-        $result["date_iv"] = $result["date"];
-        $result["date_iv"]["name"] = 'date_iv';
-        $result["amount_iv"] = $result["amount"];
-        $result["amount_iv"]["name"] = 'amount_iv';
-        $result["manager"] = array(
-        	'name' => 'manager',
-        	'class' => 'form-control',
-        	'placeholder' => 'Manager'
-        );
-        $result["description_iv"] = $result["description"];
-        $result["description_iv"]["name"] = 'description_iv';
-
-		$categories = $this->listCategoriesInvestment();
-        $result["category_investment"] = $categories;
-		//------- /.CREATE FORM -------//
-
-		// if edit -> get data from server
-		if ($type == "tr") {
-			if ($id != "") {
-				$old_transaction = $this->transaction($id);
-				$result["date"]["value"] = $old_transaction["transaction_date"];
-				$result["amount"]["value"] = $old_transaction["amount"];
-				$result["category"]["value"] = array($old_transaction["category_id"]);
-				$result["description"]["value"] = $old_transaction["description"];
-				$result["location"]["value"] = $old_transaction["location"];
-				$result["tag"]["value"] = $old_transaction["tag"];
-
-				$result["form_hidden"] = array("transaction_id" => $id);
-			} else {
-				if ($amount = $this->input->get('amount')) $result["amount"]["value"] = $amount;
-				if ($category = $this->input->get('category')) $result["category"]["value"] = array($category);
-				if ($description = $this->input->get('desc')) $result["description"]["value"] = $description;
-			}
-		} else if ($type == "iv" && $id != "") {
-			$investment = $this->investment($id);
-			$result["category_iv"] = $investment["category_id"];
-			$result["manager"]["value"] = $investment["manager"];
-			$result["description_iv"]["value"] = $investment["description"];
-			if ($change == "edit") {
-				$result["date_iv"]["value"] = $investment["transaction_date"];
-				$result["form_hidden"] = array("transaction_investment_id" => $id);
-				$result["amount_iv"]["value"] = $investment["amount"];
-			} else {
-				$result["type"]["value"] = $investment["type"];
-				$result["manager"]["readonly"] = "";
-				$result["description_iv"]["readonly"] = "";
-			}
-		}
- 
 		$result["add_footer"] = "
 			<script>
 				$(function() {
-				    ".$script."
-
-				    $('#tr-transaction').siblings().addClass('hide');
-				    $('#".$type."').trigger('click');
-				});
-
-				// function for choose tabs
-				$('.nav-tabs li').click(function() {
-					$(this).addClass('active').siblings().removeClass('active');
-
-					var tab = $(this).attr('data-tab');
-					$('#'+tab+'-transaction').removeClass('hide').siblings().addClass('hide');
-					$('input[name=date_'+tab+']').focus();
-				});
-
-				// function for choose category investment to show input value or not
-				$('#input-category-investment select').change(function () {
-					var unit = $('option:selected', this).attr('data-unit');
-
-					if (unit != null) {
-						$('#input-value').removeClass('hide');
-						$('#label-unit-investment-category').text(unit);
-					} else {
-						$('#input-value').addClass('hide');
-					}
+					setTitle(".$transactionId.");
+					insertNewLineItemList();
 				});
 			</script>
 		";
 
 		$this->load->view('root/_header', $result);
 		$this->load->view('root/_menus');
-		$this->load->view('transaction/manage');
+		$this->load->view('transaction/manage/view');
 		$this->load->view('root/_footer');
+		$this->load->view('transaction/manage/script');
+		$this->load->view('root/_end');
 	}
 
 	function recurring() {

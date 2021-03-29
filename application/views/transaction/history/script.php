@@ -80,8 +80,15 @@
 
         function renderMonthTransaction() {
             var link = baseUrl() + 'api/getMonthTransaction?' + params + '&category_id=' + categoryId;
+            console.log(link);
             tableMonthTrans = $('#datatable-month-transaction').DataTable({
-                'ajax': link,
+                'ajax': {
+                    'url': link,
+                    'type': 'POST',
+                    'headers': {
+                        'currentUser': '<?php echo $this->session->userdata('user')->account_key; ?>'
+                    }
+                },
                 'destroy': true,
                 'columns': [
                     {'searchable': false, 'orderable': false, 'defaultContent': '', 'className': 'text-center'},
@@ -187,7 +194,6 @@
 
         <!------ MODAL ----->
         function showDetailItemsTransaction(row) {
-            console.log(row);
             $('#modal-transaction-detail').modal('show');
 
             $('#modal-detail-transaction-date').text(row.transactionDate);
@@ -195,13 +201,35 @@
             $('#modal-detail-transaction-description').text(row.description);
 
             // generate list item transaction
-            var itemList = "";
+            $('#modal-detail-transaction-item-table').html("");
+            if (row.item.count > 0) {
+                $('#modal-detail-transaction-item-table').removeClass('hide');
+
+                var headerList = ["No", "Item", "Price (Rp.)", "Qty", "Total (Rp.)"];
+                var styleList = ["text-center", "", "text-right", "text-right", "text-right"];
+                $('#modal-detail-transaction-item-table').append(createHeaderTable(headerList, styleList));
+                $('#modal-detail-transaction-item-table').append(createBodyTable(row));
+                $('#modal-detail-transaction-item-table').append(createFooterTable(row));
+            } else {
+                $('#modal-detail-transaction-item-table').addClass('hide');
+            }
+        }
+
+        function createHeaderTable(headerList, style) {
+            var header = "<thead>";
+            for (var i = 0; i < headerList.length; i++) {
+                header += "<th class=" + style[i] + ">" + headerList[i] + "</th>";
+            }
+            return header += "</thead>";
+        }
+
+        function createBodyTable(row) {
+            var body = "<tbody>";
             for (var i = 0; i < row.item.count; i++) {
                 var item = row.item.list[i];
-                itemList += addTableRow(i+1, item.name, item.price.text, item.qty, item.total.text);
+                body += addTableRow(i+1, item.name, item.price.text, item.qty, item.total.text);
             }
-            itemList += "<tr><td colspan='4'></td><td class='text-right'>" + row.total.text + "</td></tr>";
-            $('#modal-detail-transaction-item-body').html(itemList);
+            return body += "</tbody>";
         }
 
         function addTableRow(no, item, price, qty, total) {
@@ -212,6 +240,13 @@
                 "<td class='text-right'>" + qty + "</td>" +
                 "<td class='text-right'>" + total + "</td>" +
             "</tr>";
+        }
+
+        function createFooterTable(row) {
+            return "<tfoot>" +
+                "<th colspan='4' class='text-right'>Total</th>" +
+                "<th class='text-right'>" + row.total.text + "</th>" +
+            "</tfoot>";
         }
         <!------ END OF MODAL ----->
     </script>
