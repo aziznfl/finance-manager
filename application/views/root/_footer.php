@@ -143,8 +143,16 @@
     return '<?php echo base_url(); ?>';
   }
 
+  function findId(data) {
+    return $(data).closest('tr').attr('id');
+  }
+
   function currencyFormat(number) {
     return number.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,').split('.')[0];
+  }
+
+  function getNumberFromCurrency(string) {
+    return parseInt(string.split(",").join(""));
   }
 </script>
 <!-- add script of each module -->

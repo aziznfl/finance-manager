@@ -67,16 +67,18 @@
                     <div class="box-body">
                         <table class="table" id="table-list-items">
                             <thead>
-                                <th class="text-center">No</th>
                                 <th>Item</th>
                                 <th class="text-right" width="175">Price</th>
-                                <th class="text-right" width="100">Qty</th>
+                                <th class="text-center" width="100">Qty</th>
                                 <th class="text-right" width="100">Total</th>
+                                <th class="text-center" width="50">Action</th>
                             </thead>
                             <tbody></tbody>
                             <tfoot>
-                                <th colspan="4" class="text-right">Total</th>
-                                <th class="text-right" id="table-list-items-total-text">Rp. 0</th>
+                                <th data-tag="counter-text"></th>
+                                <th colspan="2" class="text-right">Total</th>
+                                <th class="text-right" data-tag="total-text"></th>
+                                <th></th>
                             </tfoot>
                         </table>
                     </div>

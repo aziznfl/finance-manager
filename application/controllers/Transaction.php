@@ -134,7 +134,7 @@ class Transaction extends MY_Controller {
 	}
 
     /*------------ /.MAIN ------------*/
-    
+
 	function manageTransaction() {
 		if ($this->input->post('date_tr') != "") $arr["transaction_date"] = $this->input->post('date_tr');
 		$arr["amount"] = $this->input->post('amount');
