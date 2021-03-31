@@ -84,6 +84,30 @@ class API extends MY_Controller {
 
 	//-------- Transaction ---------//
 
+	function insertTransactionNewFlow() {
+		$data['category_id'] = $this->input->post('categoryId');
+		$data['transaction_date'] = $this->input->post('date');
+		$data['amount'] = $this->input->post('amount');
+		$data['description'] = $this->input->post('description');
+		$data['tag'] = $this->input->post('tag');
+		$data['location'] = $this->input->post('location');
+		$data['coordinate'] = $this->input->post('coordinate');
+		$data['picture'] = $this->input->post('picture');
+
+		$addedDate = $this->input->post('addedDate');
+		if ($addedDate != "" || $addedDate != null) {
+			$data['added_date'] = $addedDate;
+		}
+		
+		$timestamp = time();
+		$data["transaction_identify"] = "FMTR".$timestamp;
+
+		$data['account_key'] = $this->input->get_request_header('currentUser', true);
+
+		$result = array("status_code" => 300, "status_text" => $headers);
+		echo json_encode($result);
+	}
+
 	function insertTransaction() {
 		$data['category_id'] = $this->input->post('categoryId');
 		$data['transaction_identify'] = $this->input->post('transactionIdentify');
@@ -182,7 +206,7 @@ class API extends MY_Controller {
 			$response["item"]["list"] = array();
 
 			// get transaction list
-			$resultLists = $this->M_TransactionV1->getTransactionListItems($transaction["transaction_identify"])->result_array();
+			$resultLists = $this->M_TransactionV1->getTransactionListItems($transaction["transaction_id"])->result_array();
 			$total = 0;
 			foreach ($resultLists as $resultList) {
 				$item["name"] = $resultList["name"];

@@ -1,6 +1,7 @@
 
     <script>
         setTotal(0);
+        setForm();
 
         function unbindScript() {
             $(document).unbind('change').ready(function() {
@@ -36,24 +37,34 @@
         }
 
         function getTableId() {
-            return "#table-list-items";
+            return "#table-list-items ";
         }
 
         function isLastChild(html) {
-            var lastHtml = $(getTableId() + " tbody tr").last().find('input').first()[0];
+            var lastHtml = $(getTableId() + "tbody tr").last().find('input').first()[0];
             return (html == lastHtml);
         }
 
-        //------- Calculate ---------
+        function isLastId(id) {
+            var lastId = $(getTableId() + "tbody tr").last().attr('id');
+            return (lastId == id);
+        }
+
+        //------- Calculate --------//
 
         function getCountItem() {
-            return parseInt($(getTableId() + ' tbody tr').length);
+            return parseInt($(getTableId() + "tbody tr").length);
         }
 
         function setCounter() {
             var countItem = (getCountItem() - 1);
             var counterText = "Total Item: " + countItem;
             $("#table-list-items tfoot").find('[data-tag=\"counter-text\"]').text(counterText);
+        }
+
+        function setForm() {
+            // $('.form').attr('action', baseUrl() + "transaction/manageTransaction");
+            $(".form").attr('onsubmit', 'return post();');
         }
 
         function getTotal() {
@@ -72,16 +83,20 @@
             var oldSubtotal = getSubtotal(id);
             var oldTotal = getTotal();
 
-            var price = parseInt($("input[name='price[" + id + "]']").val());
-            var qty = parseInt($("input[name='qty[" + id + "]']").val());
+            var price = parseInt(getValueFromName("price[" + id + "]"));
+            var qty = parseInt(getValueFromName("qty[" + id + "]"));
             var subtotal = price * qty;
             var newTotal = oldTotal + (subtotal - oldSubtotal);
 
             $("#subtotal" + id).text(currencyFormat(subtotal));
             setTotal(newTotal);
         }
+
+        function getValueFromName(name) {
+            return $("input[name='" + name + "']").val();
+        }
         
-        // ------ Rendering -------
+        // ------ Rendering ------ //
 
         function insertNewLineItemList() {
             var table = $('#table-list-items tbody');
@@ -106,18 +121,20 @@
         }
 
         function removeItem(id) {
-            if (id != getCountItem() - 1) {
-                // get old data
-                var subtotal = getSubtotal(id);
-                var total = getTotal();
-                
-                // remove row html
-                $("#" + id).remove();
+            if (!isLastId(id)) {
+                if (confirm('Are you sure want to delete this item?')) {
+                    // get old data
+                    var subtotal = getSubtotal(id);
+                    var total = getTotal();
+                    
+                    // remove row html
+                    $("#" + id).remove();
 
-                // set new total
-                var newTotal = total - subtotal;
-                setTotal(newTotal);
-                setCounter();
+                    // set new total
+                    var newTotal = total - subtotal;
+                    setTotal(newTotal);
+                    setCounter();
+                }
             }
         }
 
@@ -127,5 +144,64 @@
             } else {
                 $('.content-header').html('<h1>Edit <small>Transaction</small></h1>');
             }
+        }
+
+        //------- Submit -------//
+
+        function post() {
+            var transaction = getTransaction();
+            $.ajax({
+                type: "POST",
+                url: baseUrl() + 'api/insertTransactionNewFlow',
+                data: {'hello': 'world'},
+                headers: {
+                    'currentUser': '<?php echo $this->session->userdata('user')->account_key; ?>'
+                },
+                contentType: "application/json; charset=utf-8",
+                dataType: "JSON",
+                success: function(response) {
+                    console.log(response);
+                }
+            });
+            return false;
+        }
+
+        function getTransaction() {
+            var date = getValueFromName("date_tr");
+            var category = $(".select2").find(':selected').val();
+            var amount = parseInt(getValueFromName("amount"));
+            var location = getValueFromName("location");
+            var description = getValueFromName("description");
+            var tag = getValueFromName("tag");
+
+            var transaction = {
+                'date': date, 
+                'categoryId': category, 
+                'amount': amount,
+                'location': location, 
+                'description': description, 
+                'tag': tag,
+                'items': getItemsTransaction()
+            }
+            return transaction;
+        }
+
+        function getItemsTransaction() {
+            var items = [];
+            $(getTableId() + "tbody tr").each(function(index) {
+                var id = $(this).attr('id');
+                var name = getValueFromName("items[" + id + "]");
+                var price = parseInt(getValueFromName("price[" + id + "]"));
+                var qty = parseInt(getValueFromName("qty[" + id + "]"));
+                if (name != "") {
+                    var item = {
+                        'name': name,
+                        'price': price,
+                        'qty': qty
+                    };
+                    items.push(item);
+                }
+            });
+            return items;
         }
     </script>

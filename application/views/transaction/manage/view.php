@@ -4,7 +4,7 @@
 <!-- Main content -->
 <section class="content">
     <div class="row">
-        <form class="form" method="post" action="<?php echo base_url(); ?>/transaction/manageTransaction" accept-charset="utf-8">
+        <form class="form" method="post" accept-charset="utf-8">
             <div class="col-sm-12 col-md-4">
                 <div class="box box-primary">
                     <div class="box-body">

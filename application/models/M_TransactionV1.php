@@ -136,10 +136,10 @@ class M_TransactionV1 extends CI_Model {
 		if ($category_id != 0) $where .= "AND category.category_id = ".$category_id." OR category.parent_id = ".$category_id;
 
 		$query = "
-			SELECT t.*, c.*, COUNT(tl.transaction_identify) AS count_list
+			SELECT t.*, c.*, COUNT(tl.transaction_id) AS count_list
 			FROM transaction t
 			LEFT JOIN category c ON c.category_id = t.category_id
-			LEFT JOIN transaction_list tl ON tl.transaction_identify = t.transaction_identify
+			LEFT JOIN transaction_list tl ON tl.transaction_id = t.transaction_id
 			WHERE t.type = 'outcome' AND MONTH(t.transaction_date) = '$month' AND YEAR(t.transaction_date) = '$year' AND $where
 			GROUP BY t.transaction_identify
 			ORDER BY t.type DESC, t.transaction_date DESC, t.added_date DESC, c.category_id ASC
@@ -159,11 +159,11 @@ class M_TransactionV1 extends CI_Model {
 		return $this->db->query($query);
 	}
 
-	function getTransactionListItems($transactionIdentify) {
+	function getTransactionListItems($transactionId) {
 		$query = "
 			SELECT * 
 			FROM transaction_list
-			WHERE transaction_identify = '".$transactionIdentify."' AND is_deleted = 0
+			WHERE transaction_id = '".$transactionId."' AND is_deleted = 0
 		";
 		return $this->db->query($query);
 	}
