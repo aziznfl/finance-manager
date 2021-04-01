@@ -40,6 +40,11 @@
             return "#table-list-items ";
         }
 
+        function setForm() {
+            // $('.form').attr('action', baseUrl() + "transaction/manageTransaction");
+            $(".form").attr('onsubmit', 'return post();');
+        }
+
         function isLastChild(html) {
             var lastHtml = $(getTableId() + "tbody tr").last().find('input').first()[0];
             return (html == lastHtml);
@@ -60,11 +65,6 @@
             var countItem = (getCountItem() - 1);
             var counterText = "Total Item: " + countItem;
             $("#table-list-items tfoot").find('[data-tag=\"counter-text\"]').text(counterText);
-        }
-
-        function setForm() {
-            // $('.form').attr('action', baseUrl() + "transaction/manageTransaction");
-            $(".form").attr('onsubmit', 'return post();');
         }
 
         function getTotal() {
@@ -153,14 +153,15 @@
             $.ajax({
                 type: "POST",
                 url: baseUrl() + 'api/insertTransactionNewFlow',
-                data: {'hello': 'world'},
+                contentType: "application/json; charset=utf-8",
+                dataType: "JSON",
+                data: JSON.stringify(transaction),
                 headers: {
                     'currentUser': '<?php echo $this->session->userdata('user')->account_key; ?>'
                 },
-                contentType: "application/json; charset=utf-8",
-                dataType: "JSON",
                 success: function(response) {
-                    console.log(response);
+                    // console.log(response.status_text);
+                    window.location.replace(baseUrl());
                 }
             });
             return false;
@@ -178,7 +179,10 @@
                 'date': date, 
                 'categoryId': category, 
                 'amount': amount,
-                'location': location, 
+                'location': {
+                    'name': location,
+                    'coordinate': null
+                },
                 'description': description, 
                 'tag': tag,
                 'items': getItemsTransaction()

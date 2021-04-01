@@ -27,6 +27,11 @@ class MY_Controller extends CI_Controller {
 		return $result;
 	}
 
+	function getResponseFromUrl() {
+		$streamClean = $this->security->xss_clean($this->input->raw_input_stream);
+		return json_decode($streamClean);
+	}
+
 	//-------- Category ---------//
 
 	function listCategories() {

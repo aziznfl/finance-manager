@@ -84,27 +84,51 @@ class API extends MY_Controller {
 
 	//-------- Transaction ---------//
 
+	// return JSON
 	function insertTransactionNewFlow() {
-		$data['category_id'] = $this->input->post('categoryId');
-		$data['transaction_date'] = $this->input->post('date');
-		$data['amount'] = $this->input->post('amount');
-		$data['description'] = $this->input->post('description');
-		$data['tag'] = $this->input->post('tag');
-		$data['location'] = $this->input->post('location');
-		$data['coordinate'] = $this->input->post('coordinate');
-		$data['picture'] = $this->input->post('picture');
+		$response = $this->getResponseFromUrl();
+		
+		$data['category_id'] = $response->categoryId;
+		$data['transaction_date'] = $response->date;
+		$data['amount'] = $response->amount;
+		$data['description'] = $response->description;
+		$data['tag'] = $response->tag;
+		$data['location'] = $response->location->name;
+		$data['coordinate'] = $response->location->coordinate;
+		if (isset($response->picture)) {
+			$data['picture'] = $response->picture;
+		}
 
+		// get from headers
+		$data['account_key'] = $this->input->get_request_header('currentUser', true);
+
+		// set date time
 		$addedDate = $this->input->post('addedDate');
 		if ($addedDate != "" || $addedDate != null) {
 			$data['added_date'] = $addedDate;
 		}
-		
 		$timestamp = time();
 		$data["transaction_identify"] = "FMTR".$timestamp;
 
-		$data['account_key'] = $this->input->get_request_header('currentUser', true);
+		// insert transaction to database
+		$transactionId = $this->M_TransactionV1->addData("transaction", $data);
 
-		$result = array("status_code" => 300, "status_text" => $headers);
+		// set transaction list
+		if (isset($response->items)) {
+			foreach($response->items as $item) {
+				$arr["transaction_id"] = $transactionId;
+				$arr["name"] = $item->name;
+				$arr["price"] = $item->price;
+				$arr["quantity"] = $item->qty;
+
+				// insert transaction list to database
+				$this->M_TransactionV1->addData("transaction_list", $arr);
+			}
+		}
+
+		$result = array("status_code" => 300, "status_text" => "sukses");
+
+		// return JSON
 		echo json_encode($result);
 	}
 
