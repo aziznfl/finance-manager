@@ -160,8 +160,8 @@
                     'currentUser': '<?php echo $this->session->userdata('user')->account_key; ?>'
                 },
                 success: function(response) {
-                    // console.log(response.status_text);
-                    window.location.replace(baseUrl());
+                    // window.location.replace(baseUrl());
+                    window.location.href = baseUrl();
                 }
             });
             return false;
