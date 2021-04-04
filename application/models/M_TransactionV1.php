@@ -25,6 +25,16 @@ class M_TransactionV1 extends CI_Model {
 		return $this->db->get('category_investment');
 	}
 
+	function checkHeaders($accountKey) {
+		if (isset($accountKey)) {
+			$query = "SELECT COUNT('account_id') as count FROM account WHERE account_key = '$accountKey'";
+			$response = $this->db->query($query)->result();
+			return (count($response) == 1);
+		} else {
+			return false;
+		}
+	}
+
 	//-------- Global --------//
 
 	function addData($table, $data) {
@@ -143,6 +153,26 @@ class M_TransactionV1 extends CI_Model {
 			WHERE t.type = 'outcome' AND MONTH(t.transaction_date) = '$month' AND YEAR(t.transaction_date) = '$year' AND $where
 			GROUP BY t.transaction_identify
 			ORDER BY t.type DESC, t.transaction_date DESC, t.added_date DESC, c.category_id ASC
+		";
+		return $this->db->query($query);
+	}
+
+	function getTransactionById($transactionIdentify, $accountKey) {
+		$where = $this->getWhereTransaction($accountKey);
+		$query = "
+			SELECT *
+			FROM transaction t
+			WHERE t.transaction_identify = '". $transactionIdentify ."' and ". $where ."
+		";
+		return $this->db->query($query);
+	}
+
+	function getListItemTransactionById($transactionId, $accountKey) {
+		$where = $this->getWhereTransaction($accountKey);
+		$query = "
+			SELECT *
+			FROM transaction_list tl
+			WHERE tl.transaction_id = ". $transactionId ."
 		";
 		return $this->db->query($query);
 	}

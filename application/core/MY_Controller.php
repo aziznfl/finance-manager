@@ -17,6 +17,14 @@ class MY_Controller extends CI_Controller {
 		$GLOBALS['menus'] = $this->CoreModel->getMenus();
 	}
 
+	function getBoolean($value) {
+		if ($value == "0") {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
 	function loginUser($email) {
 		$user = $this->M_User->login($email)->result();
 		return $user;
@@ -27,9 +35,27 @@ class MY_Controller extends CI_Controller {
 		return $result;
 	}
 
-	function getResponseFromUrl() {
+	function getResponseUrl() {
 		$streamClean = $this->security->xss_clean($this->input->raw_input_stream);
 		return json_decode($streamClean);
+	}
+
+	function getHeaderFromUrl($headerName) {
+		return $this->input->get_request_header($headerName, true);
+	}
+
+	function getResponseFromUrl($url) {
+		$opts = [
+			"http" => [
+				"method" => "GET",
+				"header" => 
+					"Accept-language: en\r\n" .
+					"Cookie: foo=bar\r\n".
+					"currentUser: ". $this->session->userdata('user')->account_key ."\r\n"
+			]
+		];
+		$context = stream_context_create($opts);
+		return json_decode(file_get_contents($url, false, $context), true);
 	}
 
 	//-------- Category ---------//

@@ -103,15 +103,19 @@ class Transaction extends MY_Controller {
 	}
 
 	function manage() {
-		$transactionId = $this->input->get("transactionId");
-		
 		$result['categories'] = $this->listCategories();
+
+		$transactionId = $this->input->get("transactionId");
+		// $url = base_url('exclusive/getTransactionFromIdentify/' . $transactionId);
+		// $data = $this->getResponseFromUrl($url);
 
 		$result["add_footer"] = "
 			<script>
 				$(function() {
-					setTitle(".$transactionId.");
+					setTitle('".$transactionId."');
 					insertNewLineItemList();
+					unbindScript();
+					getTransactionFromId('".$transactionId."');
 				});
 			</script>
 		";
@@ -131,6 +135,7 @@ class Transaction extends MY_Controller {
 		$this->load->view('root/_menus');
 		$this->load->view('transaction/recurring');
 		$this->load->view('root/_footer');
+		$this->load->view('root/_end');
 	}
 
     /*------------ /.MAIN ------------*/

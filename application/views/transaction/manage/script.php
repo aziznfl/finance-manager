@@ -3,6 +3,8 @@
         setTotal(0);
         setForm();
 
+        // Function
+
         function unbindScript() {
             $(document).unbind('change').ready(function() {
                 setCounter();
@@ -53,6 +55,24 @@
         function isLastId(id) {
             var lastId = $(getTableId() + "tbody tr").last().attr('id');
             return (lastId == id);
+        }
+
+        function getTransactionFromId(transactionId) {
+            if (transactionId) {
+                $.ajax({
+                    type: "GET",
+                    url: baseUrl() + 'exclusive/getTransactionFromIdentify',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "JSON",
+                    data: {'transactionIdentify': transactionId},
+                    headers: {
+                        'currentUser': '<?php echo $this->session->userdata('user')->account_key; ?>'
+                    },
+                    success: function(response) {
+                        console.log(response);
+                    }
+                });
+            }
         }
 
         //------- Calculate --------//
@@ -139,7 +159,7 @@
         }
 
         function setTitle(transactionId) {
-            if (transactionId == null) {
+            if (!transactionId) {
                 $('.content-header').html('<h1>Add <small>Transaction</small></h1>');
             } else {
                 $('.content-header').html('<h1>Edit <small>Transaction</small></h1>');
@@ -149,18 +169,16 @@
         //------- Submit -------//
 
         function post() {
-            var transaction = getTransaction();
             $.ajax({
                 type: "POST",
-                url: baseUrl() + 'api/insertTransactionNewFlow',
+                url: baseUrl() + 'exclusive/insertTransactionNewFlow',
                 contentType: "application/json; charset=utf-8",
                 dataType: "JSON",
-                data: JSON.stringify(transaction),
+                data: JSON.stringify(getTransaction()),
                 headers: {
                     'currentUser': '<?php echo $this->session->userdata('user')->account_key; ?>'
                 },
                 success: function(response) {
-                    // window.location.replace(baseUrl());
                     window.location.href = baseUrl();
                 }
             });

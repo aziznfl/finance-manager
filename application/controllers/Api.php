@@ -69,68 +69,7 @@ class API extends MY_Controller {
 		echo json_encode(Array("data" => $result));
 	}
 
-	function addCategory() {
-		$arr["category_name"] = $this->input->post('name');
-		$arr["parent_id"] = $this->input->post('parent');
-		$arr["position"] = 0;
-
-		if ($category_id != "") {
-			$where = "category_id = ".$this->input->post('category_id');
-			$this->updateCategory($arr, $where);
-		} else {
-			$this->addNewCategory($arr);
-		}
-	}
-
 	//-------- Transaction ---------//
-
-	// return JSON
-	function insertTransactionNewFlow() {
-		$response = $this->getResponseFromUrl();
-		
-		$data['category_id'] = $response->categoryId;
-		$data['transaction_date'] = $response->date;
-		$data['amount'] = $response->amount;
-		$data['description'] = $response->description;
-		$data['tag'] = $response->tag;
-		$data['location'] = $response->location->name;
-		$data['coordinate'] = $response->location->coordinate;
-		if (isset($response->picture)) {
-			$data['picture'] = $response->picture;
-		}
-
-		// get from headers
-		$data['account_key'] = $this->input->get_request_header('currentUser', true);
-
-		// set date time
-		$addedDate = $this->input->post('addedDate');
-		if ($addedDate != "" || $addedDate != null) {
-			$data['added_date'] = $addedDate;
-		}
-		$timestamp = time();
-		$data["transaction_identify"] = "FMTR".$timestamp;
-
-		// insert transaction to database
-		$transactionId = $this->M_TransactionV1->addData("transaction", $data);
-
-		// set transaction list
-		if (isset($response->items)) {
-			foreach($response->items as $item) {
-				$arr["transaction_id"] = $transactionId;
-				$arr["name"] = $item->name;
-				$arr["price"] = $item->price;
-				$arr["quantity"] = $item->qty;
-
-				// insert transaction list to database
-				$this->M_TransactionV1->addData("transaction_list", $arr);
-			}
-		}
-
-		$result = array("status_code" => 300, "status_text" => "sukses");
-
-		// return JSON
-		echo json_encode($result);
-	}
 
 	function insertTransaction() {
 		$data['category_id'] = $this->input->post('categoryId');
