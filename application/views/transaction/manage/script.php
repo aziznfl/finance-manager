@@ -110,7 +110,7 @@
             return "<tr id='" + count + "'>" +
                 "<td><input name='items[" + count + "]' class='form-control addItems' placeholder='Item'></td>" +
                 "<td><input name='price[" + count + "]' class='form-control text-right counter' type='number' value='0'></td>" +
-                "<td><input name='qty[" + count + "]' class='form-control text-right counter' type='number' value='0'></td>" +
+                "<td><input name='qty[" + count + "]' class='form-control text-right counter' type='number' value='1'></td>" +
                 "<td id='subtotal" + count + "' class='text-right text-center-vertical'>0</td>" +
                 "<td class='text-center text-center-vertical'>" +
                     "<a href='javascript:void(0)' onclick='removeItem(" + count + ")'>" +
