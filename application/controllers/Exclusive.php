@@ -47,7 +47,7 @@ class Exclusive extends MY_Controller {
 			$status .= "add";
 			$timestamp = time();
 			$data["transaction_identify"] = "FMTR".$timestamp;
-			// $transactionId = $this->M_TransactionV1->addData("transaction", $data);
+			$transactionId = $this->M_TransactionV1->addData("transaction", $data);
 		} else {
 			$status .= "update";
 			// update transaction to database
