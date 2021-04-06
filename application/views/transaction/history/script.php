@@ -191,7 +191,7 @@
             return text;
         }
 
-        <!------ MODAL ----->
+        //------ MODAL -----//
         function showDetailItemsTransaction(row) {
             $('#modal-transaction-detail').modal('show');
 
@@ -249,5 +249,5 @@
                 "<th class='text-right'>" + currencyFormat(total) + "</th>" +
             "</tfoot>";
         }
-        <!------ END OF MODAL ----->
+        //------ END OF MODAL -----//
     </script>

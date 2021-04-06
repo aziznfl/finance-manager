@@ -209,6 +209,7 @@
                         'currentUser': '<?php echo $this->session->userdata('user')->account_key; ?>'
                     },
                     success: function(response) {
+                        // console.log(response);
                         window.location.href = baseUrl();
                     },
                     failed: function() {
