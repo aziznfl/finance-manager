@@ -31,7 +31,7 @@
                         // counter total items
                         if ($(this).hasClass('counter')) {
                             var id = findId(this);
-                            setSubTotal(id);
+                            setSubtotal(id);
                         }
                     }
                 );
@@ -43,7 +43,6 @@
         }
 
         function setForm() {
-            // $('.form').attr('action', baseUrl() + "transaction/manageTransaction");
             $(".form").attr('onsubmit', 'return post();');
         }
 
@@ -61,7 +60,7 @@
             if (transactionId) {
                 $.ajax({
                     type: "GET",
-                    url: baseUrl() + 'exclusive/getTransactionFromIdentify',
+                    url: baseUrl() + 'exclusive/fetchTransactionFromIdentify',
                     contentType: "application/json; charset=utf-8",
                     dataType: "JSON",
                     data: {'transactionIdentify': transactionId},
@@ -69,10 +68,34 @@
                         'currentUser': '<?php echo $this->session->userdata('user')->account_key; ?>'
                     },
                     success: function(response) {
-                        console.log(response);
+                        setFormTransaction(response.data);
                     }
                 });
             }
+        }
+
+        function setFormTransaction(data) {
+            setValueFromName("transactionId", data.transactionId);
+            setValueFromName("date", data.transactionDate);
+            setValueFromSelect2(data.categoryId);
+            setValueFromName("amount", data.amount);
+            setValueFromName("location", data.location.name);
+            setValueFromName("description", data.description);
+            setValueFromName("tag", data.tag);
+
+            // set child
+            data.child.forEach(setFormTransactionList);
+        }
+
+        var counterItem = 0;
+        function setFormTransactionList(child) {
+            setValueFromName("itemId[" + counterItem + "]", child.itemId)
+            setValueFromName("items["+ counterItem +"]", child.item);
+            setValueFromName("price["+ counterItem +"]", child.price);
+            setValueFromName("qty["+ counterItem +"]", child.qty);
+            setSubtotal(counterItem);
+            insertNewLineItemList();
+            counterItem++;
         }
 
         //------- Calculate --------//
@@ -87,19 +110,11 @@
             $("#table-list-items tfoot").find('[data-tag=\"counter-text\"]').text(counterText);
         }
 
-        function getTotal() {
-            return getNumberFromCurrency($("#table-list-items tfoot").find('[data-tag=\"total-text\"]').text());
-        }
-
-        function setTotal(total) {
-            $("#table-list-items tfoot").find('[data-tag=\"total-text\"]').text(currencyFormat(total));
-        }
-
         function getSubtotal(id) {
             return getNumberFromCurrency($("#subtotal" + id).text());
         }
 
-        function setSubTotal(id) {
+        function setSubtotal(id) {
             var oldSubtotal = getSubtotal(id);
             var oldTotal = getTotal();
 
@@ -111,11 +126,15 @@
             $("#subtotal" + id).text(currencyFormat(subtotal));
             setTotal(newTotal);
         }
-
-        function getValueFromName(name) {
-            return $("input[name='" + name + "']").val();
-        }
         
+        function getTotal() {
+            return getNumberFromCurrency($("#table-list-items tfoot").find('[data-tag=\"total-text\"]').text());
+        }
+
+        function setTotal(total) {
+            $("#table-list-items tfoot").find('[data-tag=\"total-text\"]').text(currencyFormat(total));
+        }
+
         // ------ Rendering ------ //
 
         function insertNewLineItemList() {
@@ -137,6 +156,7 @@
                         "<span class='fa fa-remove text-red'></span>" +
                     "</a>" +
                 "</td>" +
+                "<td class='hide'><input type='number' name='itemId[" + count + "]'></td>" +
             "</td>";
         }
 
@@ -169,31 +189,49 @@
         //------- Submit -------//
 
         function post() {
-            $.ajax({
-                type: "POST",
-                url: baseUrl() + 'exclusive/insertTransactionNewFlow',
-                contentType: "application/json; charset=utf-8",
-                dataType: "JSON",
-                data: JSON.stringify(getTransaction()),
-                headers: {
-                    'currentUser': '<?php echo $this->session->userdata('user')->account_key; ?>'
-                },
-                success: function(response) {
-                    window.location.href = baseUrl();
-                }
-            });
+            $(".form button").attr("disabled", "disabled");
+            var successChecking = false;
+            var transaction = getTransaction();
+
+            // check category
+            if (!isNaN(transaction.categoryId)) {
+                successChecking = true;
+            }
+
+            if (successChecking) {
+                $.ajax({
+                    type: "POST",
+                    url: baseUrl() + 'exclusive/manageTransactionNewFlow',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "JSON",
+                    data: JSON.stringify(transaction),
+                    headers: {
+                        'currentUser': '<?php echo $this->session->userdata('user')->account_key; ?>'
+                    },
+                    success: function(response) {
+                        window.location.href = baseUrl();
+                    },
+                    failed: function() {
+                        $(".form button").removeAttr("disabled");
+                    }
+                });
+            } else {
+                $(".form button").removeAttr("disabled");
+            }
             return false;
         }
 
         function getTransaction() {
-            var date = getValueFromName("date_tr");
-            var category = $(".select2").find(':selected').val();
+            var transactionId = nulledIsEmpty(getValueFromName("transactionId"));
+            var date = getValueFromName("date");
+            var category = parseInt($(".select2").find(':selected').val());
             var amount = parseInt(getValueFromName("amount"));
-            var location = getValueFromName("location");
-            var description = getValueFromName("description");
-            var tag = getValueFromName("tag");
+            var location = nulledIsEmpty(getValueFromName("location"));
+            var description = nulledIsEmpty(getValueFromName("description"));
+            var tag = nulledIsEmpty(getValueFromName("tag"));
 
             var transaction = {
+                'transactionId': transactionId,
                 'date': date, 
                 'categoryId': category, 
                 'amount': amount,
@@ -212,11 +250,13 @@
             var items = [];
             $(getTableId() + "tbody tr").each(function(index) {
                 var id = $(this).attr('id');
+                var itemId = parseInt(getValueFromName("itemId[" + id + "]"));
                 var name = getValueFromName("items[" + id + "]");
                 var price = parseInt(getValueFromName("price[" + id + "]"));
                 var qty = parseInt(getValueFromName("qty[" + id + "]"));
                 if (name != "") {
                     var item = {
+                        'itemId': itemId,
                         'name': name,
                         'price': price,
                         'qty': qty

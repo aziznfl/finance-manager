@@ -8,11 +8,12 @@
             <div class="col-sm-12 col-md-4">
                 <div class="box box-primary">
                     <div class="box-body">
+                        <input type="text" name="transactionId" class="hidden" value="asd">
                         <div class="form-group">
                             <label>Date *</label>
                             <div class="input-group">
                                 <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
-                                <input type="text" name="date_tr" value="<?php echo date('Y-m-d H:i:s'); ?>" class="form-control datetimepicker" placeholder="Now">
+                                <input type="text" name="date" value="<?php echo date('Y-m-d H:i:s'); ?>" class="form-control datetimepicker" placeholder="Now">
                             </div>
                         </div>
                         <div class="form-group">
@@ -52,7 +53,7 @@
                             <label>Tag</label>
                             <input type="text" name="tag" value="" class="form-control" placeholder="Tag">
                         </div>
-                        <div class="form-group no-margin" style="padding-top: 8px">
+                        <div class="form-group no-margin hide" style="padding-top: 8px">
                             <button class="btn btn-primary btn-flat btn-block"><span class="fa fa-plus"></span>&nbsp;&nbsp;Save Transaction</button>
                         </div>
                     </div>
@@ -83,6 +84,7 @@
                         </table>
                     </div>
                 </div>
+                <button class="btn btn-primary btn-flat btn-block"><span class="fa fa-plus"></span>&nbsp;&nbsp;Save Transaction</button>
             </div>
         </form>
     </div>

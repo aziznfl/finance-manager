@@ -103,12 +103,9 @@ class Transaction extends MY_Controller {
 	}
 
 	function manage() {
-		$result['categories'] = $this->listCategories();
-
 		$transactionId = $this->input->get("transactionId");
-		// $url = base_url('exclusive/getTransactionFromIdentify/' . $transactionId);
-		// $data = $this->getResponseFromUrl($url);
 
+		$result['categories'] = $this->listCategories();
 		$result["add_footer"] = "
 			<script>
 				$(function() {
@@ -141,7 +138,7 @@ class Transaction extends MY_Controller {
     /*------------ /.MAIN ------------*/
 
 	function manageTransaction() {
-		if ($this->input->post('date_tr') != "") $arr["transaction_date"] = $this->input->post('date_tr');
+		if ($this->input->post('date') != "") $arr["transaction_date"] = $this->input->post('date');
 		$arr["amount"] = $this->input->post('amount');
 		$arr["category_id"] = $this->input->post('category');
 		if ($this->input->post('description') != "") $arr["description"] = $this->input->post('description');

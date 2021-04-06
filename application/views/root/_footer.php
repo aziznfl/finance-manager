@@ -88,7 +88,6 @@
           // update
         },
         start: function(event, ui) {
-          console.log('sort');
           if (ui.helper.hasClass('second-level')) {
             ui.placeholder.removeClass('placeholder');
             ui.placeholder.addClass('placeholder-sub');
@@ -147,12 +146,33 @@
       return $(data).closest('tr').attr('id');
     }
 
+    function nulledIsEmpty(value) {
+      if (value == "") {
+        return null;
+      } else {
+        return value;
+      }
+    }
+
     function currencyFormat(number) {
       return number.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,').split('.')[0];
     }
 
     function getNumberFromCurrency(string) {
       return parseInt(string.split(",").join(""));
+    }
+
+    function getValueFromName(name) {
+      return $("input[name='" + name + "']").val();
+    }
+
+    function setValueFromName(name, value) {
+      $("input[name='" + name + "']").val(value);
+    }
+
+    function setValueFromSelect2(value) {
+      $(".select2").val(value);
+      $(".select2").trigger("change");
     }
   </script>
   <!-- add script of each module -->

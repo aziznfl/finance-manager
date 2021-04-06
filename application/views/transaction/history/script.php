@@ -80,7 +80,6 @@
 
         function renderMonthTransaction() {
             var link = baseUrl() + 'api/getMonthTransaction?' + params + '&category_id=' + categoryId;
-            console.log(link);
             tableMonthTrans = $('#datatable-month-transaction').DataTable({
                 'ajax': {
                     'url': link,

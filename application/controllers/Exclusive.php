@@ -17,7 +17,7 @@ class Exclusive extends MY_Controller {
 	//-------- Transaction ---------//
 
 	// return JSON
-	function insertTransactionNewFlow() {
+	function manageTransactionNewFlow() {
 		$response = $this->getResponseUrl();
 		
 		$data['category_id'] = $response->categoryId;
@@ -39,44 +39,58 @@ class Exclusive extends MY_Controller {
 		if ($addedDate != "" || $addedDate != null) {
 			$data['added_date'] = $addedDate;
 		}
-		$timestamp = time();
-		$data["transaction_identify"] = "FMTR".$timestamp;
 
-		// insert transaction to database
-		$transactionId = $this->M_TransactionV1->addData("transaction", $data);
+		$status = "";
+		$transactionId = $response->transactionId;
+		if ($transactionId == null) {
+			// insert transaction to database
+			$status .= "add";
+			$timestamp = time();
+			$data["transaction_identify"] = "FMTR".$timestamp;
+			// $transactionId = $this->M_TransactionV1->addData("transaction", $data);
+		} else {
+			$status .= "update";
+			// update transaction to database
+			$this->M_TransactionV1->updateData("transaction", $data, 'transaction_id = "'.$transactionId.'"');
+		}
 
 		// set transaction list
 		if (isset($response->items)) {
 			foreach($response->items as $item) {
-				$arr["transaction_id"] = $transactionId;
 				$arr["name"] = $item->name;
 				$arr["price"] = $item->price;
 				$arr["quantity"] = $item->qty;
 
 				// insert transaction list to database
-				$this->M_TransactionV1->addData("transaction_list", $arr);
+				$itemId = $item->itemId;
+				if ($itemId == null) {
+					$arr["transaction_id"] = $transactionId;
+					$this->M_TransactionV1->addData("transaction_list", $arr);
+				} else {
+					$this->M_TransactionV1->updateData("transaction_list", $arr, "transaction_list_id = ". $itemId);
+				}
 			}
 		}
 
-		$result = array("status_code" => 300, "status_text" => "sukses");
+		$result = array("statusCode" => $response, "statusText" => $status);
 
 		// return JSON
 		echo json_encode($result);
 	}
 
 	// return JSON
-	function getTransactionFromIdentify() {
+	function fetchTransactionFromIdentify() {
 		$transactionIdentify = $this->input->get('transactionIdentify');
 		$accountKey = $this->getHeaderFromUrl('currentUser');
 		$data = $this->M_TransactionV1->getTransactionById($transactionIdentify, $accountKey)->row();
 		
 		// get transaction
-		$response['transactionDate'] = $data->transaction_date;
-		$response['transactionId'] = $data->transaction_id;
+		$response['transactionId'] = (int)$data->transaction_id;
 		$response['transactionIdentify'] = $data->transaction_identify;
+		$response['transactionDate'] = $data->transaction_date;
 		$response['addedDate'] = $data->added_date;
-		$response['categoryId'] = $data->category_id;
-		$response['amount'] = $data->amount;
+		$response['categoryId'] = (int)$data->category_id;
+		$response['amount'] = (int)$data->amount;
 		$response['type'] = $data->type;
 		$response['description'] = $data->description;
 		$response['location']['name'] = $data->location;
@@ -88,7 +102,7 @@ class Exclusive extends MY_Controller {
 		// get list item transaction
 		$childDatas = $this->M_TransactionV1->getListItemTransactionById($data->transaction_id, $accountKey)->result();
 		foreach ($childDatas as $childData) {
-			$child['id'] = $childData->transaction_list_id;
+			$child['itemId'] = $childData->transaction_list_id;
 			$child['item'] = $childData->name;
 			$child['price'] = $childData->price;
 			$child['qty'] = $childData->quantity;
