@@ -111,87 +111,6 @@ class API extends MY_Controller {
 		echo json_encode(Array("data" => $result));
 	}
 
-	function getTransaction($transaction_id) {
-		$result = $this->transaction($transaction_id);
-		$result["amount"] = (int)$result["amount"];
-		echo json_encode($result);
-	}
-
-	function getTopTransaction() {
-		$month = $this->input->get('month');
-   		$year = $this->input->get('year');
-   		$accountKey = $this->input->get('accountKey');
-
-		$result = $this->M_TransactionV1->getTopTransaction($month, $year, $accountKey)->result_array();
-		$all = array("data" => array(), "total" => 0);
-		foreach ($result as $transaction) {
-			$transaction["category_id"] = (int)$transaction["category_id"];
-			$transaction["category_name"] = ucwords($transaction["category_name"]);
-			$transaction["total"] = (int)$transaction["total"];
-			$transaction["total_text"] = number_format($transaction["total"]);
-			$transaction["percentage"] = number_format($transaction["percentage"], 2)."%";
-			array_push($all["data"], $transaction);
-			$all["total"] += $transaction["total"];
-		}
-
-		$all["total_text"] = number_format($all["total"]);
-		echo json_encode($all);
-	}
-
-	function getMonthTransaction() {
-		$month = $this->input->get('month');
-   		$year = $this->input->get('year');
-   		$accountKey = $this->input->get('accountKey');
-   		$category_id = $this->input->get('category_id');
-   		if (!isset($category_id)) $category_id = 0;
-		
-		$result = $this->M_TransactionV1->getMonthTransaction($month, $year, $category_id, $accountKey)->result_array();
-		$all = array();
-		foreach ($result as $transaction) {
-			$response["transactionId"] = (int)$transaction["transaction_id"];
-			$response["transactionIdentify"] = $transaction["transaction_identify"];
-			$response["transactionDate"] = $transaction["transaction_date"];
-			$response["addedDate"] = $transaction["added_date"];
-			$response["description"] = $transaction["description"];
-			$response["tag"] = $transaction["tag"];
-			$response["type"] = $transaction["type"];
-			$response["place"]["name"] = $transaction["location"];
-			$response["place"]["coordinate"] = $transaction["coordinate"];
-			$response["picture"] = $transaction["picture"];
-			$response["total"]["value"] = (int)$transaction["amount"];
-			$response["total"]["text"] = number_format($transaction["amount"]);
-			$response["category"]["id"] = (int)$transaction["category_id"];
-			$response["category"]["name"] = ucwords($transaction["category_name"]);
-			$response["category"]["icon"] = $transaction["icon"];
-			$response["category"]["parentId"] = $transaction["parent_id"];
-			$response["isDeleted"] = $transaction["is_deleted"];
-			$response["item"]["count"] = (int)$transaction["count_list"];
-			$response["item"]["list"] = array();
-
-			// get transaction list
-			$resultLists = $this->M_TransactionV1->getTransactionListItems($transaction["transaction_id"])->result_array();
-			$total = 0;
-			foreach ($resultLists as $resultList) {
-				$item["name"] = $resultList["name"];
-				$item["price"]["value"] = (int)$resultList["price"];
-				$item["price"]["text"] = number_format($resultList["price"]);
-				$item["qty"] = $resultList["quantity"];
-				$item["total"]["value"] = (int)$resultList["quantity"] * $resultList["price"];
-				$item["total"]["text"] = number_format($resultList["quantity"] * $resultList["price"]);
-				$item["isDeleted"] = $resultList["is_deleted"];
-
-				$total += $item["total"]["value"];
-				array_push($response["item"]["list"], $item);
-			}
-			$response["item"]["total"]["value"] = (int)$total;
-			$response["item"]["total"]["text"] = number_format($total);
-
-			array_push($all, $response);
-		}
-
-		echo json_encode(array("data" => $all));
-	}
-
 	function getTotalPerMonthTransaction() {
 		$result = $this->M_TransactionV1->getTotalPerMonthTransaction($this->getAccountKey())->result();
 		echo json_encode(Array("data" => $result));
@@ -250,7 +169,7 @@ class API extends MY_Controller {
 	//-------- Investment --------//
 
 	function getInvestmentList() {
-		$accountKey = $this->input->get('accountKey');
+		$accountKey = $this->getHeaderFromUrl('currentUser');
 		$result = $this->M_TransactionV1->getInvestment($accountKey)->result_array();
 		$portfolios = array();
 		foreach ($result as $portfolio) {

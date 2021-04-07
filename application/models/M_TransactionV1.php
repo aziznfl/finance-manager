@@ -7,10 +7,7 @@ class M_TransactionV1 extends CI_Model {
 		parent::__construct();
 	}
 
-	function getWhereTransaction($accountKey = null) {
-		if ($accountKey == null) {
-			$accountKey = $this->session->userdata('user')->account_key;
-		}
+	function getWhereTransaction($accountKey) {
 		return "(account_key = '".$accountKey."')";
 	}
 
@@ -78,7 +75,7 @@ class M_TransactionV1 extends CI_Model {
 
 	//-------- Transaction ---------//
 
-	function getTotalPerMonthTransaction($accountKey = null) {
+	function getTotalPerMonthTransaction($accountKey) {
 		$query = "
 			SELECT EXTRACT(YEAR FROM transaction_date) AS year, EXTRACT(MONTH FROM transaction_date) AS month, SUM(amount) AS total_monthly, COUNT(transaction_id) as count_monthly
 			FROM transaction
@@ -226,7 +223,7 @@ class M_TransactionV1 extends CI_Model {
 			        IF (type = 'debts' OR type = 'transfer_from', -amount, amount)
 			    ) AS balance
 			    FROM debts
-			    WHERE ".$this->getWhereTransaction()."
+			    WHERE ".$this->getWhereTransaction($this->session->userdata('user')->account_key)."
 			    GROUP BY to_who
 			    ORDER BY transaction_date ASC
 			) AS debts_view
@@ -238,7 +235,7 @@ class M_TransactionV1 extends CI_Model {
 	function getDebtsList() {
 		$query = "
 			SELECT * FROM `debts`
-			WHERE ".$this->getWhereTransaction()."
+			WHERE ".$this->getWhereTransaction($this->session->userdata('user')->account_key)."
 			ORDER BY transaction_date DESC
 		";
 		return $this->db->query($query);

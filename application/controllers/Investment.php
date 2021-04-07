@@ -28,9 +28,15 @@ class Investment extends MY_Controller {
 	public function portfolio() {
 		$result["add_footer"] = "
 			<script>
+            	var link = baseUrl() + 'api/getInvestmentList';
 				$(function() {
 					var table = $('#transaction_table').DataTable({
-						'ajax': '".base_url('api/getInvestmentList')."',
+						'ajax': {
+							'url': link,
+							'headers': {
+								'currentUser': '". $this->session->userdata('user')->account_key ."'
+							}
+						},
 						'columns': [
 							{'data': null, 'className': 'text-center', 'orderable': false, 'searching': false},
 							{'data': 'date', 'className': 'text-center'},

@@ -26,7 +26,8 @@ class Transaction extends MY_Controller {
 		$result["year"] = $year;
 		$result["month"] = $month;
 
-		$result["total_month_transaction"] = $this->M_TransactionV1->getTotalPerMonthTransaction();
+		$accountKey = $this->session->userdata('user')->account_key;
+		$result["total_month_transaction"] = $this->M_TransactionV1->getTotalPerMonthTransaction($accountKey);
 		$result["list_categories"] = $this->listCategories();
 
 		$result["add_footer"] = "
@@ -112,7 +113,10 @@ class Transaction extends MY_Controller {
 					setTitle('".$transactionId."');
 					insertNewLineItemList();
 					unbindScript();
-					getTransactionFromId('".$transactionId."');
+
+					// fetch data
+					fetchCategory();
+					fetchTransactionFromId('".$transactionId."');
 				});
 			</script>
 		";

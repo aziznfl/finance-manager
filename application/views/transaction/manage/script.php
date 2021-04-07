@@ -56,24 +56,6 @@
             return (lastId == id);
         }
 
-        function getTransactionFromId(transactionId) {
-            if (transactionId) {
-                $.ajax({
-                    type: "GET",
-                    url: baseUrl() + 'exclusive/fetchTransactionFromIdentify',
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "JSON",
-                    data: {'transactionIdentify': transactionId},
-                    headers: {
-                        'currentUser': '<?php echo $this->session->userdata('user')->account_key; ?>'
-                    },
-                    success: function(response) {
-                        setFormTransaction(response.data);
-                    }
-                });
-            }
-        }
-
         function setFormTransaction(data) {
             setValueFromName("transactionId", data.transactionId);
             setValueFromName("date", data.transactionDate);
@@ -183,6 +165,41 @@
                 $('.content-header').html('<h1>Add <small>Transaction</small></h1>');
             } else {
                 $('.content-header').html('<h1>Edit <small>Transaction</small></h1>');
+            }
+        }
+
+        //------- Fetch -------//
+
+        function fetchCategory() {
+            $.ajax({
+                type: "GET",
+                url: baseUrl() + 'exclusive/fetchCategories',
+                contentType: "application/json; charset=utf-8",
+                dataType: "JSON",
+                headers: {
+                    'currentUser': '<?php echo $this->session->userdata('user')->account_key; ?>'
+                },
+                success: function(response) {
+                    console.log(response);
+                }
+            })
+        }
+
+        function fetchTransactionFromId(transactionId) {
+            if (transactionId) {
+                $.ajax({
+                    type: "GET",
+                    url: baseUrl() + 'exclusive/fetchTransactionFromIdentify',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "JSON",
+                    data: {'transactionIdentify': transactionId},
+                    headers: {
+                        'currentUser': '<?php echo $this->session->userdata('user')->account_key; ?>'
+                    },
+                    success: function(response) {
+                        setFormTransaction(response.data);
+                    }
+                });
             }
         }
 

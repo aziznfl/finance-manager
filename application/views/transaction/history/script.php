@@ -18,7 +18,7 @@
             window.history.pushState('object or string', 'Title', baseUrl() + 'transaction/history?' + params);
 
             renderMonthTransaction();
-            renderTopTransaction();
+            renderMonthSummaryTransaction();
 
             // set position of month balance
             var index = $.map(list, function(item, i) {
@@ -43,8 +43,8 @@
             tableMonthTrans.draw();
         }
 
-        function renderTopTransaction() {
-            var link = baseUrl() + 'api/getTopTransaction?' + params;
+        function renderMonthSummaryTransaction() {
+            var link = baseUrl() + 'exclusive/fetchMonthSummaryTransaction?' + params;
             tableTopTrans = $('#datatable-top-transaction').DataTable({
                 'ordering': false,
                 'searching': false,
@@ -55,6 +55,9 @@
                     'dataSrc': function(json) {
                         $('#top-floating-amount-table').html(json.total_text);
                         return json.data;
+                    },
+                    'headers': {
+                        'currentUser': '<?php echo $this->session->userdata('user')->account_key; ?>'
                     }
                 },
                 'columns': [
@@ -79,7 +82,7 @@
         }
 
         function renderMonthTransaction() {
-            var link = baseUrl() + 'api/getMonthTransaction?' + params + '&category_id=' + categoryId;
+            var link = baseUrl() + 'exclusive/fetchMonthTransaction?' + params + '&category_id=' + categoryId;
             tableMonthTrans = $('#datatable-month-transaction').DataTable({
                 'ajax': {
                     'url': link,
