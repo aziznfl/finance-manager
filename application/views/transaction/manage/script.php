@@ -46,13 +46,21 @@
             $(".form").attr('onsubmit', 'return post();');
         }
 
+        function getLastIdItem() {
+            var id = $(getTableId() + "tbody tr").last().attr('id');
+            if (typeof id == 'undefined') {
+                return -1;
+            }
+            return parseInt(id);
+        }
+
         function isLastChild(html) {
             var lastHtml = $(getTableId() + "tbody tr").last().find('input').first()[0];
             return (html == lastHtml);
         }
 
         function isLastId(id) {
-            var lastId = $(getTableId() + "tbody tr").last().attr('id');
+            var lastId = getLastIdItem();
             return (lastId == id);
         }
 
@@ -126,8 +134,7 @@
         }
 
         function renderNewLineItemList() {
-            var tr = $('#table-list-items tbody tr');
-            var count = tr.length;
+            var count = getLastIdItem() + 1;
             return "<tr id='" + count + "'>" +
                 "<td><input name='items[" + count + "]' class='form-control addItems' placeholder='Item'></td>" +
                 "<td><input name='price[" + count + "]' class='form-control text-right counter' type='number' value='0'></td>" +

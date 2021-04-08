@@ -33,6 +33,9 @@ class Exclusive extends MY_Controller {
 	// return JSON
 	function manageTransactionNewFlow() {
 		$response = $this->getResponseUrl();
+		$isUpdateTransaction = false;
+		$oldListIdTransaction = array();
+		$updatedListIdTransaction = array();
 		
 		$data['category_id'] = $response->categoryId;
 		$data['transaction_date'] = $response->date;
@@ -63,9 +66,17 @@ class Exclusive extends MY_Controller {
 			$data["transaction_identify"] = "FMTR".$timestamp;
 			$transactionId = $this->M_TransactionV1->addData("transaction", $data);
 		} else {
-			$status .= "update";
 			// update transaction to database
+			$status .= "update";
+			$isUpdateTransaction = true;
 			$this->M_TransactionV1->updateData("transaction", $data, 'transaction_id = "'.$transactionId.'"');
+		}
+
+		// get old transaction if status transaction is update
+		if ($isUpdateTransaction) {
+			foreach ($this->M_TransactionV1->getTransactionListItems($transactionId)->result() as $item) {
+				array_push($oldListIdTransaction, $item->transaction_list_id);
+			}
 		}
 
 		// set transaction list
@@ -82,7 +93,15 @@ class Exclusive extends MY_Controller {
 					$this->M_TransactionV1->addData("transaction_list", $arr);
 				} else {
 					$this->M_TransactionV1->updateData("transaction_list", $arr, "transaction_list_id = ". $itemId);
+
+					// append id updated list to ignored from deleted
+					array_push($updatedListIdTransaction, $item->itemId);
 				}
+			}
+
+			// remove deleted item
+			foreach (array_diff($oldListIdTransaction, $updatedListIdTransaction) as $removedItemId) {
+				$this->M_TransactionV1->deleteData("transaction_list", "transaction_list_id = ".$removedItemId);
 			}
 		}
 
