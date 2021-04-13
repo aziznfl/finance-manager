@@ -8,17 +8,7 @@
     <!-- Main content -->
     <section class="content">
         <!-- Small box -->
-        <div class="row">
-            <div class="col-lg-3 col-md-6 col-xs-12">
-                <div class="small-box bg-green">
-                    <div class="inner">
-                        <h3>Rp. <?php echo number_format($amountInvestment); ?></h3>
-                        <p>Investment</p>
-                    </div>
-                    <a href="investment/portfolio" class="small-box-footer">More Info <i class="fa fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-        </div>
+        <div class="row" id="card-info"></div>
 
         <!-- Content -->
     	<div class="row">

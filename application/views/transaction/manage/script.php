@@ -178,16 +178,25 @@
         //------- Fetch -------//
 
         function fetchCategory() {
+            $(".select2").html("<option></option>");
+            unbindSelect2();
+            
             $.ajax({
                 type: "GET",
-                url: baseUrl() + 'exclusive/fetchCategories',
+                url: apiUrl() + 'category/listItem',
                 contentType: "application/json; charset=utf-8",
                 dataType: "JSON",
                 headers: {
                     'currentUser': '<?php echo $this->session->userdata('user')->account_key; ?>'
                 },
                 success: function(response) {
-                    console.log(response);
+                    $.each(response.data, function(i, parent) {
+                        $(".select2").append("<option value='" + parent.id + "'>" + capitalize(parent.name) + "</option>");
+                        $.each(parent.child, function(i, child) {
+                            $(".select2").append("<option value='" + child.id + "'>- " + capitalize(child.name) + "</option>");
+                        });
+                    });
+                    unbindSelect2();
                 }
             })
         }
@@ -196,7 +205,7 @@
             if (transactionId) {
                 $.ajax({
                     type: "GET",
-                    url: baseUrl() + 'exclusive/fetchTransactionFromIdentify',
+                    url: apiUrl() + 'transaction/getOneTransaction',
                     contentType: "application/json; charset=utf-8",
                     dataType: "JSON",
                     data: {'transactionIdentify': transactionId},

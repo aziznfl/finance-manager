@@ -23,12 +23,13 @@ class Investment extends MY_Controller {
 		$this->load->view('root/_menus');
 		$this->load->view('investment/investment_advance');
 		$this->load->view('root/_footer');
+		$this->load->view('root/_end');
 	}
 
 	public function portfolio() {
 		$result["add_footer"] = "
 			<script>
-            	var link = baseUrl() + 'api/getInvestmentList';
+            	var link = apiUrl() + 'investment/portfolio';
 				$(function() {
 					var table = $('#transaction_table').DataTable({
 						'ajax': {
@@ -139,5 +140,6 @@ class Investment extends MY_Controller {
 		$this->load->view('root/_menus');
 		$this->load->view('investment/investment_list');
 		$this->load->view('root/_footer');
+		$this->load->view('root/_end');
 	}
 }

@@ -18,16 +18,7 @@
                         </div>
                         <div class="form-group">
                             <label>Category *</label>
-                            <select name="category" class="form-control select2">
-                                <option></option>
-                                <?php
-                                foreach($categories as $category) {
-                                    echo "<option value=". $category["category_id"] .">".ucwords($category["category_name"])."</option>";
-                                    foreach($category["child"] as $child) {
-                                        echo "<option value=". $child["category_id"] .">- ".ucwords($child["category_name"])."</option>";
-                                    }
-                                } ?>
-                            </select>
+                            <select name="category" class="form-control select2"></select>
                         </div>
                         <div class="form-group">
                             <label>Amount *</label>
@@ -68,7 +59,7 @@
                     <div class="box-body">
                         <table class="table" id="table-list-items">
                             <thead>
-                                <th>Item</th>
+                                <th width="250">Item</th>
                                 <th class="text-right" width="175">Price</th>
                                 <th class="text-center" width="100">Qty</th>
                                 <th class="text-right" width="100">Total</th>
@@ -76,8 +67,8 @@
                             </thead>
                             <tbody></tbody>
                             <tfoot>
-                                <th data-tag="counter-text"></th>
-                                <th colspan="2" class="text-right">Total</th>
+                                <th colspan="2" data-tag="counter-text"></th>
+                                <th class="text-right">Total</th>
                                 <th class="text-right" data-tag="total-text"></th>
                                 <th></th>
                             </tfoot>

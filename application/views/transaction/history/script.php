@@ -44,7 +44,7 @@
         }
 
         function renderMonthSummaryTransaction() {
-            var link = baseUrl() + 'exclusive/fetchMonthSummaryTransaction?' + params;
+            var link = apiUrl() + 'transaction/fetchMonthSummaryTransaction?' + params;
             tableTopTrans = $('#datatable-top-transaction').DataTable({
                 'ordering': false,
                 'searching': false,
@@ -82,7 +82,7 @@
         }
 
         function renderMonthTransaction() {
-            var link = baseUrl() + 'exclusive/fetchMonthTransaction?' + params + '&category_id=' + categoryId;
+            var link = apiUrl() + 'transaction/fetchMonthTransaction?' + params + '&category_id=' + categoryId;
             tableMonthTrans = $('#datatable-month-transaction').DataTable({
                 'ajax': {
                     'url': link,
@@ -113,58 +113,6 @@
                     }
                 ],
                 'order': [1, 'desc']
-            });
-        }
-
-        function renderCategory() {
-            var link = baseUrl() + 'api/getCategories';
-            tableCategory = $('#datatable-category').DataTable({
-                'ajax': link,
-                'ordering': false,
-                'searching': false,
-                'paging': false,
-                'destroy': true,
-                'columns': [
-                    {
-                        'className': 'text-center', 
-                        'render': function(param, type, data, meta) {
-                            return meta.row + meta.settings._iDisplayStart + 1;
-                        }
-                    },
-                    {'data': 'category.name', 'className': 'text-capitalize'}
-                ]
-            });
-
-            $('#datatable-category tbody').on('click', 'tr', function() {
-                var row = tableCategory.row(this);
-
-                $(this).attr('style', 'background-color: #dff0d8').siblings().attr('style', '');
-                renderSubCategory(row.data().category.id);
-            });
-        }
-
-        function renderSubCategory(categoryId) {
-            var link = baseUrl() + 'api/getCategoryTransaction?categoryId=' + categoryId;
-            $.ajax({
-                method: 'GET',
-                url: link,
-                data: {categoryId: categoryId},
-                dataType: 'JSON',
-                success: function(response){
-                    var html = '';
-                    let data = response.data;
-                    for(var i=0; i<data.length; i++) {
-                        let result = data[i];
-
-                        html += '<tr>' +
-                            '<td class=\"text-center\">'+ (i+1) +'</td>' +
-                            '<td class=\"text-center\">'+ result.transaction_date +'</td>' +
-                            '<td>'+ textDescription(result) +'</td>' +
-                            '<td class=\"text-right\">'+ result.amount.text +'</td>' +
-                        '</tr>';
-                    }
-                    $('#datatable-sub-category tbody').html(html);
-                }
             });
         }
 

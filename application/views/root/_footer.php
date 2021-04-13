@@ -63,10 +63,7 @@
 
   <script>
     $(function() {
-      //Initialize Select2 Elements
-      $('.select2').select2({
-        placeholder: 'Please select'
-      })
+      unbindSelect2();
 
       //Datatable
       $('.datatable').DataTable();
@@ -142,6 +139,17 @@
       return '<?php echo base_url(); ?>';
     }
 
+    function apiUrl() {
+      var location = window.location;
+
+      if (location.hostname.includes("localhost") || location.hostname.includes("127.0.0.1")) {
+        var url = location.protocol + "//" + location.host + '/finance-manager-api/';
+        return url;
+      } else {
+        return location.protocol + '//api.' + location.host;
+      }
+    }
+
     function findId(data) {
       return $(data).closest('tr').attr('id');
     }
@@ -158,6 +166,11 @@
       return number.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,').split('.')[0];
     }
 
+    function capitalize(text) {
+      var lower = text.toLowerCase();
+      return text.charAt(0).toUpperCase() + lower.slice(1);
+    }
+
     function getNumberFromCurrency(string) {
       return parseInt(string.split(",").join(""));
     }
@@ -168,6 +181,14 @@
 
     function setValueFromName(name, value) {
       $("input[name='" + name + "']").val(value);
+    }
+
+    function unbindSelect2() {
+      $(document).unbind('change').ready(function() {
+        $('.select2').select2({
+          placeholder: 'Please select'
+        });
+      });
     }
 
     function setValueFromSelect2(value) {

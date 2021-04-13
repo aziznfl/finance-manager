@@ -86,10 +86,9 @@ class Transaction extends MY_Controller {
 						var tab = $(this).attr('data-tab');
 						$('#tab-'+tab).removeClass('hide').siblings().addClass('hide');
 
-						if (tab == 'category' && isFirstCategory) {
-							renderCategory();
-							isFirstCategory = false;
-						}
+						// if (tab == 'category' && isFirstCategory) {
+						// 	isFirstCategory = false;
+						// }
 					});
 				});
 			</script>
@@ -106,7 +105,6 @@ class Transaction extends MY_Controller {
 	function manage() {
 		$transactionId = $this->input->get("transactionId");
 
-		$result['categories'] = $this->listCategories();
 		$result["add_footer"] = "
 			<script>
 				$(function() {
@@ -140,37 +138,6 @@ class Transaction extends MY_Controller {
 	}
 
     /*------------ /.MAIN ------------*/
-
-	function manageTransaction() {
-		if ($this->input->post('date') != "") $arr["transaction_date"] = $this->input->post('date');
-		$arr["amount"] = $this->input->post('amount');
-		$arr["category_id"] = $this->input->post('category');
-		if ($this->input->post('description') != "") $arr["description"] = $this->input->post('description');
-		if ($this->input->post('location') != "") $arr["location"] = $this->input->post('location');
-		if ($this->input->post('tag') != "") $arr["tag"] = $this->input->post('tag');
-
-		$transaction_id = $this->input->post('transaction_id');
-
-		$date = strtotime($arr["transaction_date"]);
-		$params = "year=".date('Y', $date).'&month='.date('n', $date);
-
-		if ($transaction_id != "") {
-			$where = "transaction_id = ".$this->input->post('transaction_id');
-			$this->updateTransaction($arr, $where);
-		} else {
-			$timestamp = time();
-			$arr["transaction_identify"] = "FMTR".$timestamp;
-			$arr["account_key"] = $this->session->userdata('user')->account_key;
-			$this->addNewTransaction($arr);
-		}
-
-		$from = $this->input->post["from"];
-		if ($from != "" || $from != null) {
-			header("location:".base_url("transaction/".$from));
-		} else {
-			header("location:".base_url("transaction/history?".$params));
-		}
-	}
 
 	function manageInvestment() {
 		if ($this->input->post('date_iv') != "") $arr["transaction_date"] = $this->input->post('date_iv');

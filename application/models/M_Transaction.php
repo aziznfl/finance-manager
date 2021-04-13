@@ -18,38 +18,6 @@ class M_Transaction extends CI_Model {
 		return $this->db->get('category');
 	}
 
-	function getCategoriesInvestment() {
-		return $this->db->get('category_investment');
-	}
-
-	function createTransactionView() {
-		$query = "
-			CREATE OR REPLACE VIEW transaction_view AS
-			SELECT account_id, AVG(total) as average_amount_per_month, AVG(count) as average_item_per_month
-			FROM (
-			    SELECT account_id, SUM(amount) as total, COUNT(transaction_id) as count
-			    FROM transaction
-			    GROUP BY account_id, EXTRACT(YEAR FROM transaction_date), EXTRACT(MONTH FROM transaction_date)
-			) transaction_extract
-			GROUP BY account_id
-		";
-
-		$query_event = "
-			CREATE EVENT update_transaction_view
-			ON SCHEDULE EVERY 1 MINUTE
-			STARTS '2020-05-09 11:25:00'
-			DO
-			CREATE OR REPLACE VIEW transaction_view AS
-			SELECT account_id, AVG(total) as average_amount_per_month, AVG(count) as average_item_per_month
-			FROM (
-			    SELECT account_id, SUM(amount) as total, COUNT(transaction_id) as count
-			    FROM transaction
-			    GROUP BY account_id, EXTRACT(YEAR FROM transaction_date), EXTRACT(MONTH FROM transaction_date)
-			) transaction_extract
-			GROUP BY account_id
-		";
-	}
-
 	function get($tag) {
 		$query = "
 			SELECT a.date, a.amount, a.description
@@ -97,55 +65,10 @@ class M_Transaction extends CI_Model {
 
 	//-------- Transaction ---------//
 
-	function getOneTransaction($transaction_id) {
-		$this->db->where("transaction_id", $transaction_id);
-		$this->db->where("account_key", $this->session->userdata('user')->account_key);
-		$this->db->where($this->getWhereTransaction());
-		return $this->db->get('transaction');
-	}
-
-	function getAllTransaction($limit, $type = "outcome") {
-		// $this->db->limit($limit);
-		$this->db->join("category", "category.category_id = transaction.category_id");
-		$this->db->order_by("type", "DESC");
-		$this->db->order_by("transaction_date", "DESC");
-		$this->db->order_by("added_date", "DESC");
-		$this->db->order_by("category.category_id", "ASC");
-		$this->db->where("type", $type);
-		$this->db->limit($limit);
-		$this->db->where($this->getWhereTransaction());
-		return $this->db->get('transaction');
-	}
-
 	function getRecurringTransaction() {
 		$this->db->join("category", "category.category_id = transaction_recurring.category_id", "left");
 		$this->db->where($this->getWhereTransaction());
 		return $this->db->get("transaction_recurring");
-	}
-
-	//-------- Investment --------//
-
-	function getOneInvestment($transaction_id) {
-		$this->db->join("category_investment", "transaction_investment.category_id = category_investment.category_id", "left");
-		$this->db->where("account_key", $this->session->userdata('user')->account_key);
-		$this->db->where("transaction_investment_id", $transaction_id);
-		return $this->db->get('transaction_investment');
-	}
-
-	function getInvestment() {
-		$this->db->join("category_investment", "transaction_investment.category_id = category_investment.category_id", "left");
-		$this->db->where("account_key", $this->session->userdata('user')->account_key);
-		$this->db->order_by("transaction_date", "ASC");
-		return $this->db->get('transaction_investment');
-	}
-
-	function getTotalInvestment() {
-		$query = "
-			SELECT SUM(CASE WHEN type = 'outcome' THEN amount ELSE -amount END) as total_investment
-			FROM transaction_investment 
-			WHERE account_key = '".$this->session->userdata('user')->account_key."'
-		";
-		return $this->db->query($query);
 	}
 
 	//--------- Debts ---------//

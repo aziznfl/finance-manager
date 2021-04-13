@@ -16,139 +16,27 @@ class Dashboard extends MY_Controller {
     }
 
 	public function index() {
-		// get transaction history for charts
-		$months = array();
-		$category = [];
-		$total_transaction = array();
-		$total_investment = array();
-		$arrTrans = $this->M_TransactionV1->getDashboardTransaction()->result_array();
-		foreach($arrTrans as $val) {
-			$month = date("M-y", strtotime($val["month"]."/1/".$val["year"]));
-			array_push($months, $month);
-			array_push($total_transaction, (int)$val['total_transaction']);
-			array_push($total_investment, (int)$val['total_investment']);
-		}
-		$value = array(array("name" => "Transaction", "data" => $total_transaction, "stack" => "Transaction"), array("name" => "Investment", "data" => $total_investment, "stack" => "Investment"));
-		
-		// get several tag
-		$result["amountInvestment"] = $this->totalInvestment();
-
-		$apiKey = $this->session->userdata('user')->account_key;
 		$result["add_footer"] = "
-		<script>
-			$(function() {
-				table = $('#datatable-last-transaction').DataTable({
-					'orderable': false,
-					'searching': false,
-					'paging': false,
-					'bInfo': false,
-					'ajax': {
-						'url': '".base_url()."'+'api/getLastTransaction', 
-						'type': 'POST',
-						'data': {'accountKey': '".$apiKey."', 'apiKey': '".$apiKey."'}
-					},
-					'destroy': true,
-					'columns': [
-						{'searchable': false, 'orderable': false, 'defaultContent': '', 'className': 'text-center'},
-						{'data': 'transaction_date', 'className': 'text-center'},
-						{
-							'render': function (param, type, data, meta) {
-								var categoryView = '<b>'+data.category.category_name+'</b>';
-								var descView = '';
-								var tagView = '';
-								
-								if (data.description != null && data.description != '') { descView = '<br/><span class=\"text-secondary\">'+data.description+'</span>'; }
-								if (data.location != null && data.location != '') { 
-									categoryView += '&nbsp;&nbsp;&nbsp;<span class=\"text-primary\"><span class=\"fa fa-map-marker\"></span>&nbsp;'+data.location+'</span>';
-								}
-								if (data.tag != null) { tagView = '<br/><span class=\"label bg-blue\">'+data.tag+'</span>'; }
-
-								return categoryView+descView+tagView;
-							}
-						},
-						{'data': 'amount_text', 'className': 'text-right'},
-						{'orderable': false, 
-							'className': 'text-center',
-							'render': function (param, type, data, meta) {
-								return '<a href=\"".base_url('transaction/manage?type=tr&id=')."'+data.transaction_id+'\"><i class=\"fa fa-edit\"></i></a>';
-							}
-						}
-					],
-					'order': [1, 'desc']
+			<script>
+				$(function() {
+					fetchCardInfo();
+					fetchSummaryYoYTransaction();
+					
+					table.on('order.dt search.dt', function() {
+						table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+							cell.innerHTML = i+1;
+						} );
+					}).draw();
 				});
-
-				table.on('order.dt search.dt', function() {
-			        table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-			            cell.innerHTML = i+1;
-			        } );
-			    }).draw();
-			});
-
-			Highcharts.chart('chart-transactions', {
-			    chart: {
-			        type: 'column'
-			    },
-			    title: {
-			        text: 'Transaction (Outcome)'
-			    },
-			    xAxis: {
-			        categories: ".json_encode($months)."
-			    },
-			    yAxis: {
-			        min: 0,
-			        title: {
-			            text: 'Amount'
-			        },
-			        stackLabels: {
-			            enabled: true,
-			            style: {
-			                fontWeight: 'bold',
-			                color: ( // theme
-			                    Highcharts.defaultOptions.title.style &&
-			                    Highcharts.defaultOptions.title.style.color
-			                ) || 'gray'
-			            }
-			        }
-			    },
-			    legend: {
-			        align: 'right',
-			        x: 0,
-			        verticalAlign: 'top',
-			        y: 0,
-			        floating: true,
-			        backgroundColor: Highcharts.defaultOptions.legend.backgroundColor || 'white',
-			        borderColor: '#CCC',
-			        borderWidth: 1,
-			        shadow: false
-			    },
-			    tooltip: {
-			        headerFormat: '<b>{point.x}</b><br/>',
-			        pointFormat: '{series.name}: {point.y}' //<br/>Total: {point.stackTotal}
-			    },
-			    plotOptions: {
-			        column: {
-			            stacking: 'normal'
-			        },
-					series: {
-						cursor: 'pointer',
-						point: {
-							events: {
-								click: function () {
-									console.log(this.options.key);
-								}
-							}
-						}
-					}
-				},
-			    series: ".json_encode($value)."
-			});
-		</script>
+			</script>
 		";
 
 		$this->load->view('root/_header', $result);
 		$this->load->view('root/_menus');
-		$this->load->view('dashboard');
+		$this->load->view('dashboard/view');
 		$this->load->view('root/_footer');
+		$this->load->view('dashboard/script');
+		$this->load->view('root/_end');
 	}
 
 	//----- My Function ---------//
