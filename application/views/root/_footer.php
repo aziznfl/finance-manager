@@ -147,7 +147,7 @@
         return url;
       } else {
         var hostName = location.hostname;
-        var domainName = hostname.substring(hostName.lastIndexOf(".", hostName.lastIndexOf(".") - 1) + 1);
+        var domainName = hostName.substring(hostName.lastIndexOf(".", hostName.lastIndexOf(".") - 1) + 1);
         return location.protocol + '//api.' + domainName + '/';
       }
     }
