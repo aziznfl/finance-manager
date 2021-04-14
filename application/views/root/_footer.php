@@ -146,7 +146,7 @@
         var url = location.protocol + "//" + location.host + '/finance-manager-api/';
         return url;
       } else {
-        var hostname = location.hostname;
+        var hostName = location.hostname;
         var domainName = hostname.substring(hostName.lastIndexOf(".", hostName.lastIndexOf(".") - 1) + 1);
         return location.protocol + '//api.' + domainName + '/';
       }
