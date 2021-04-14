@@ -146,7 +146,7 @@
         var url = location.protocol + "//" + location.host + '/finance-manager-api/';
         return url;
       } else {
-        return location.protocol + '//api.' + location.host;
+        return location.protocol + '//api.' + location.host + '/';
       }
     }
 
