@@ -10,8 +10,11 @@ class Dashboard extends MY_Controller {
         header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
         $method = $_SERVER['REQUEST_METHOD'];
         if ($method == "OPTIONS") {
+			echo "options -> die";
             die();
-        }
+        } else {
+			echo "else";
+		}
 
 		if ($this->session->userdata('user') == '') {
 			header("location: ".base_url('account'));
