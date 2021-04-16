@@ -234,7 +234,7 @@
             if (successChecking) {
                 $.ajax({
                     type: "POST",
-                    url: baseUrl() + 'exclusive/manageTransactionNewFlow',
+                    url: apiUrl() + 'transaction/manageTransactionNewFlow',
                     contentType: "application/json; charset=utf-8",
                     dataType: "JSON",
                     data: JSON.stringify(transaction),
