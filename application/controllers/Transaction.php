@@ -107,13 +107,14 @@ class Transaction extends MY_Controller {
 
 		$result["add_footer"] = "
 			<script>
+				var transactionId = '".$transactionId."';
 				$(function() {
-					setTitleAndButton('".$transactionId."');
+					setTitleAndButton();
 					insertNewLineItemList();
 					unbindScript();
 
 					// fetch data
-					fetchCategory('".$transactionId."');
+					fetchCategory();
 				});
 			</script>
 		";

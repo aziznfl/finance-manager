@@ -60,10 +60,10 @@
                         <table class="table" id="table-list-items">
                             <thead>
                                 <th width="250">Item</th>
-                                <th class="text-right" width="175">Price</th>
+                                <th class="text-center" width="175">Price</th>
                                 <th class="text-center" width="100">Qty</th>
                                 <th class="text-right" width="100">Total</th>
-                                <th class="text-center" width="50">Action</th>
+                                <th class="text-center" width="50"></th>
                             </thead>
                             <tbody></tbody>
                             <tfoot>
@@ -73,6 +73,17 @@
                                 <th></th>
                             </tfoot>
                         </table>
+                    </div>
+                </div>
+                <div>
+                    <button id="btn-submit" class="btn btn-primary"></button>
+                    <div id="form-delete" class="pull-right">
+                        <a class="btn btn-warning" onclick="removeTransaction()">
+                            <span class="fa fa-trash"></span>&nbsp;&nbsp;Remove
+                        </a>
+                        <a class="btn btn-danger hide" style="margin-left: 12px;">
+                            <span class="fa fa-remove"></span>&nbsp;&nbsp;Delete
+                        </a>
                     </div>
                 </div>
             </div>
