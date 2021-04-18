@@ -37,7 +37,7 @@
                 {'orderable': false, 
                     'className': 'text-center',
                     'render': function (param, type, data, meta) {
-                        return "<a href='" + baseUrl() + "transaction/manage?type=tr&id=" + data.transaction_id + "'><i class='fa fa-edit'></i></a>";
+                        return "<a href='" + baseUrl() + "transaction/manage?type=tr&transactionId=" + data.transaction_identify + "'><i class='fa fa-edit'></i></a>";
                     }
                 }
             ],

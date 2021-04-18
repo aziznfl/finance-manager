@@ -167,17 +167,21 @@
             }
         }
 
-        function setTitle(transactionId) {
+        function setTitleAndButton(transactionId) {
             if (!transactionId) {
                 $('.content-header').html('<h1>Add <small>Transaction</small></h1>');
+                $('#btn-submit').html('<span class="fa fa-plus"></span>&nbsp;&nbsp;Save Transaction');
+                $('#btn-delete').addClass('hide');
             } else {
                 $('.content-header').html('<h1>Edit <small>Transaction</small></h1>');
+                $('#btn-submit').html('<span class="fa fa-refresh"></span>&nbsp;&nbsp;Update Transaction');
+                $('#btn-delete').removeClass('hide');
             }
         }
 
         //------- Fetch -------//
 
-        function fetchCategory() {
+        function fetchCategory(transactionId) {
             $(".select2").html("<option></option>");
             unbindSelect2();
             
@@ -197,6 +201,10 @@
                         });
                     });
                     unbindSelect2();
+
+                    if (transactionId) {
+                        fetchTransactionFromId(transactionId);
+                    }
                 }
             })
         }

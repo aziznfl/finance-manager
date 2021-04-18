@@ -75,7 +75,6 @@
                         </table>
                     </div>
                 </div>
-                <button class="btn btn-primary btn-flat btn-block"><span class="fa fa-plus"></span>&nbsp;&nbsp;Save Transaction</button>
             </div>
         </form>
     </div>
