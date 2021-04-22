@@ -2,6 +2,7 @@
     <script>
         setTotal(0);
         setForm();
+        var counterItem = 0;
 
         // Function
 
@@ -77,7 +78,6 @@
             data.child.forEach(setFormTransactionList);
         }
 
-        var counterItem = 0;
         function setFormTransactionList(child) {
             setValueFromName("itemId[" + counterItem + "]", child.itemId)
             setValueFromName("items["+ counterItem +"]", child.item);
@@ -86,6 +86,11 @@
             setSubtotal(counterItem);
             insertNewLineItemList();
             counterItem++;
+        }
+
+        function setAsNewTransaction() {
+            transactionId = null;
+            setTitleAndButton();
         }
 
         //------- Calculate --------//
@@ -203,13 +208,13 @@
                     unbindSelect2();
 
                     if (transactionId) {
-                        fetchTransactionFromId(transactionId);
+                        fetchTransactionFromId();
                     }
                 }
             })
         }
 
-        function fetchTransactionFromId(transactionId) {
+        function fetchTransactionFromId() {
             if (transactionId) {
                 $.ajax({
                     type: "GET",
@@ -222,6 +227,10 @@
                     },
                     success: function(response) {
                         setFormTransaction(response.data);
+                    },
+                    error: function() {
+                        alert("Transaction not found!");
+                        setAsNewTransaction();
                     }
                 });
             }
@@ -250,10 +259,12 @@
                         'currentUser': '<?php echo $this->session->userdata('user')->account_key; ?>'
                     },
                     success: function(response) {
-                        // console.log(response);
-                        window.location.href = baseUrl();
+                        window.location.href = baseUrl() + "/transaction/history";
                     },
-                    failed: function() {
+                    error: function(xhr, status, error) {
+                        if (error == "") {
+                            alert("Please check internet connection!");
+                        }
                         $(".form button").removeAttr("disabled");
                     }
                 });
@@ -310,6 +321,31 @@
         }
 
         function removeTransaction() {
-            console.log(transactionId);
+            var successChecking = true;
+
+            var request = {
+                'transactionId': transactionId
+            };
+            if (successChecking) {
+                $.ajax({
+                    type: "GET",
+                    url: apiUrl() + "transaction/removeTransaction",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "JSON",
+                    data: {
+                        "transactionId": transactionId
+                    },
+                    headers: {
+                        'currentUser': '<?php echo $this->session->userdata('user')->account_key; ?>'
+                    },
+                    success: function(response) {
+                        alert(response.data + " transaction has been successfully removed!");
+                        window.location.href = baseUrl() + "/transaction/history";
+                    },
+                    error: function() {
+                        alert("failed to remove this transaction!");
+                    }
+                });
+            }
         }
     </script>
