@@ -135,8 +135,8 @@
       });
     });
 
-    function baseUrl() {
-      return '<?php echo base_url(); ?>';
+    function baseUrl(childUrl = '') {
+      return '<?php echo base_url(); ?>' + childUrl;
     }
 
     function apiUrl() {
@@ -150,6 +150,10 @@
         var domainName = hostName.substring(hostName.lastIndexOf(".", hostName.lastIndexOf(".") - 1) + 1);
         return location.protocol + '//www.api.' + domainName + '/';
       }
+    }
+
+    function setBrowserUrl(childUrl) {
+      window.history.pushState('object or string', 'Title', baseUrl(childUrl));
     }
 
     function findId(data) {

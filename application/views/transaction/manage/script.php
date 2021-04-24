@@ -90,6 +90,7 @@
 
         function setAsNewTransaction() {
             transactionId = null;
+            setBrowserUrl('transaction/manage');
             setTitleAndButton();
         }
 
