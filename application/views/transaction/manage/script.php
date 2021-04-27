@@ -212,7 +212,7 @@
                         fetchTransactionFromId();
                     }
                 }
-            })
+            });
         }
 
         function fetchTransactionFromId() {

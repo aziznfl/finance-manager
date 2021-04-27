@@ -185,8 +185,12 @@
       return $("input[name='" + name + "']").val();
     }
 
-    function setValueFromName(name, value) {
+    function setValueFromName(name, value, disabled = false) {
       $("input[name='" + name + "']").val(value);
+
+      if (disabled) {
+        $("input[name='" + name + "']").prop("disabled", true);
+      }
     }
 
     function unbindSelect2() {
@@ -197,8 +201,13 @@
       });
     }
 
-    function setValueFromSelect2(value) {
+    function setValueFromSelect2(value, disabled = false) {
       $(".select2").val(value);
+
+      if (disabled) {
+        $(".select2").prop("disabled", true);
+      }
+
       $(".select2").trigger("change");
     }
   </script>

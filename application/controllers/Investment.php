@@ -26,70 +26,37 @@ class Investment extends MY_Controller {
 		$this->load->view('root/_end');
 	}
 
+	public function manage() {
+		$investmentIdentify = $this->input->get("id");
+		if (isset($_GET["updateValue"])) {
+			$updateValue = true;
+		} else {
+			$updateValue = false;
+		}
+
+		$result["add_footer"] = "
+			<script>
+				var investmentIdentify = '" . $investmentIdentify . "';
+				var updateValue = ". json_encode($updateValue) .";
+				$(function() {
+					unbindScript();
+				});
+			</script>
+		";
+
+		$this->load->view('root/_header', $result, $GLOBALS);
+		$this->load->view('root/_menus');
+		$this->load->view('investment/manage/view');
+		$this->load->view('root/_footer');
+		$this->load->view('investment/manage/script');
+		$this->load->view('root/_end');
+	}
+
 	public function portfolio() {
 		$result["add_footer"] = "
 			<script>
             	var link = apiUrl() + 'investment/portfolio';
 				$(function() {
-					var table = $('#transaction_table').DataTable({
-						'ajax': {
-							'url': link,
-							'headers': {
-								'currentUser': '". $this->session->userdata('user')->account_key ."'
-							}
-						},
-						'columns': [
-							{'data': null, 'className': 'text-center', 'orderable': false, 'searching': false},
-							{'data': 'date', 'className': 'text-center'},
-							{
-								'data': 'amount_text',
-								'className': 'text-right',
-								'createdCell': function(td, cellData, rowData, row, col) {
-									if (rowData.state_text == 'Done') {
-										if (rowData.amount > 0) $(td).addClass('text-success');
-										else if (rowData.amount < 0) $(td).addClass('text-danger');
-										else $(td).addClass('text-primary');
-									}
-								}
-							},
-							{
-								'data': 'state_text',
-								'className': 'text-center text-bold',
-								'createdCell': function(td, cellData, rowData, row, col) {
-								 	if (cellData == 'Done') {
-										$(td).addClass('text-success');
-									} else {
-										$(td).addClass('text-primary');
-									}
-								}
-							},
-							{
-								'className': 'text-center',
-								'render': function(param, type, data, meta) {
-									var valueText = '';
-									if (data.value_text != null) valueText = ' ('+data.value_text+')'
-									return data.description + valueText;
-								}
-							},
-							{
-								'data': 'instrument',
-								'className': 'text-center'
-							},
-							{'data': 'manager', 'className': 'text-center'},
-							{
-								'className': 'text-center',
-								'render': function(param, type, data, meta) {
-									if (data.state_text != 'Done') {
-										return '<a class=\"btn btn-xs btn-primary\" href=\"".base_url("transaction/manage?type=iv&id='+data.id+'")."\"><span class=\"fa fa-plus\"></span> Add New</a>';
-									} else {
-										return '';
-									}
-								}
-							}
-						],
-						'order': [1, 'desc']
-					});
-
 					table.on('order.dt search.dt', function() {
 				        table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
 				            cell.innerHTML = i+1;
@@ -108,38 +75,14 @@ class Investment extends MY_Controller {
         				}
 				    });
 				});
-
-				function childTranscation(data) {
-					var html = '<table class=\"table table-condensed no-margin no-border\" style=\"margin: -8px !important;\">';
-					for (i = 0; i < data.length; i++) {
-						var amount = data[i].amount_text;
-						var value = '';
-						amount = data[i].type != \"outcome\" ? \"+\"+amount : \"-\"+amount;
-						if (data[i].unit != null) value = data[i].value+' '+data[i].unit;
-
-						html += '<tr><td width=\"1%\" class=\"text-center\">-</td>';
-						html += '<td class=\"text-center\">'+data[i].transaction_date+'</td>';
-						html += '<td class=\"text-right\">' +
-							amount+'&nbsp;&nbsp;&nbsp;&nbsp;' +
-							'<a href=\"".base_url('transaction/manage?type=iv&change=edit&id=')."'+data[i].transaction_investment_id+'\" title=\"Edit Transaction\">' +
-								'<span class=\"fa fa-edit\"></span>' +
-							'</a>&nbsp;&nbsp;' +
-							'<a href=\"#\"><span class=\"fa fa-trash text-danger\" title=\"Delete Transaction\"></span></a>' +
-							'</td>';
-						html += '<td class=\"text-right\" width=\"10%\">'+value+'</td>';
-						html += '<td width=\"50%\"></td></tr>';
-					}
-					html += '</table>';
-
-					return html;
-				}
 			</script>
 		";
 
 		$this->load->view('root/_header', $result, $GLOBALS);
 		$this->load->view('root/_menus');
-		$this->load->view('investment/investment_list');
+		$this->load->view('investment/portfolio/view');
 		$this->load->view('root/_footer');
+		$this->load->view('investment/portfolio/script');
 		$this->load->view('root/_end');
 	}
 }
