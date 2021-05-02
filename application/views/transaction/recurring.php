@@ -32,19 +32,22 @@
 								$repetition_text = "Every ";
 								$arr = explode(" ", $result["repetition"]);
 								$date = "";
+
 								if ($arr[4] == "*") {
 									// not every weekend
 									$date .= date("Y");
 									if ($arr[3] != "*") {
 										// every year
 										$repetition_text .= " Year<br/>(on ".dateText($arr, "F jS - H:i").")";
-										$date .= "-".dateText($arr, "m-d H:i:s");
+										$date .= "-".dateText($arr, "m-d%20H:i:00");
 									} else if ($arr[3] == "*") {
 										// not every year
 										$date .= "-".date("m");
 										if ($arr[2] != "*") {
 											$repetition_text .= " Month<br/>(on ".dateText($arr, "jS - H:i").")";
-											$date .= "-".dateText($arr, "d");
+											$date .= "-".dateText($arr, "d%20H:i:00");
+										} else {
+											$date .= "-".dateText($arr, "d%20H:i:00");
 										}
 									}
 								}
@@ -55,9 +58,10 @@
 								echo "<td>".
 										"<div style='font-size: 16px; font-weight: 400;''>Rp. ".number_format($result['amount'])."</div>".
 										"<div><span style='font-weight: 600;'>".ucwords($result['category_name'])."</span>".$desc_text."</div>".
+										"<span class='label bg-blue'>".$result['tag']."</span>".
 									"</td>";
 								echo "<td class='text-center'>".
-										"<a href=".base_url("transaction/manage?date=".$date."&amount=".$result['amount']."&category=".$result['category_id']."&desc=".$result["description"]."&from=recurring")."><span class='fa fa-plus'></span></a>".
+										"<a href=".base_url("transaction/manage?date=".$date."&amount=".$result['amount']."&category=".$result['category_id']."&desc=".$result["description"]."&tag=".$result["tag"])."><span class='fa fa-plus'></span></a>".
 									"</td>";
 								echo "</tr>";
 							}

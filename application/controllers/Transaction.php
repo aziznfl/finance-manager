@@ -108,14 +108,29 @@ class Transaction extends MY_Controller {
 		$result["add_footer"] = "
 			<script>
 				var transactionId = '".$transactionId."';
+				var oldData = {};
+
 				$(function() {
 					setTitleAndButton();
 					insertNewLineItemList();
 					unbindScript();
+					generateOldData();
 
 					// fetch data
 					fetchCategory();
 				});
+
+				function generateOldData() {
+					oldData.location = null;
+					oldData.child = null;
+					oldData['transactionDate'] = '".$this->input->get("date")."';
+					oldData['amount'] = '".$this->input->get("amount")."';
+					oldData['categoryId'] = '".$this->input->get("category")."';
+					oldData['description'] = '".$this->input->get("desc")."';
+					oldData['tag'] = '".$this->input->get("tag")."';
+
+					// will be set to form after fetch category
+				}
 			</script>
 		";
 

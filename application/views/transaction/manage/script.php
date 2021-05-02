@@ -70,12 +70,16 @@
             setValueFromName("date", data.transactionDate);
             setValueFromSelect2(data.categoryId);
             setValueFromName("amount", data.amount);
-            setValueFromName("location", data.location.name);
+            if (data.location) {
+                setValueFromName("location", data.location.name);
+            }
             setValueFromName("description", data.description);
             setValueFromName("tag", data.tag);
 
             // set child
-            data.child.forEach(setFormTransactionList);
+            if (data.child) {
+                data.child.forEach(setFormTransactionList);
+            }
         }
 
         function setFormTransactionList(child) {
@@ -210,6 +214,8 @@
 
                     if (transactionId) {
                         fetchTransactionFromId();
+                    } else if (oldData) {
+                        setFormTransaction(oldData);
                     }
                 }
             });
