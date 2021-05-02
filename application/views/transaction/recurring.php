@@ -52,16 +52,26 @@
 									}
 								}
 
+								$location = "";
+								if ($result["location"] != "") {
+									$location = "&nbsp;&nbsp;&nbsp;".
+										"<span class='text-primary'>".
+											"<span class='fa fa-map-marker'></span>&nbsp;".$result['location'].
+										"</span>";
+								}
+
 								echo "<tr>";
 								echo "<td class='text-center'>".$i."</td>";
 								echo "<td class='text-center'>".$repetition_text."</td>";
 								echo "<td>".
 										"<div style='font-size: 16px; font-weight: 400;''>Rp. ".number_format($result['amount'])."</div>".
-										"<div><span style='font-weight: 600;'>".ucwords($result['category_name'])."</span>".$desc_text."</div>".
+										"<div>".
+											"<span style='font-weight: 600;'>".ucwords($result['category_name'])."</span>".$desc_text.$location.
+										"</div>".
 										"<span class='label bg-blue'>".$result['tag']."</span>".
 									"</td>";
 								echo "<td class='text-center'>".
-										"<a href=".base_url("transaction/manage?date=".$date."&amount=".$result['amount']."&category=".$result['category_id']."&desc=".$result["description"]."&tag=".$result["tag"])."><span class='fa fa-plus'></span></a>".
+										"<a href=".base_url("transaction/manage?date=".$date."&amount=".$result['amount']."&category=".$result['category_id']."&desc=".$result["description"]."&location=".$result["location"]."&tag=".$result["tag"])."><span class='fa fa-plus'></span></a>".
 									"</td>";
 								echo "</tr>";
 							}

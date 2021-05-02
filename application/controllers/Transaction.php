@@ -121,7 +121,9 @@ class Transaction extends MY_Controller {
 				});
 
 				function generateOldData() {
-					oldData.location = null;
+					oldData.location = {
+						name: '".$this->input->get("location")."'
+					};
 					oldData.child = null;
 					oldData['transactionDate'] = '".$this->input->get("date")."';
 					oldData['amount'] = '".$this->input->get("amount")."';

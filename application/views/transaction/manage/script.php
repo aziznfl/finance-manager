@@ -215,6 +215,7 @@
                     if (transactionId) {
                         fetchTransactionFromId();
                     } else if (oldData) {
+                        console.log(oldData);
                         setFormTransaction(oldData);
                     }
                 }
