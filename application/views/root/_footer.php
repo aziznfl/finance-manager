@@ -64,9 +64,7 @@
   <script>
     $(function() {
       unbindSelect2();
-
-      //Datatable
-      $('.datatable').DataTable();
+      unbindDataTable();
 
       //Date picker
       $('.datepicker').datepicker({
@@ -135,6 +133,28 @@
       });
     });
 
+    // ---------- UNBIND ---------- //
+
+    function unbindSelect2() {
+      $(document).unbind('change').ready(function() {
+        $('.select2').select2({
+          placeholder: 'Please select'
+        });
+      });
+    }
+
+    function unbindDataTable() {
+      $(document).unbind('change').ready(function() {
+        $('.datatable').DataTable( {
+          language: {
+            // infoEmpty: "No records available.",
+          }
+        });
+      });
+    }
+
+    // ---------- .UNBIND ---------- //
+
     function baseUrl(childUrl = '') {
       return '<?php echo base_url(); ?>' + childUrl;
     }
@@ -191,14 +211,6 @@
       if (disabled) {
         $("input[name='" + name + "']").prop("disabled", true);
       }
-    }
-
-    function unbindSelect2() {
-      $(document).unbind('change').ready(function() {
-        $('.select2').select2({
-          placeholder: 'Please select'
-        });
-      });
     }
 
     function setValueFromSelect2(value, disabled = false) {

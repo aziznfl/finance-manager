@@ -122,7 +122,6 @@
         $("#submit").click(function() {
             // $(this).attr("disabled", "disabled");
             var investment = getInvestment();
-            console.log(investmentIdentify, updateValue);
 
             if (updateValue) {
                 updateInvestment(investment);
@@ -148,6 +147,18 @@
                     'amount': parseInt(amount),
                     'isDone': parseInt(isDone)
                 }
+                if (updateValue) {
+                    investment = {
+                        'date': date,
+                        'instrumentId': parseInt(instrument),
+                        'manager': manager,
+                        'description': description,
+                        'status': status,
+                        'amount': parseInt(amount),
+                        'isDone': parseInt(isDone),
+                        'identify': investmentIdentify
+                    }
+                }
                 return investment;
             }
         });
@@ -155,7 +166,7 @@
         function updateInvestment(investment) {
             $.ajax({
                 type: "POST",
-                url: apiUrl() + 'investment/manageInvestment',
+                url: apiUrl() + 'investment/updateInvestment',
                 contentType: "application/json; charset=utf-8",
                 dataType: "JSON",
                 data: JSON.stringify(investment),
@@ -163,8 +174,7 @@
                     'currentUser': '<?php echo $this->session->userdata('user')->account_key; ?>'
                 },
                 success: function(response) {
-                    console.log(response);
-                    // window.location.href = baseUrl() + "/transaction/history";
+                    window.location.href = baseUrl() + "/transaction/history";
                 },
                 error: function(xhr, status, error) {
                     if (error == "") {
@@ -176,9 +186,10 @@
         }
 
         function addChildItemInvestment(investment) {
+            console.log(investment);
             $.ajax({
                 type: "POST",
-                url: apiUrl() + 'investment/createChildItemInvestment',
+                url: apiUrl() + 'investment/insertInvestment',
                 contentType: "application/json; charset=utf-8",
                 dataType: "JSON",
                 data: JSON.stringify(investment),

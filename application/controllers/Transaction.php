@@ -147,10 +147,19 @@ class Transaction extends MY_Controller {
 	function recurring() {
 		$result["transaction"] = $this->recurringTransaction();
 
+		$result["add_footer"] = "
+			<script>
+				$(function() {
+					fetchRecurring();
+				});
+			</script>
+		";
+
 		$this->load->view('root/_header', $result);
 		$this->load->view('root/_menus');
-		$this->load->view('transaction/recurring');
+		$this->load->view('transaction/recurring/view');
 		$this->load->view('root/_footer');
+		$this->load->view('transaction/recurring/script');
 		$this->load->view('root/_end');
 	}
 
