@@ -42,8 +42,6 @@
   </script>
   <!-- Bootstrap 3.3.7 -->
   <script src="<?php echo base_url(); ?>assets/bootstrap/js/bootstrap.min.js"></script>
-  <!-- highcharts -->
-  <script src="<?php echo base_url(); ?>assets/highcharts/highcharts.js"></script>
   <!-- Slimscroll -->
   <script src="<?php echo base_url(); ?>assets/jquery-slimscroll/jquery.slimscroll.min.js"></script>
   <!-- datatables -->

@@ -67,9 +67,13 @@
 
         function setFormTransaction(data) {
             setValueFromName("transactionId", data.transactionId);
-            setValueFromName("date", data.transactionDate);
+            if (data.transactionDate) {
+                setValueFromName("date", data.transactionDate);
+            }
             setValueFromSelect2(data.categoryId);
-            setValueFromName("amount", data.amount);
+            if (data.amount) {
+                setValueFromName("amount", data.amount);
+            }
             if (data.location) {
                 setValueFromName("location", data.location.name);
             }
@@ -215,7 +219,6 @@
                     if (transactionId) {
                         fetchTransactionFromId();
                     } else if (oldData) {
-                        console.log(oldData);
                         setFormTransaction(oldData);
                     }
                 }

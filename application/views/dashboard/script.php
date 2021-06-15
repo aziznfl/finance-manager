@@ -1,4 +1,6 @@
 
+  <!-- highcharts -->
+  <script src="<?php echo base_url(); ?>assets/highcharts/highcharts.js"></script>
 
     <script>
         var table = $('#datatable-last-transaction').DataTable({
